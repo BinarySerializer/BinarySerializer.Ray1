@@ -55,9 +55,9 @@ namespace BinarySerializer.Ray1
         public Ray1EngineVersion EngineVersion { get; }
         public Ray1EngineBranch EngineBranch { get; }
         public Ray1PCVersion PCVersion { get; }
-        public World World { get; }
-        public int Level { get; }
-        public string Volume { get; }
+        public World World { get; set; }
+        public int Level { get; set; }
+        public string Volume { get; set; }
         public bool IsFAN { get; } // TODO: Replace by engine version tree
 
         public static int CellSize = 16;
