@@ -1,0 +1,2 @@
+# BinarySerializer.Ray1
+BinarySerializer.Ray1 is an extension library to [BinarySerializer](https://github.com/RayCarrot/BinarySerializer), created by [RayCarrot](https://github.com/RayCarrot) and [Byvar](https://github.com/byvar). It supports serializing formats from all versions of Rayman 1, including the SNES prototype and the Atari Jaguar versions.
