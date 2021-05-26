@@ -31,7 +31,8 @@
 
             if (settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
                 settings.EngineVersion == Ray1EngineVersion.PS1_Edu ||
-                settings.EngineVersion == Ray1EngineVersion.PC_Kit)
+                settings.EngineVersion == Ray1EngineVersion.PC_Kit ||
+                settings.EngineVersion == Ray1EngineVersion.PC_Fan)
             {
                 Unk1 = s.Serialize<uint>(Unk1, name: nameof(Unk1));
                 XPosition = s.Serialize<short>(XPosition, name: nameof(XPosition));

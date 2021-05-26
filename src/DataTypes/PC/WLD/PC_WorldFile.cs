@@ -66,7 +66,9 @@
             Eta = s.SerializeObjectArray<PC_ETA>(Eta, Eta.Length, name: nameof(Eta));
 
             // Kit and EDU have more data...
-            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Edu)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
+                settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
+                settings.EngineVersion == Ray1EngineVersion.PC_Fan)
             {
                 // Serialize world defines
                 WorldDefineChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
@@ -75,7 +77,7 @@
                 }, ChecksumPlacement.Before, name: nameof(WorldDefineChecksum));
 
                 // Serialize file tables
-                if (settings.EngineVersion == Ray1EngineVersion.PC_Kit)
+                if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Fan)
                 {
                     DESFileNames = s.SerializeStringArray(DESFileNames, 100, 13, name: nameof(DESFileNames));
                     ETAFileNames = s.SerializeStringArray(ETAFileNames, 60, 13, name: nameof(ETAFileNames));

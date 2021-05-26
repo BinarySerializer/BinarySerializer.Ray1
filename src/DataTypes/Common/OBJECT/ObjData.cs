@@ -346,6 +346,7 @@ namespace BinarySerializer.Ray1
             Short_4E = s.Serialize<short>(Short_4E, name: nameof(Short_4E));
 
             if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
+                settings.EngineVersion == Ray1EngineVersion.PC_Fan ||
                 settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
                 settings.EngineVersion == Ray1EngineVersion.PS1_Edu)
                 EDU_ExtHitPoints = s.Serialize<uint>(EDU_ExtHitPoints, name: nameof(EDU_ExtHitPoints));
@@ -567,7 +568,7 @@ namespace BinarySerializer.Ray1
             Etat = 5;
 
             // Set correct sub-etat and position
-            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Fan)
             {
                 SubEtat = 69;
 

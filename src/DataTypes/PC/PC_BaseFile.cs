@@ -30,7 +30,8 @@
 
             if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
                 settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
-                settings.EngineVersion == Ray1EngineVersion.PS1_Edu)
+                settings.EngineVersion == Ray1EngineVersion.PS1_Edu || 
+                settings.EngineVersion == Ray1EngineVersion.PC_Fan)
             {
                 PrimaryKitHeader = s.SerializeString(PrimaryKitHeader, 5, name: nameof(PrimaryKitHeader));
                 SecondaryKitHeader = s.SerializeString(SecondaryKitHeader, 5, name: nameof(SecondaryKitHeader));

@@ -48,7 +48,9 @@
                     Objects = s.SerializeObjectArray<ObjData>(Objects, ObjCount, name: nameof(Objects));
                     ObjCommands = s.SerializeObjectArray<PC_CommandCollection>(ObjCommands, ObjCount, name: nameof(ObjCommands));
                 });
-            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Edu, name: nameof(ObjBlockChecksum));
+            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
+                                                            settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
+                                                            settings.EngineVersion == Ray1EngineVersion.PC_Fan, name: nameof(ObjBlockChecksum));
         }
     }
 }

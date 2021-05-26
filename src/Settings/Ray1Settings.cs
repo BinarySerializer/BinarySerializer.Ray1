@@ -5,14 +5,13 @@ namespace BinarySerializer.Ray1
 {
     public class Ray1Settings
     {
-        public Ray1Settings(Ray1EngineVersion engineVersion, World world, int level, Ray1PCVersion pcVersion = Ray1PCVersion.None, string volume = null, bool isFan = false)
+        public Ray1Settings(Ray1EngineVersion engineVersion, World world, int level, Ray1PCVersion pcVersion = Ray1PCVersion.None, string volume = null)
         {
             EngineVersion = engineVersion;
             World = world;
             Level = level;
             PCVersion = pcVersion;
             Volume = volume;
-            IsFAN = isFan;
 
             switch (EngineVersion)
             {
@@ -28,6 +27,7 @@ namespace BinarySerializer.Ray1
                 case Ray1EngineVersion.PC:
                 case Ray1EngineVersion.PocketPC:
                 case Ray1EngineVersion.PC_Kit:
+                case Ray1EngineVersion.PC_Fan:
                 case Ray1EngineVersion.PC_Edu:
                 case Ray1EngineVersion.PS1_Edu:
                     EngineBranch = Ray1EngineBranch.PC;
@@ -56,10 +56,10 @@ namespace BinarySerializer.Ray1
         public Ray1EngineVersion EngineVersion { get; }
         public Ray1EngineBranch EngineBranch { get; }
         public Ray1PCVersion PCVersion { get; }
+
         public World World { get; set; }
         public int Level { get; set; }
         public string Volume { get; set; }
-        public bool IsFAN { get; } // TODO: Replace by engine version tree
 
         public static int CellSize = 16;
         public static Encoding DefaultEncoding => Encoding.GetEncoding(437);

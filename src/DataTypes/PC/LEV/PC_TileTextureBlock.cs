@@ -80,7 +80,9 @@
                     // Serialize the fourth unknown value
                     Unknown4 = s.SerializeArray<byte>(Unknown4, 32, name: nameof(Unknown4));
                 }, ChecksumPlacement.After, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC, name: nameof(TexturesChecksum));
-            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Edu, name: nameof(TextureBlockChecksum));
+            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
+                                                            settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
+                                                            settings.EngineVersion == Ray1EngineVersion.PC_Fan, name: nameof(TextureBlockChecksum));
         }
     }
 }

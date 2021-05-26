@@ -77,7 +77,8 @@
             ImageDataLength = s.Serialize<uint>(ImageDataLength, name: nameof(ImageDataLength));
 
             var isChecksumBefore = Pre_FileType == Type.World && (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
-                                                              settings.EngineVersion == Ray1EngineVersion.PC_Edu);
+                                                                  settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
+                                                                  settings.EngineVersion == Ray1EngineVersion.PC_Fan);
             var hasChecksum = isChecksumBefore || Pre_FileType != Type.BigRay;
 
             ImageDataChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>

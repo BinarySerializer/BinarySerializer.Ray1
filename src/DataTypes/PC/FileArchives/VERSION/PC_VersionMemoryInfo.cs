@@ -37,7 +37,7 @@
             TailleMainMemSamplesTable = s.Serialize<uint>(TailleMainMemSamplesTable, name: nameof(TailleMainMemSamplesTable));
             s.Log($"{nameof(TailleMainMemSamplesTable)}: {TailleMainMemSamplesTable << 10} bytes");
 
-            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Fan)
             {
                 TailleMainMemEdit = s.Serialize<uint>(TailleMainMemEdit, name: nameof(TailleMainMemEdit));
                 s.Log($"{nameof(TailleMainMemEdit)}: {TailleMainMemEdit << 10} bytes");

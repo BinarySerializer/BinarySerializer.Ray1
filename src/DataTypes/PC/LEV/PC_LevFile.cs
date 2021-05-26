@@ -85,7 +85,9 @@
             TextureBlockPointer = s.SerializePointer(TextureBlockPointer, allowInvalid: allowInvalid, name: nameof(TextureBlockPointer));
 
             // Serialize the level defines
-            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Edu)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
+                settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
+                settings.EngineVersion == Ray1EngineVersion.PC_Fan)
                 LevelDefines = s.SerializeObject<PC_LevelDefines>(LevelDefines, name: nameof(LevelDefines));
 
             // Serialize the map data
@@ -121,7 +123,7 @@
             ObjData = s.SerializeObject<PC_ObjBlock>(ObjData, name: nameof(ObjData));
 
             // Serialize the profile define data (only on By his Fans and 60 Levels)
-            if (settings.IsFAN)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Fan)
                 ProfileDefine = s.SerializeObject<PC_ProfileDefine>(ProfileDefine, name: nameof(ProfileDefine));
 
             // Serialize alpha data (only on EDU)
