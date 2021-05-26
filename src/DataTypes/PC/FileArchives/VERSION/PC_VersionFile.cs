@@ -30,7 +30,7 @@
             s.DoAt(Offset + 0x52, () => VersionModes = s.SerializeStringArray(VersionModes, VersionsCount, 20, name: nameof(VersionModes)));
             s.DoAt(Offset + 0x192, () => VersionMemoryInfos = s.SerializeObjectArray<PC_VersionMemoryInfo>(VersionMemoryInfos, VersionsCount, name: nameof(VersionMemoryInfos)));
 
-            s.DoAt(Offset + (settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit ? 0x392 : 0x312), () =>
+            s.DoAt(Offset + (settings.EngineVersion == Ray1EngineVersion.PC_Kit ? 0x392 : 0x312), () =>
             {
                 DefaultPrimaryHeader = s.SerializeString(DefaultPrimaryHeader, 5, name: nameof(DefaultPrimaryHeader));
                 DefaultSecondaryHeader = s.SerializeString(DefaultSecondaryHeader, 5, name: nameof(DefaultSecondaryHeader));
@@ -38,7 +38,7 @@
             });
 
             // Make sure we actually end up at the end of the file.
-            s.Goto(Offset + (settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit ? 0x39E : 0x31E));
+            s.Goto(Offset + (settings.EngineVersion == Ray1EngineVersion.PC_Kit ? 0x39E : 0x31E));
         }
     }
 }

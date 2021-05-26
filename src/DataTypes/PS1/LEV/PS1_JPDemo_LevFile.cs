@@ -36,7 +36,7 @@
             // Serialize object information
             ObjectsPointer = s.SerializePointer(ObjectsPointer, name: nameof(ObjectsPointer));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3)
+            if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
                 UnknownObjTablePointer = s.SerializePointer(UnknownObjTablePointer, name: nameof(UnknownObjTablePointer));
             ObjectsCount = s.Serialize<uint>(ObjectsCount, name: nameof(ObjectsCount));
             ObjectsLinkTablePointer = s.SerializePointer(ObjectsLinkTablePointer, name: nameof(ObjectsLinkTablePointer));

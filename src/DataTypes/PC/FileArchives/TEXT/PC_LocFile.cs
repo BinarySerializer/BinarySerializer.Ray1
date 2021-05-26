@@ -38,10 +38,10 @@ namespace BinarySerializer.Ray1
             // Most versions have 3 languages, but sometimes the NumberOfLanguages is set to 1 because only 1 is available. Other versions may have up to 5.
             var numLangNames = Math.Min(5, Math.Max(3, (int)NumberOfLanguages));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_Edu && (settings.Volume.StartsWith("IT") || settings.Volume.StartsWith("CS")))
+            if (settings.EngineVersion == Ray1EngineVersion.PS1_Edu && (settings.Volume.StartsWith("IT") || settings.Volume.StartsWith("CS")))
                 numLangNames = 5;
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu && (settings.Volume.StartsWith("HN") || settings.Volume.StartsWith("IS") || settings.Volume.StartsWith("NL")))
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Edu && (settings.Volume.StartsWith("HN") || settings.Volume.StartsWith("IS") || settings.Volume.StartsWith("NL")))
                 numLangNames = 5;
 
             LanguageNames = s.SerializeStringArray(LanguageNames, numLangNames, 11, name: nameof(LanguageNames));

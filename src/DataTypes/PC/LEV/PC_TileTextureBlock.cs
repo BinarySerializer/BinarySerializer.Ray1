@@ -60,7 +60,7 @@
 
             TextureBlockChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
             {
-                s.DoXOR((byte)(settings.EngineVersion == Ray1EngineVersion.R1_PC || settings.EngineVersion == Ray1EngineVersion.R1_PocketPC ? 0 : 0xFF), () =>
+                s.DoXOR((byte)(settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC ? 0 : 0xFF), () =>
                 {
                     // Read the offset table for the textures, based from the start of the tile texture arrays
                     TexturesOffsetTable = s.SerializePointerArray(TexturesOffsetTable, 1200, anchor: s.CurrentPointer + 1200 * 4 + 3 * 4, name: nameof(TexturesOffsetTable));
@@ -79,8 +79,8 @@
 
                     // Serialize the fourth unknown value
                     Unknown4 = s.SerializeArray<byte>(Unknown4, 32, name: nameof(Unknown4));
-                }, ChecksumPlacement.After, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.R1_PC || settings.EngineVersion == Ray1EngineVersion.R1_PocketPC, name: nameof(TexturesChecksum));
-            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit || settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu, name: nameof(TextureBlockChecksum));
+                }, ChecksumPlacement.After, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC, name: nameof(TexturesChecksum));
+            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Edu, name: nameof(TextureBlockChecksum));
         }
     }
 }

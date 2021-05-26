@@ -51,7 +51,7 @@
             VideoBiosCheckSum = s.Serialize<byte>(VideoBiosCheckSum, name: nameof(VideoBiosCheckSum));
             BiosCheckSum = s.Serialize<byte>(BiosCheckSum, name: nameof(BiosCheckSum));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC || settings.EngineVersion == Ray1EngineVersion.R1_PocketPC)
+            if (settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC)
                 s.DoXOR(0x15, () => Plan0NumPcx = s.SerializeArray<byte>(Plan0NumPcx, Plan0NumPcxCount, name: nameof(Plan0NumPcx)));
             else
                 s.DoXOR(0x19, () => Plan0NumPcxFiles = s.SerializeStringArray(Plan0NumPcxFiles, Plan0NumPcxCount, 8, name: nameof(Plan0NumPcxFiles)));
@@ -66,7 +66,7 @@
             Eta = s.SerializeObjectArray<PC_ETA>(Eta, Eta.Length, name: nameof(Eta));
 
             // Kit and EDU have more data...
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit || settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Edu)
             {
                 // Serialize world defines
                 WorldDefineChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
@@ -75,7 +75,7 @@
                 }, ChecksumPlacement.Before, name: nameof(WorldDefineChecksum));
 
                 // Serialize file tables
-                if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit)
+                if (settings.EngineVersion == Ray1EngineVersion.PC_Kit)
                 {
                     DESFileNames = s.SerializeStringArray(DESFileNames, 100, 13, name: nameof(DESFileNames));
                     ETAFileNames = s.SerializeStringArray(ETAFileNames, 60, 13, name: nameof(ETAFileNames));

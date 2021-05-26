@@ -82,7 +82,7 @@ namespace BinarySerializer.Ray1
                         etatCount = Etat + 1;
 
                         // Get correct etat count on GBA
-                        if (settings.EngineVersion == Ray1EngineVersion.R1_GBA)
+                        if (settings.EngineVersion == Ray1EngineVersion.GBA)
                         {
                             s.DoAt(ETAPointer, () => {
                                 int curEtatCount = 0;
@@ -136,7 +136,7 @@ namespace BinarySerializer.Ray1
 
                         if (!hasSerialized || prevETA.Length <= j)
                         {
-                            if (settings.EngineVersion == Ray1EngineVersion.R1_DSi)
+                            if (settings.EngineVersion == Ray1EngineVersion.DSi)
                             {
                                 count = j == Etat ? (SubEtat + 1) : 1;
                             }

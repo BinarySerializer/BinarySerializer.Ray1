@@ -34,7 +34,7 @@
 
             BackgroundLayerInfos = s.SerializeObjectArray<Sprite>(BackgroundLayerInfos, 12, name: nameof(BackgroundLayerInfos));
 
-            Unknown4 = s.SerializeArray<byte>(Unknown4, settings.EngineVersion == Ray1EngineVersion.R1_PS1_JP ? 208 : 80, name: nameof(Unknown4));
+            Unknown4 = s.SerializeArray<byte>(Unknown4, settings.EngineVersion == Ray1EngineVersion.PS1_JP ? 208 : 80, name: nameof(Unknown4));
         }
     }
 }

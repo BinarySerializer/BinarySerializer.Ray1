@@ -87,7 +87,7 @@ namespace BinarySerializer.Ray1
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_GBA)
+            if (settings.EngineVersion == Ray1EngineVersion.GBA)
             {
                 // Serialize values
                 TileDataPointer = s.SerializePointer(TileDataPointer, name: nameof(TileDataPointer));
@@ -101,7 +101,7 @@ namespace BinarySerializer.Ray1
                 ParallaxBackgroundIndex = s.Serialize<byte>(ParallaxBackgroundIndex, name: nameof(ParallaxBackgroundIndex));
                 CompressionFlags = s.Serialize<uint>(CompressionFlags, name: nameof(CompressionFlags));
             }
-            else if (settings.EngineVersion == Ray1EngineVersion.R1_DSi)
+            else if (settings.EngineVersion == Ray1EngineVersion.DSi)
             {
                 // Serialize values
                 DSi_Uint_00 = s.Serialize<uint>(DSi_Uint_00, name: nameof(DSi_Uint_00));
@@ -119,7 +119,7 @@ namespace BinarySerializer.Ray1
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_GBA)
+            if (settings.EngineVersion == Ray1EngineVersion.GBA)
             {
                 s.DoAt(MapDataPointer, () => 
                 {
@@ -150,7 +150,7 @@ namespace BinarySerializer.Ray1
                 TileData = s.DoAt(TileDataPointer, () => 
                     s.SerializeArray<byte>(TileData, 0x20 * ((uint)maxBlockIndex + 1), name: nameof(TileData)));
             }
-            else if (settings.EngineVersion == Ray1EngineVersion.R1_DSi)
+            else if (settings.EngineVersion == Ray1EngineVersion.DSi)
             {
                 MapData = s.DoAt(MapDataPointer, () => 
                     s.DoEncoded(new GBA_LZSSEncoder(), () => s.SerializeObject<MapData>(MapData, name: nameof(MapData))));

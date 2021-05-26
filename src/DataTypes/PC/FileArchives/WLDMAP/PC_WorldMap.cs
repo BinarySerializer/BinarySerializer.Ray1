@@ -27,8 +27,8 @@
             var settings = s.GetSettings<Ray1Settings>();
 
             // Serialize alpha data (only on EDU)
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu ||
-                settings.EngineVersion == Ray1EngineVersion.R1_PS1_Edu)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
+                settings.EngineVersion == Ray1EngineVersion.PS1_Edu)
             {
                 EDU_Alpha ??= new byte[160][];
 

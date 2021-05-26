@@ -63,7 +63,7 @@ namespace BinarySerializer.Ray1
 
             s.DoAt(ImageDataPointer, () => 
             {
-                if (settings.EngineVersion == Ray1EngineVersion.R1_DSi)
+                if (settings.EngineVersion == Ray1EngineVersion.DSi)
                 {
                     if (isImgDataCompressed)
                         s.DoEncoded(new GBA_LZSSEncoder(), () => ImageData = s.SerializeArray<byte>(ImageData, 0x40 * Width * Height, name: nameof(ImageData)));
@@ -83,7 +83,7 @@ namespace BinarySerializer.Ray1
             s.DoAt(PalettesPointer, () => 
             {
                 Palettes = s.SerializeObjectArray<RGBA5551Color>(Palettes,
-                    (settings.EngineVersion == Ray1EngineVersion.R1_DSi) ? 256 : (PaletteCount * 16),
+                    (settings.EngineVersion == Ray1EngineVersion.DSi) ? 256 : (PaletteCount * 16),
                     name: nameof(Palettes));
             });
         }

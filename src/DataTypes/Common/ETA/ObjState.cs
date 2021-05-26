@@ -72,29 +72,29 @@ namespace BinarySerializer.Ray1
             {
                 RightSpeed = s.Serialize<sbyte>(RightSpeed, name: nameof(RightSpeed));
 
-                if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 ||
-                    settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6)
+                if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ||
+                    settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
                     Demo_Byte_01 = s.Serialize<byte>(Demo_Byte_01, name: nameof(Demo_Byte_01));
 
                 LeftSpeed = s.Serialize<sbyte>(LeftSpeed, name: nameof(LeftSpeed));
 
-                if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 ||
-                    settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6)
+                if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ||
+                    settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
                     Demo_Byte_03 = s.Serialize<byte>(Demo_Byte_03, name: nameof(Demo_Byte_03));
 
                 AnimationIndex = s.Serialize<byte>(AnimationIndex, name: nameof(AnimationIndex));
 
-                if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 ||
-                    settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6)
+                if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ||
+                    settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
                     Demo_Byte_05 = s.Serialize<byte>(Demo_Byte_05, name: nameof(Demo_Byte_05));
 
                 LinkedEtat = s.Serialize<byte>(LinkedEtat, name: nameof(LinkedEtat));
                 LinkedSubEtat = s.Serialize<byte>(LinkedSubEtat, name: nameof(LinkedSubEtat));
 
-                if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3)
+                if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
                     Demo_Byte_08 = s.Serialize<byte>(Demo_Byte_08, name: nameof(Demo_Byte_08));
 
-                if (settings.EngineVersion == Ray1EngineVersion.R1_Saturn)
+                if (settings.EngineVersion == Ray1EngineVersion.Saturn)
                 {
                     s.SerializeBitValues<byte>(bitFunc =>
                     {
@@ -111,7 +111,7 @@ namespace BinarySerializer.Ray1
                     });
                 }
 
-                if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3)
+                if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
                 {
                     Demo_Byte_0A = s.Serialize<byte>(Demo_Byte_0A, name: nameof(Demo_Byte_0A));
                     Demo_Byte_0B = s.Serialize<byte>(Demo_Byte_0B, name: nameof(Demo_Byte_0B));
@@ -120,7 +120,7 @@ namespace BinarySerializer.Ray1
                 }
                 else
                 {
-                    if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6)
+                    if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
                         Demo_Byte_08 = s.Serialize<byte>(Demo_Byte_08, name: nameof(Demo_Byte_08));
 
                     SoundIndex = s.Serialize<byte>(SoundIndex, name: nameof(SoundIndex));

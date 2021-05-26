@@ -191,7 +191,7 @@ namespace BinarySerializer.Ray1
             }
             else
             {
-                var offset = settings.EngineVersion == Ray1EngineVersion.R1_Saturn ? 7 : 0;
+                var offset = settings.EngineVersion == Ray1EngineVersion.Saturn ? 7 : 0;
 
                 return BitHelpers.ExtractBits(PS1_Flags, 1, offset) == 1;
             }
@@ -208,7 +208,7 @@ namespace BinarySerializer.Ray1
             }
             else
             {
-                var offset = settings.EngineVersion == Ray1EngineVersion.R1_Saturn ? 7 : 0;
+                var offset = settings.EngineVersion == Ray1EngineVersion.Saturn ? 7 : 0;
 
                 PS1_Flags = (byte)BitHelpers.SetBits(PS1_Flags, value ? 1 : 0, 1, offset);
             }
@@ -254,7 +254,7 @@ namespace BinarySerializer.Ray1
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            if (!IsPCFormat(settings) || Pre_IsSerializingFromMemory || settings.EngineVersion == Ray1EngineVersion.R1_GBA || settings.EngineVersion == Ray1EngineVersion.R1_DSi)
+            if (!IsPCFormat(settings) || Pre_IsSerializingFromMemory || settings.EngineVersion == Ray1EngineVersion.GBA || settings.EngineVersion == Ray1EngineVersion.DSi)
             {
                 SpritesPointer = s.SerializePointer(SpritesPointer, name: nameof(SpritesPointer));
                 AnimationsPointer = s.SerializePointer(AnimationsPointer, name: nameof(AnimationsPointer));
@@ -263,7 +263,7 @@ namespace BinarySerializer.Ray1
 
                 CommandsPointer = s.SerializePointer(CommandsPointer, name: nameof(CommandsPointer));
 
-                if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 || settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6)
+                if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 || settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
                 {
                     PS1Demo_Unk1 = s.SerializeArray<byte>(PS1Demo_Unk1, 40, name: nameof(PS1Demo_Unk1));
 
@@ -309,7 +309,7 @@ namespace BinarySerializer.Ray1
                 YPosition = s.Serialize<short>((short)YPosition, name: nameof(YPosition));
             }
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 || settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6)
+            if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 || settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
             {
                 PS1Demo_Unk3 = s.Serialize<short>(PS1Demo_Unk3, name: nameof(PS1Demo_Unk3));
             }
@@ -327,7 +327,7 @@ namespace BinarySerializer.Ray1
             InitialXPosition = s.Serialize<short>(InitialXPosition, name: nameof(InitialXPosition));
             InitialYPosition = s.Serialize<short>(InitialYPosition, name: nameof(InitialYPosition));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3)
+            if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
             {
                 PS1Demo_IsFlipped = s.Serialize<bool>(PS1Demo_IsFlipped, name: nameof(PS1Demo_IsFlipped)); // This is stored as a short in the game, but used as a bool
                 PS1Demo_Padding = s.Serialize<byte>(PS1Demo_Padding, name: nameof(PS1Demo_Padding));
@@ -345,9 +345,9 @@ namespace BinarySerializer.Ray1
             Short_4C = s.Serialize<short>(Short_4C, name: nameof(Short_4C));
             Short_4E = s.Serialize<short>(Short_4E, name: nameof(Short_4E));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit || 
-                settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu ||
-                settings.EngineVersion == Ray1EngineVersion.R1_PS1_Edu)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
+                settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
+                settings.EngineVersion == Ray1EngineVersion.PS1_Edu)
                 EDU_ExtHitPoints = s.Serialize<uint>(EDU_ExtHitPoints, name: nameof(EDU_ExtHitPoints));
 
             CMD_Arg1 = s.Serialize<short>(CMD_Arg1, name: nameof(CMD_Arg1));
@@ -363,7 +363,7 @@ namespace BinarySerializer.Ray1
             if (IsPCFormat(settings))
                 Type = s.Serialize<ObjType>(Type, name: nameof(Type));
 
-            CollisionTypes = s.SerializeArray<TileCollisionType>(CollisionTypes, settings.EngineVersion != Ray1EngineVersion.R1_PS1_JPDemoVol3 ? 5 : 1, name: nameof(CollisionTypes));
+            CollisionTypes = s.SerializeArray<TileCollisionType>(CollisionTypes, settings.EngineVersion != Ray1EngineVersion.PS1_JPDemoVol3 ? 5 : 1, name: nameof(CollisionTypes));
             Byte_67 = s.Serialize<byte>(Byte_67, name: nameof(Byte_67));
 
             OffsetBX = s.Serialize<byte>(OffsetBX, name: nameof(OffsetBX));
@@ -392,7 +392,7 @@ namespace BinarySerializer.Ray1
 
             OffsetHY = s.Serialize<byte>(OffsetHY, name: nameof(OffsetHY));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 || settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6)
+            if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 || settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
                 PS1_Flags = s.Serialize<byte>(PS1_Flags, name: nameof(PS1_Flags));
 
             FollowSprite = s.Serialize<byte>(FollowSprite, name: nameof(FollowSprite));
@@ -413,11 +413,11 @@ namespace BinarySerializer.Ray1
             CurrentCommandContext = s.Serialize<byte>(CurrentCommandContext, name: nameof(CurrentCommandContext));
             Byte_7D = s.Serialize<byte>(Byte_7D, name: nameof(Byte_7D));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 || settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6)
+            if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 || settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
             {
                 PS1Demo_Unk5 = s.Serialize<byte>(PS1Demo_Unk5, name: nameof(PS1Demo_Unk5));
 
-                if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3)
+                if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
                 {
                     PS1Demo_Unk6 = s.Serialize<byte>(PS1Demo_Unk6, name: nameof(PS1Demo_Unk6));
                     PS1Demo_Unk7 = s.Serialize<byte>(PS1Demo_Unk7, name: nameof(PS1Demo_Unk7));
@@ -437,9 +437,9 @@ namespace BinarySerializer.Ray1
             }
             else
             {
-                if (settings.EngineVersion != Ray1EngineVersion.R1_PS1_JPDemoVol3)
+                if (settings.EngineVersion != Ray1EngineVersion.PS1_JPDemoVol3)
                 {
-                    if (settings.EngineVersion != Ray1EngineVersion.R1_PS1_JPDemoVol6)
+                    if (settings.EngineVersion != Ray1EngineVersion.PS1_JPDemoVol6)
                     {
                         PS1_RuntimeFlags = s.Serialize<PS1_EventFlags>(PS1_RuntimeFlags, name: nameof(PS1_RuntimeFlags));
                         PS1_Flags = s.Serialize<byte>(PS1_Flags, name: nameof(PS1_Flags));
@@ -459,7 +459,7 @@ namespace BinarySerializer.Ray1
             // Serialize the animation descriptors
             s.DoAt(AnimationsPointer, () => AnimDescriptors = s.SerializeObjectArray<Animation>(AnimDescriptors, AnimationsCount, name: nameof(AnimDescriptors)));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3)
+            if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
             {
                 if (ImageBuffer == null && ImageBufferPointer != null && ImageDescriptors != null)
                 {
@@ -517,8 +517,8 @@ namespace BinarySerializer.Ray1
             var settings = context.GetSettings<Ray1Settings>();
 
             OffsetBX = 80;
-            OffsetBY = (byte)(settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 || 
-                              settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6 ? 80 : 78);
+            OffsetBY = (byte)(settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 || 
+                              settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6 ? 80 : 78);
             if (rayPos != null)
             {
                 XPosition = rayPos.XPosition + rayPos.OffsetBX - OffsetBX;
@@ -567,7 +567,7 @@ namespace BinarySerializer.Ray1
             Etat = 5;
 
             // Set correct sub-etat and position
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit)
             {
                 SubEtat = 69;
 
@@ -579,7 +579,7 @@ namespace BinarySerializer.Ray1
                 //OffsetBX = 80;
                 //OffsetBY = 64;
             }
-            else if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu || settings.EngineVersion == Ray1EngineVersion.R1_PS1_Edu)
+            else if (settings.EngineVersion == Ray1EngineVersion.PC_Edu || settings.EngineVersion == Ray1EngineVersion.PS1_Edu)
             {
                 if (index == 0) // Normal
                     SubEtat = 39;

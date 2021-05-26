@@ -42,8 +42,8 @@
                 TransparencyMode = s.Serialize<PC_TransparencyMode>(TransparencyMode, name: nameof(TransparencyMode));
                 PC_Byte_05 = s.Serialize<byte>(PC_Byte_05, name: nameof(PC_Byte_05));
             }
-            else if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 || 
-                     settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6)
+            else if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 || 
+                     settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
             {
                 s.SerializeBitValues<int>(bitFunc =>
                 {
@@ -52,7 +52,7 @@
                     BlockType = (byte)bitFunc(BlockType, 8, name: nameof(BlockType));
                 });
             }
-            else if (settings.EngineVersion == Ray1EngineVersion.R1_Saturn)
+            else if (settings.EngineVersion == Ray1EngineVersion.Saturn)
             {
                 s.SerializeBitValues<ushort>(bitFunc =>
                 {
@@ -99,7 +99,7 @@
 
                 TileMapX = 0;
             }
-            else if (settings.EngineVersion == Ray1EngineVersion.R1_PS1 || 
+            else if (settings.EngineVersion == Ray1EngineVersion.PS1 || 
                      settings.EngineVersion == Ray1EngineVersion.R2_PS1)
             {
                 s.SerializeBitValues<ushort>(bitFunc =>
@@ -109,7 +109,7 @@
                     BlockType = (byte)bitFunc(BlockType, 6, name: nameof(BlockType));
                 });
             }
-            else if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JP)
+            else if (settings.EngineVersion == Ray1EngineVersion.PS1_JP)
             {
                 s.SerializeBitValues<ushort>(bitFunc =>
                 {

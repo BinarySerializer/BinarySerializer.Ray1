@@ -36,7 +36,7 @@
             var unk2Length = 27;
 
             // The PS1 version hard-codes a different length for this version
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_Edu && settings.Volume.StartsWith("CS"))
+            if (settings.EngineVersion == Ray1EngineVersion.PS1_Edu && settings.Volume.StartsWith("CS"))
                 unk2Length = 29;
 
             Bytes_04 = s.SerializeArray<byte>(Bytes_04, unk2Length, name: nameof(Bytes_04));

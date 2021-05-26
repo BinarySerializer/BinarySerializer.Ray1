@@ -18,7 +18,7 @@
             Width = 48;
             Height = 36;
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_GBA)
+            if (settings.EngineVersion == Ray1EngineVersion.GBA)
             {
                 // Hard-code properties
                 ImageDataPointer = s.GetPreDefinedPointer(GBA_DefinedPointer.WorldMapVignetteImageData);
@@ -29,7 +29,7 @@
                 // Serialize data from pointers
                 SerializeVignette(s, false);
             }
-            else if (settings.EngineVersion == Ray1EngineVersion.R1_DSi)
+            else if (settings.EngineVersion == Ray1EngineVersion.DSi)
             {
                 // Serialize pointers
                 s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.WorldMapVignette), () =>

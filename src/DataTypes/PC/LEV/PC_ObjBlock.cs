@@ -41,14 +41,14 @@
             ObjBlockChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
             {
                 // Set the xor key to use for the obj block
-                s.DoXOR((byte)(settings.EngineVersion == Ray1EngineVersion.R1_PC || settings.EngineVersion == Ray1EngineVersion.R1_PocketPC ? 0 : 0x91), () =>
+                s.DoXOR((byte)(settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC ? 0 : 0x91), () =>
                 {
                     ObjCount = s.Serialize<ushort>(ObjCount, name: nameof(ObjCount));
                     ObjLinkingTable = s.SerializeArray<ushort>(ObjLinkingTable, ObjCount, name: nameof(ObjLinkingTable));
                     Objects = s.SerializeObjectArray<ObjData>(Objects, ObjCount, name: nameof(Objects));
                     ObjCommands = s.SerializeObjectArray<PC_CommandCollection>(ObjCommands, ObjCount, name: nameof(ObjCommands));
                 });
-            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit || settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu, name: nameof(ObjBlockChecksum));
+            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Edu, name: nameof(ObjBlockChecksum));
         }
     }
 }

@@ -38,7 +38,7 @@
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC || settings.EngineVersion == Ray1EngineVersion.R1_PocketPC)
+            if (settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC)
             {
                 FileOffset = s.Serialize<uint>(FileOffset, name: nameof(FileOffset));
                 FileSize = s.Serialize<uint>(FileSize, name: nameof(FileSize));

@@ -24,7 +24,7 @@
 
             s.DoAt(SpritesPointer, () => Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites)));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3)
+            if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
             {
                 if (ImageBuffer == null && ImageBufferPointer != null && Sprites != null)
                 {

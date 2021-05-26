@@ -28,9 +28,9 @@
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit || 
-                settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu ||
-                settings.EngineVersion == Ray1EngineVersion.R1_PS1_Edu)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
+                settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
+                settings.EngineVersion == Ray1EngineVersion.PS1_Edu)
             {
                 PrimaryKitHeader = s.SerializeString(PrimaryKitHeader, 5, name: nameof(PrimaryKitHeader));
                 SecondaryKitHeader = s.SerializeString(SecondaryKitHeader, 5, name: nameof(SecondaryKitHeader));

@@ -85,14 +85,14 @@
             TextureBlockPointer = s.SerializePointer(TextureBlockPointer, allowInvalid: allowInvalid, name: nameof(TextureBlockPointer));
 
             // Serialize the level defines
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit || settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Edu)
                 LevelDefines = s.SerializeObject<PC_LevelDefines>(LevelDefines, name: nameof(LevelDefines));
 
             // Serialize the map data
             MapData = s.SerializeObject<PC_MapData>(MapData, name: nameof(MapData));
 
             // Serialize the background data
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC || settings.EngineVersion == Ray1EngineVersion.R1_PocketPC)
+            if (settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC)
             {
                 // Serialize the background data
                 FNDIndex = s.Serialize<byte>(FNDIndex, name: nameof(FNDIndex));
@@ -101,7 +101,7 @@
             }
 
             // Serialize the rough tile textures
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC)
+            if (settings.EngineVersion == Ray1EngineVersion.PC)
                 RoughTileTextureData = s.SerializeObject<PC_RoughTileTextureBlock>(RoughTileTextureData, name: nameof(RoughTileTextureData));
             else
                 LeftoverRoughTextureBlock = s.SerializeArray<byte>(LeftoverRoughTextureBlock, TextureBlockPointer.FileOffset - s.CurrentPointer.FileOffset, name: nameof(LeftoverRoughTextureBlock));
@@ -114,7 +114,7 @@
             TileTextureData = s.SerializeObject<PC_TileTextureBlock>(TileTextureData, name: nameof(TileTextureData));
 
             // At this point the stream position should match the event block offset (ignore the Pocket PC version here since it uses leftover pointers from PC version)
-            if (settings.EngineVersion != Ray1EngineVersion.R1_PocketPC && s.CurrentPointer != EventBlockPointer)
+            if (settings.EngineVersion != Ray1EngineVersion.PocketPC && s.CurrentPointer != EventBlockPointer)
                 s.LogWarning("Event block offset is incorrect");
 
             // Serialize the event data
@@ -125,7 +125,7 @@
                 ProfileDefine = s.SerializeObject<PC_ProfileDefine>(ProfileDefine, name: nameof(ProfileDefine));
 
             // Serialize alpha data (only on EDU)
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Edu)
             {
                 EDU_AlphaChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
                 {

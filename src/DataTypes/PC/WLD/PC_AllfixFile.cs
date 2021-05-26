@@ -49,9 +49,9 @@
             DESIndex_ClockObj = s.Serialize<uint>(DESIndex_ClockObj, name: nameof(DESIndex_ClockObj));
             DESIndex_DivObj = s.Serialize<uint>(DESIndex_DivObj, name: nameof(DESIndex_DivObj));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit || 
-                settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu ||
-                settings.EngineVersion == Ray1EngineVersion.R1_PS1_Edu)
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
+                settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
+                settings.EngineVersion == Ray1EngineVersion.PS1_Edu)
                 DESIndex_PARCHEM = s.Serialize<uint>(DESIndex_PARCHEM, name: nameof(DESIndex_PARCHEM));
         }
     }

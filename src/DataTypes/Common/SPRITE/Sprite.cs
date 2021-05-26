@@ -136,9 +136,9 @@
                         PaletteInfo = s.Serialize<ushort>(PaletteInfo, name: nameof(PaletteInfo));
                         TexturePageInfo = s.Serialize<ushort>(TexturePageInfo, name: nameof(TexturePageInfo));
                     }
-                    else if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JP || 
-                             settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 ||
-                             settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol6)
+                    else if (settings.EngineVersion == Ray1EngineVersion.PS1_JP || 
+                             settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ||
+                             settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
                     {
                         Index = s.Serialize<ushort>(Index, name: nameof(Index));
                         ImageType = s.Serialize<ushort>(ImageType, name: nameof(ImageType));
@@ -149,7 +149,7 @@
                         Unknown1 = s.Serialize<byte>(Unknown1, name: nameof(Unknown1));
                         Unknown2 = s.Serialize<byte>(Unknown2, name: nameof(Unknown2));
                     }
-                    else if (settings.EngineVersion == Ray1EngineVersion.R1_Saturn)
+                    else if (settings.EngineVersion == Ray1EngineVersion.Saturn)
                     {
                         Index = s.Serialize<ushort>(Index, name: nameof(Index));
 
@@ -177,7 +177,7 @@
                         });
                     }
 
-                    if (settings.EngineVersion != Ray1EngineVersion.R1_Saturn &&
+                    if (settings.EngineVersion != Ray1EngineVersion.Saturn &&
                         settings.EngineVersion != Ray1EngineVersion.R2_PS1)
                     {
                         Unknown3 = s.Serialize<byte>(Unknown3, name: nameof(Unknown3));

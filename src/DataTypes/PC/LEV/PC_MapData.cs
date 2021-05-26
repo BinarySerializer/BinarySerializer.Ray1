@@ -49,7 +49,7 @@
                 // Create the palettes if necessary
                 if (ColorPalettes == null)
                 {
-                    ColorPalettes = settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit ? new RGB666Color[][]
+                    ColorPalettes = settings.EngineVersion == Ray1EngineVersion.PC_Kit ? new RGB666Color[][]
                     {
                         new RGB666Color[256],
                     } : new RGB666Color[][]
@@ -72,7 +72,7 @@
 
                 // Serialize the map cells
                 Tiles = s.SerializeObjectArray<MapTile>(Tiles, Height * Width, name: nameof(Tiles));
-            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.R1_PC_Kit || settings.EngineVersion == Ray1EngineVersion.R1_PC_Edu, name: nameof(MapBlockChecksum));
+            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Edu, name: nameof(MapBlockChecksum));
         }
     }
 }

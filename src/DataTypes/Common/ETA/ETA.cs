@@ -62,8 +62,8 @@ namespace BinarySerializer.Ray1
                 uint stateSize = settings.EngineVersion switch
                 {
                     Ray1EngineVersion.R2_PS1 => 16u,
-                    Ray1EngineVersion.R1_PS1_JPDemoVol3 => 14u,
-                    Ray1EngineVersion.R1_PS1_JPDemoVol6 => 12u,
+                    Ray1EngineVersion.PS1_JPDemoVol3 => 14u,
+                    Ray1EngineVersion.PS1_JPDemoVol6 => 12u,
                     _ => 8
                 };
 

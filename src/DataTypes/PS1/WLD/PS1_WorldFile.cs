@@ -124,7 +124,7 @@
             // OBJECT PALETTE 2
             ObjPalette2 = s.DoAt(ObjPalette2BlockPointer, () => s.SerializeObjectArray<RGBA5551Color>(ObjPalette2, 256, name: nameof(ObjPalette2)));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PS1)
+            if (settings.EngineVersion == Ray1EngineVersion.PS1)
             {
                 // TILES
                 PalettedTiles = s.DoAt(TilesBlockPointer, () => s.SerializeArray<byte>(PalettedTiles, TilePaletteBlockPointer - TilesBlockPointer, name: nameof(PalettedTiles)));
@@ -142,7 +142,7 @@
                 // TILE PALETTE ASSIGN
                 TilePaletteIndexTable = s.DoAt(PaletteIndexBlockPointer, () => s.SerializeArray<byte>(TilePaletteIndexTable, FileSize - PaletteIndexBlockPointer.FileOffset, name: nameof(TilePaletteIndexTable)));
             }
-            else if (settings.EngineVersion == Ray1EngineVersion.R1_PS1_JP)
+            else if (settings.EngineVersion == Ray1EngineVersion.PS1_JP)
             {
                 // TILES
                 s.DoAt(TilesBlockPointer, () => 

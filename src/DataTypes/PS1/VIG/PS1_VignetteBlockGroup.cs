@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="engineVersion">The engine version</param>
         /// <returns>The block width</returns>
-        public int GetBlockWidth(Ray1EngineVersion engineVersion) => engineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 ? 32 : 64;
+        public int GetBlockWidth(Ray1EngineVersion engineVersion) => engineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ? 32 : 64;
 
         /// <summary>
         /// Serializes the data

@@ -29,7 +29,7 @@ namespace BinarySerializer.Ray1
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1Jaguar_Proto && Pre_StructType != 29)
+            if (settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto && Pre_StructType != 29)
                 UnkPointers = s.SerializePointerArray(UnkPointers, 64, allowInvalid: true, name: nameof(UnkPointers));
 
             if (Pre_StructType != 29)
@@ -39,7 +39,7 @@ namespace BinarySerializer.Ray1
 
             if (Pre_StructType != 29) 
             {
-                Transitions = s.SerializeObjectArray<JAG_EventComplexDataTransition>(Transitions, settings.EngineVersion == Ray1EngineVersion.R1Jaguar_Proto ? 5 : 7, onPreSerialize: g => {
+                Transitions = s.SerializeObjectArray<JAG_EventComplexDataTransition>(Transitions, settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto ? 5 : 7, onPreSerialize: g => {
 					g.Pre_StructType = Pre_StructType;
 					g.Pre_NumLayers = Pre_NumLayers;
 				}, name: nameof(Transitions));
@@ -89,7 +89,7 @@ namespace BinarySerializer.Ray1
 				States = temp.ToArray();
 			}
 
-			if (settings.EngineVersion != Ray1EngineVersion.R1Jaguar_Proto)
+			if (settings.EngineVersion != Ray1EngineVersion.Jaguar_Proto)
             {
                 s.DoAt(SpritesPointer, () => 
                 {

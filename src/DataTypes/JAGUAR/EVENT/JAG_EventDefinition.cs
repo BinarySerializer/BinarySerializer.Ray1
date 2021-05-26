@@ -83,7 +83,7 @@ namespace BinarySerializer.Ray1
                 Byte_25 = s.Serialize<byte>(Byte_25, name: nameof(Byte_25));
                 Byte_26 = s.Serialize<byte>(Byte_26, name: nameof(Byte_26));
 				CodePointer = s.SerializePointer(CodePointer, name: nameof(CodePointer));
-			} else if (StructType == 6 || StructType == 7 || StructType == 30 || StructType == 31 || (settings.EngineVersion == Ray1EngineVersion.R1Jaguar_Proto && StructType == 15)) {
+			} else if (StructType == 6 || StructType == 7 || StructType == 30 || StructType == 31 || (settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto && StructType == 15)) {
 				CurrentStatePointer = s.SerializePointer(CurrentStatePointer, name: nameof(CurrentStatePointer));
 				ComplexDataPointer = s.SerializePointer(ComplexDataPointer, name: nameof(ComplexDataPointer));
 				UShort_10 = s.Serialize<ushort>(UShort_10, name: nameof(UShort_10));
@@ -101,7 +101,7 @@ namespace BinarySerializer.Ray1
 				Byte_25 = s.Serialize<byte>(Byte_25, name: nameof(Byte_25));
 				Byte_26 = s.Serialize<byte>(Byte_26, name: nameof(Byte_26));
 				Byte_27 = s.Serialize<byte>(Byte_27, name: nameof(Byte_27));
-			} else if (StructType == 23 || StructType == 11 || StructType == 2 || (settings.EngineVersion == Ray1EngineVersion.R1Jaguar_Demo && StructType == 10)) {
+			} else if (StructType == 23 || StructType == 11 || StructType == 2 || (settings.EngineVersion == Ray1EngineVersion.Jaguar_Demo && StructType == 10)) {
 				CodePointer = s.SerializePointer(CodePointer, name: nameof(CodePointer));
 				UnkBytes = s.SerializeArray<byte>(UnkBytes, 0x1c, name: nameof(UnkBytes));
 			} else if (StructType == 36 || StructType == 37 || StructType == 56) {
@@ -130,7 +130,7 @@ namespace BinarySerializer.Ray1
 				FrameCount = s.Serialize<byte>(FrameCount, name: nameof(FrameCount));
 				Byte_23 = s.Serialize<byte>(Byte_23, name: nameof(Byte_23));
 				UnkBytes = s.SerializeArray<byte>(UnkBytes, 0x10, name: nameof(UnkBytes));
-			} else if(settings.EngineVersion == Ray1EngineVersion.R1Jaguar_Proto && (StructType == 10 || StructType == 26 || StructType == 19)) {
+			} else if(settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto && (StructType == 10 || StructType == 26 || StructType == 19)) {
 				if (StructType == 10) {
 					UInt_1C = s.Serialize<uint>(UInt_1C, name: nameof(UInt_1C));
 					UShort_10 = s.Serialize<ushort>(UShort_10, name: nameof(UShort_10));
@@ -247,7 +247,7 @@ namespace BinarySerializer.Ray1
 			});
 
 			// Serialize image descriptors based on the state animations
-			if (settings.EngineVersion != Ray1EngineVersion.R1Jaguar_Proto)
+			if (settings.EngineVersion != Ray1EngineVersion.Jaguar_Proto)
             {
                 s.DoAt(SpritesPointer, () => {
                     if (StructType == 25)

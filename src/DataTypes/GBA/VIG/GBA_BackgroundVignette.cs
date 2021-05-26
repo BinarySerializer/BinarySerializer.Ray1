@@ -41,7 +41,7 @@
             var settings = s.GetSettings<Ray1Settings>();
 
             // Serialize data
-            if (settings.EngineVersion == Ray1EngineVersion.R1_DSi) 
+            if (settings.EngineVersion == Ray1EngineVersion.DSi) 
             {
                 DSi_Uint_00 = s.Serialize<uint>(DSi_Uint_00, name: nameof(DSi_Uint_00));
                 DSi_Uint_04 = s.Serialize<uint>(DSi_Uint_04, name: nameof(DSi_Uint_04));
@@ -61,11 +61,11 @@
 
             Bytes_20 = s.SerializeArray<byte>(Bytes_20, 4, name: nameof(Bytes_20));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_DSi)
+            if (settings.EngineVersion == Ray1EngineVersion.DSi)
                 DSi_Uint_2C = s.Serialize<uint>(DSi_Uint_2C, name: nameof(DSi_Uint_2C));
 
             // Serialize data from pointers
-            SerializeVignette(s, settings.EngineVersion == Ray1EngineVersion.R1_DSi);
+            SerializeVignette(s, settings.EngineVersion == Ray1EngineVersion.DSi);
         }
 
         #endregion

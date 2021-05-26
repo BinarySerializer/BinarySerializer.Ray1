@@ -63,8 +63,8 @@ namespace BinarySerializer.Ray1
         {
             var settings = context.GetSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC || 
-                settings.EngineVersion == Ray1EngineVersion.R1_PocketPC)
+            if (settings.EngineVersion == Ray1EngineVersion.PC || 
+                settings.EngineVersion == Ray1EngineVersion.PocketPC)
                 throw new NotImplementedException("Repacking is not supported for Rayman 1"); // The header is in the exe
 
             // Get every file before we start writing
@@ -139,8 +139,8 @@ namespace BinarySerializer.Ray1
             base.SerializeImpl(s);
 
             // For Rayman 1 the header is hard-coded in the game executable
-            if (settings.EngineVersion == Ray1EngineVersion.R1_PC || 
-                settings.EngineVersion == Ray1EngineVersion.R1_PocketPC)
+            if (settings.EngineVersion == Ray1EngineVersion.PC || 
+                settings.EngineVersion == Ray1EngineVersion.PocketPC)
             {
                 if (s is BinarySerializer)
                     throw new Exception("Can't serialize Rayman 1 archive headers");

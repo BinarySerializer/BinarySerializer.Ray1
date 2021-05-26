@@ -30,7 +30,7 @@
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            var isEncryptedAndChecksum = settings.EngineVersion != Ray1EngineVersion.R1_PS1_Edu;
+            var isEncryptedAndChecksum = settings.EngineVersion != Ray1EngineVersion.PS1_Edu;
 
             LevelDefineChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
             {

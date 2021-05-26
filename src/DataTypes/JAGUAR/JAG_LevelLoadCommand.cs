@@ -55,7 +55,7 @@ namespace BinarySerializer.Ray1
                     UInt1 = s.Serialize<uint>(UInt1, name: nameof(UInt1));
                     LevelMapBlockPointer = s.SerializePointer(LevelMapBlockPointer, name: nameof(LevelMapBlockPointer));
 
-                    if (settings.EngineVersion == Ray1EngineVersion.R1Jaguar_Proto)
+                    if (settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto)
                         Short1 = s.Serialize<short>(Short1, name: nameof(Short1));
                     else
                         LevelEventBlockPointer = s.SerializePointer(LevelEventBlockPointer, name: nameof(LevelEventBlockPointer));
@@ -72,7 +72,7 @@ namespace BinarySerializer.Ray1
                     UInt1 = s.Serialize<uint>(UInt1, name: nameof(UInt1));
                     UInt2 = s.Serialize<uint>(UInt2, name: nameof(UInt2));
 
-                    if (settings.EngineVersion == Ray1EngineVersion.R1Jaguar_Proto)
+                    if (settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto)
                         Short1 = s.Serialize<short>(Short1, name: nameof(Short1));
 
                     break;
@@ -89,7 +89,7 @@ namespace BinarySerializer.Ray1
                     TargetImageBufferMemoryPointer = s.Serialize<uint>(TargetImageBufferMemoryPointer, name: nameof(TargetImageBufferMemoryPointer));
                     Short1 = s.Serialize<short>(Short1, name: nameof(Short1));
 
-                    if (settings.EngineVersion == Ray1EngineVersion.R1Jaguar_Proto)
+                    if (settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto)
                     {
                         Short2 = s.Serialize<short>(Short2, name: nameof(Short2));
                         Short3 = s.Serialize<short>(Short3, name: nameof(Short3));

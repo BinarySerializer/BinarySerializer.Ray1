@@ -71,7 +71,7 @@ namespace BinarySerializer.Ray1
 
                     case CommandType.GO_DOLOOP:
                     case CommandType.GO_RETURN:
-                        Arguments = s.SerializeArray<byte>(Arguments, settings.EngineVersion == Ray1EngineVersion.R1_PS1_JPDemoVol3 ? 1 : 0, name: nameof(Arguments));
+                        Arguments = s.SerializeArray<byte>(Arguments, settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ? 1 : 0, name: nameof(Arguments));
                         break;
 
                     case CommandType.GO_TEST:
