@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace BinarySerializer.Ray1
 {
@@ -61,6 +62,7 @@ namespace BinarySerializer.Ray1
         public bool IsFAN { get; } // TODO: Replace by engine version tree
 
         public static int CellSize = 16;
+        public static Encoding DefaultEncoding => Encoding.GetEncoding(437);
     }
 
     public enum Ray1EngineVersion
