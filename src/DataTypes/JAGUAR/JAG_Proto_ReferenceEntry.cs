@@ -27,6 +27,9 @@
                 DataValue = s.Serialize<uint>(DataValue, name: nameof(DataValue));
 
             s.DoAt(StringPointer, () => String = s.SerializeString(String, name: nameof(String)));
+
+            if (Type == EntryType.DataBlock)
+                Offset.File.AddLabel(DataPointer.FileOffset, String);
         }
 
         public enum EntryType : byte
