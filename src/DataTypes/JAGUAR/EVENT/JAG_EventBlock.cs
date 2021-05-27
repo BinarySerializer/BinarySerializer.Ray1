@@ -27,14 +27,14 @@ namespace BinarySerializer.Ray1
             MapEvents = s.SerializeObject<JAG_MapEvents>(MapEvents, name: nameof(MapEvents));
 
             // Serialize next data block, skipping the padding
-            s.DoAt(Pre_OffListPointer ?? Offset + 0x1208, () => EventOffsetTable = s.SerializeArray<ushort>(EventOffsetTable, MapEvents.EventIndexMap.Max(), name: nameof(EventOffsetTable)));
+            s.DoAt(Pre_OffListPointer ?? (Offset + 0x1208), () => EventOffsetTable = s.SerializeArray<ushort>(EventOffsetTable, MapEvents.EventIndexMap.Max(), name: nameof(EventOffsetTable)));
 
             EventData ??= new JAG_EventInstance[EventOffsetTable.Length][];
 
             // Serialize the events based on the offsets
             for (int i = 0; i < EventData.Length; i++)
             {
-                s.DoAt(Pre_EventsPointer ?? Offset + 0x1608 + EventOffsetTable[i], () =>
+                s.DoAt((Pre_EventsPointer ?? Offset + 0x1608) + EventOffsetTable[i], () =>
                 {
                     if (EventData[i] == null)
                     {
