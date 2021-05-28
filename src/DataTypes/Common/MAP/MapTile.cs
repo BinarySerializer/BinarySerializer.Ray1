@@ -99,7 +99,8 @@
 
                 TileMapX = 0;
             }
-            else if (settings.EngineVersion == Ray1EngineVersion.PS1 || 
+            else if (settings.EngineVersion == Ray1EngineVersion.PS1 ||
+                     settings.EngineVersion == Ray1EngineVersion.PS1_EUDemo ||
                      settings.EngineVersion == Ray1EngineVersion.R2_PS1)
             {
                 s.SerializeBitValues<ushort>(bitFunc =>

@@ -124,7 +124,8 @@
             // OBJECT PALETTE 2
             ObjPalette2 = s.DoAt(ObjPalette2BlockPointer, () => s.SerializeObjectArray<RGBA5551Color>(ObjPalette2, 256, name: nameof(ObjPalette2)));
 
-            if (settings.EngineVersion == Ray1EngineVersion.PS1)
+            if (settings.EngineVersion == Ray1EngineVersion.PS1 ||
+                settings.EngineVersion == Ray1EngineVersion.PS1_EUDemo)
             {
                 // TILES
                 PalettedTiles = s.DoAt(TilesBlockPointer, () => s.SerializeArray<byte>(PalettedTiles, TilePaletteBlockPointer - TilesBlockPointer, name: nameof(PalettedTiles)));

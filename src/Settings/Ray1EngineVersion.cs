@@ -14,6 +14,7 @@
         PS1_JPDemoVol3,
         PS1_JPDemoVol6,
         PS1_JP,
+        PS1_EUDemo,
         PS1,
         R2_PS1,
         Saturn,

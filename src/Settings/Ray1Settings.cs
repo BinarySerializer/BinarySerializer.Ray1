@@ -16,6 +16,7 @@ namespace BinarySerializer.Ray1
             switch (EngineVersion)
             {
                 case Ray1EngineVersion.PS1:
+                case Ray1EngineVersion.PS1_EUDemo:
                 case Ray1EngineVersion.R2_PS1:
                 case Ray1EngineVersion.PS1_JP:
                 case Ray1EngineVersion.PS1_JPDemoVol3:
