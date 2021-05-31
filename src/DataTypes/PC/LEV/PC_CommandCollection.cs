@@ -1,7 +1,7 @@
 ﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Event command for PC
+    /// Obj command for PC
     /// </summary>
     public class PC_CommandCollection : BinarySerializable
     {

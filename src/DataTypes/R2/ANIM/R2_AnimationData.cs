@@ -5,7 +5,7 @@
     /// </summary>
     public class R2_AnimationData : BinarySerializable
     {
-        #region Event Data
+        #region Object Data
 
         /// <summary>
         /// The ETA pointer
@@ -18,7 +18,7 @@
         public Pointer AnimationsPointer { get; set; }
 
         /// <summary>
-        /// The animation descriptor count
+        /// The animations count
         /// </summary>
         public ushort AnimationsCount { get; set; }
 
@@ -35,7 +35,7 @@
         public R2_Animation[] Animations { get; set; }
 
         /// <summary>
-        /// The event ETA
+        /// The ETA
         /// </summary>
         public ETA ETA { get; set; }
 

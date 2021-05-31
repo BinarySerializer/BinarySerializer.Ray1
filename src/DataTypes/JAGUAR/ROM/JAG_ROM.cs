@@ -65,7 +65,7 @@ namespace BinarySerializer.Ray1
         public GBR655Color[] Background { get; set; }
 
         // Prototype only
-        public Dictionary<uint, Sprite[]> ImageBufferDescriptors { get; set; }
+        public Dictionary<uint, Sprite[]> ImageBufferSprites { get; set; }
 
         #endregion
         
@@ -350,7 +350,7 @@ namespace BinarySerializer.Ray1
                 // Tilemap
                 s.DoAt(GetProtoDataPointer(JAG_Proto_References.jun_block), () => TileData = s.SerializeObjectArray<GBR655Color>(TileData, 440 * (16 * 16), name: nameof(TileData)));
 
-                // Serialize image buffers and descriptors
+                // Serialize image buffers and sprites
                 if (ImageBuffers == null)
                 {
                     var orderedPointers = References.Where(x => x.DataPointer != null).OrderBy(x => x.DataPointer.AbsoluteOffset).Select(x => x.DataPointer).Distinct().ToArray();
@@ -367,7 +367,7 @@ namespace BinarySerializer.Ray1
                         "mag", // Magician
                         "mst", // Moskito
                         "div", // Allfix (HUD, photographer etc.)
-                        //"ten", // Tentacle flower (has no img/anim descriptors)
+                        //"ten", // Tentacle flower (has no sprites/animations)
                     }.Select(x => new
                     {
                         RomAdr = GetProtoDataReference($"inc{x}").DataPointer,
@@ -378,18 +378,18 @@ namespace BinarySerializer.Ray1
                     });
 
                     ImageBuffers = new Dictionary<uint, byte[]>();
-                    ImageBufferDescriptors = new Dictionary<uint, Sprite[]>();
+                    ImageBufferSprites = new Dictionary<uint, Sprite[]>();
 
                     foreach (var spr in sprites)
                     {
                         // Serialize the image buffer
                         s.DoAt(spr.RomAdr, () => ImageBuffers[spr.MemAdr] = s.SerializeArray<byte>(default, spr.Length, name: $"ImageBuffer_{spr.Name}"));
 
-                        // Get length of image descriptor array
-                        var imgDescLen = (orderedPointers[Array.FindIndex(orderedPointers, x => x == spr.DescrAdr) + 1].AbsoluteOffset - spr.DescrAdr.AbsoluteOffset) / 0x10;
+                        // Get length of sprites array
+                        var spritesLength = (orderedPointers[Array.FindIndex(orderedPointers, x => x == spr.DescrAdr) + 1].AbsoluteOffset - spr.DescrAdr.AbsoluteOffset) / 0x10;
 
-                        // Serialize image descriptors
-                        s.DoAt(spr.DescrAdr, () => ImageBufferDescriptors[spr.MemAdr] = s.SerializeObjectArray<Sprite>(default, imgDescLen, name: $"ImageBufferDescriptors_{spr.Name}"));
+                        // Serialize sprites
+                        s.DoAt(spr.DescrAdr, () => ImageBufferSprites[spr.MemAdr] = s.SerializeObjectArray<Sprite>(default, spritesLength, name: $"{nameof(ImageBufferSprites)}_{spr.Name}"));
                     }
                 }
 

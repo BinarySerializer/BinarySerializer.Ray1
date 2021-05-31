@@ -5,7 +5,7 @@ namespace BinarySerializer.Ray1
     public class SNES_ObjData : BinarySerializable
     {
         public SNES_Pointer UnknownStatesPointer { get; set; }
-        public SNES_Pointer ImageDescriptorsPointer { get; set; }
+        public SNES_Pointer SpritesPointer { get; set; }
         public ushort Ushort_04 { get; set; } // 0
         public short XPosition { get; set; }
         public short YPosition { get; set; }
@@ -13,14 +13,14 @@ namespace BinarySerializer.Ray1
         public SNES_Pointer StatesPointer { get; set; }
 
         public SNES_State[] States { get; set; }
-        public SNES_Sprite[] ImageDescriptors { get; set; }
+        public SNES_Sprite[] Sprites { get; set; }
         public SNES_Pointer[] UnknownStatesPointers { get; set; }
         public SNES_State[] UnknownStates { get; set; } // References to some of the states in the normal state array
 
         public override void SerializeImpl(SerializerObject s)
         {
             UnknownStatesPointer = s.SerializeObject<SNES_Pointer>(UnknownStatesPointer, onPreSerialize: x => x.Pre_MemoryBankOverride = 4, name: nameof(UnknownStatesPointer));
-            ImageDescriptorsPointer = s.SerializeObject<SNES_Pointer>(ImageDescriptorsPointer, onPreSerialize: x => x.Pre_MemoryBankOverride = 4, name: nameof(ImageDescriptorsPointer));
+            SpritesPointer = s.SerializeObject<SNES_Pointer>(SpritesPointer, onPreSerialize: x => x.Pre_MemoryBankOverride = 4, name: nameof(SpritesPointer));
 
             Ushort_04 = s.Serialize<ushort>(Ushort_04, name: nameof(Ushort_04));
 
@@ -36,7 +36,7 @@ namespace BinarySerializer.Ray1
 
             // Serialize data from pointers
             States = s.DoAt(StatesPointer.GetPointer(), () => s.SerializeObjectArray<SNES_State>(States, 5 * 0x15, name: nameof(States)));
-            ImageDescriptors = s.DoAt(ImageDescriptorsPointer.GetPointer(), () => s.SerializeObjectArray<SNES_Sprite>(ImageDescriptors, States.Max(state => state.Animation?.Layers.Max(layer => layer.SpriteIndex + 1) ?? 0), name: nameof(ImageDescriptors)));
+            Sprites = s.DoAt(SpritesPointer.GetPointer(), () => s.SerializeObjectArray<SNES_Sprite>(Sprites, States.Max(state => state.Animation?.Layers.Max(layer => layer.SpriteIndex + 1) ?? 0), name: nameof(Sprites)));
             
             UnknownStatesPointers = s.DoAt(UnknownStatesPointer.GetPointer(), () => s.SerializeObjectArray<SNES_Pointer>(UnknownStatesPointers, 16, onPreSerialize: x => x.Pre_MemoryBankOverride = 4, name: nameof(UnknownStatesPointers)));
 

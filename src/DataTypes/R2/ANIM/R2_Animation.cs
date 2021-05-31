@@ -3,7 +3,7 @@
 namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Animation descriptor
+    /// Animation data
     /// </summary>
     public class R2_Animation : BinarySerializable, IAnimation
     {

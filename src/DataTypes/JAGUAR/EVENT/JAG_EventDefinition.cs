@@ -246,7 +246,7 @@ namespace BinarySerializer.Ray1
 				AnimationLayers = s.SerializeObjectArray<AnimationLayer>(AnimationLayers, layers * FrameCount, name: nameof(AnimationLayers));
 			});
 
-			// Serialize image descriptors based on the state animations
+			// Serialize sprites based on the state animations
 			if (settings.EngineVersion != Ray1EngineVersion.Jaguar_Proto)
             {
                 s.DoAt(SpritesPointer, () => {

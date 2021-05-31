@@ -35,12 +35,12 @@ namespace BinarySerializer.Ray1
 
         public Pointer MainDataBlockPointer { get; set; }
 
-        public Sprite[][] ImageDescriptors { get; set; }
+        public Sprite[][] Sprites { get; set; }
 
-        public PS1EDU_Animation[][] AnimationDescriptors { get; set; }
+        public PS1EDU_Animation[][] Animations { get; set; }
 
         /// <summary>
-        /// The event states for every ETA
+        /// The obj states for every ETA
         /// </summary>
         public ObjState[][][] ETA { get; set; }
 
@@ -55,9 +55,9 @@ namespace BinarySerializer.Ray1
 
         public byte[] ETASubStateCountTable { get; set; }
 
-        public uint AnimationDescriptorLayersBlockSizeTableCount { get; set; }
+        public uint AnimationLayersBlockSizeTableCount { get; set; }
 
-        public ushort[] AnimationDescriptorLayersBlockSizeTable { get; set; }
+        public ushort[] AnimationLayersBlockSizeTable { get; set; }
 
         public AnimationLayer[] AnimationLayers { get; set; }
 
@@ -120,9 +120,9 @@ namespace BinarySerializer.Ray1
             ETASubStateCountTableCount = s.Serialize<byte>(ETASubStateCountTableCount, name: nameof(ETASubStateCountTableCount));
             ETASubStateCountTable = s.SerializeArray<byte>(ETASubStateCountTable, ETASubStateCountTableCount, name: nameof(ETASubStateCountTable));
 
-            // Serialize animation descriptor layer table
-            AnimationDescriptorLayersBlockSizeTableCount = s.Serialize<uint>(AnimationDescriptorLayersBlockSizeTableCount, name: nameof(AnimationDescriptorLayersBlockSizeTableCount));
-            AnimationDescriptorLayersBlockSizeTable = s.SerializeArray<ushort>(AnimationDescriptorLayersBlockSizeTable, AnimationDescriptorLayersBlockSizeTableCount, name: nameof(AnimationDescriptorLayersBlockSizeTable));
+            // Serialize animation layer table
+            AnimationLayersBlockSizeTableCount = s.Serialize<uint>(AnimationLayersBlockSizeTableCount, name: nameof(AnimationLayersBlockSizeTableCount));
+            AnimationLayersBlockSizeTable = s.SerializeArray<ushort>(AnimationLayersBlockSizeTable, AnimationLayersBlockSizeTableCount, name: nameof(AnimationLayersBlockSizeTable));
 
             // Serialize animation layers
             AnimationLayers = s.SerializeObjectArray<AnimationLayer>(AnimationLayers, 0xFE, name: nameof(AnimationLayers));
@@ -144,74 +144,74 @@ namespace BinarySerializer.Ray1
                 // Helper method for serializing the DES
                 void SerializeDES()
                 {
-                    ImageDescriptors ??= new Sprite[DESCount][];
-                    AnimationDescriptors ??= new PS1EDU_Animation[DESCount][];
+                    Sprites ??= new Sprite[DESCount][];
+                    Animations ??= new PS1EDU_Animation[DESCount][];
 
                     int curAnimDesc = 0;
 
                     // Serialize data for every DES
                     for (int i = 0; i < DESCount; i++)
                     {
-                        // Serialize image descriptors
-                        ImageDescriptors[i] = s.SerializeObjectArray<Sprite>(ImageDescriptors[i], DESData[i].SpritesCount, name: $"{nameof(ImageDescriptors)}[{i}]");
+                        // Serialize sprites
+                        Sprites[i] = s.SerializeObjectArray<Sprite>(Sprites[i], DESData[i].SpritesCount, name: $"{nameof(Sprites)}[{i}]");
 
-                        // Serialize animation descriptors
-                        AnimationDescriptors[i] = s.SerializeObjectArray<PS1EDU_Animation>(AnimationDescriptors[i], DESData[i].AnimationsCount, name: $"{nameof(AnimationDescriptors)}[{i}]");
+                        // Serialize animations
+                        Animations[i] = s.SerializeObjectArray<PS1EDU_Animation>(Animations[i], DESData[i].AnimationsCount, name: $"{nameof(Animations)}[{i}]");
 
-                        // Serialize animation descriptor data
-                        for (int j = 0; j < AnimationDescriptors[i].Length; j++)
+                        // Serialize animation data
+                        for (int j = 0; j < Animations[i].Length; j++)
                         {
-                            var descriptor = AnimationDescriptors[i][j];
+                            var anim = Animations[i][j];
 
-                            if (descriptor.FrameCount <= 0)
+                            if (anim.FrameCount <= 0)
                             {
                                 curAnimDesc++;
                                 continue;
                             }
 
                             // Serialize layer data
-                            descriptor.LayersData = s.SerializeArray<byte>(descriptor.LayersData, AnimationDescriptorLayersBlockSizeTable[curAnimDesc], name: nameof(descriptor.LayersData));
+                            anim.LayersData = s.SerializeArray<byte>(anim.LayersData, AnimationLayersBlockSizeTable[curAnimDesc], name: nameof(anim.LayersData));
 
                             // Padding...
-                            if (AnimationDescriptorLayersBlockSizeTable[curAnimDesc] % 4 != 0)
+                            if (AnimationLayersBlockSizeTable[curAnimDesc] % 4 != 0)
                             {
                                 // Padding seems to contain garbage data in this case instead of 0xCD?
-                                int paddingLength = 4 - AnimationDescriptorLayersBlockSizeTable[curAnimDesc] % 4;
+                                int paddingLength = 4 - AnimationLayersBlockSizeTable[curAnimDesc] % 4;
                                 s.SerializeArray<byte>(Enumerable.Repeat((byte)0xCD, paddingLength).ToArray(), paddingLength, name: "Padding");
                             }
 
                             // Serialize frames
-                            if (descriptor.AnimFramesPointer != 0xFFFFFFFF)
-                                descriptor.Frames = s.SerializeObjectArray<AnimationFrame>(descriptor.Frames, descriptor.FrameCount, name: nameof(descriptor.Frames));
+                            if (anim.AnimFramesPointer != 0xFFFFFFFF)
+                                anim.Frames = s.SerializeObjectArray<AnimationFrame>(anim.Frames, anim.FrameCount, name: nameof(anim.Frames));
 
                             // Parse layers
-                            if (descriptor.Layers == null)
+                            if (anim.Layers == null)
                             {
                                 var layers = new List<AnimationLayer>();
                                 var offset = 0;
 
-                                while (offset < descriptor.LayersData.Length)
+                                while (offset < anim.LayersData.Length)
                                 {
-                                    if (descriptor.LayersData[offset] < 2)
+                                    if (anim.LayersData[offset] < 2)
                                     {
                                         layers.Add(new AnimationLayer()
                                         {
-                                            IsFlippedHorizontally = descriptor.LayersData[offset + 0] == 1,
-                                            XPosition = descriptor.LayersData[offset + 1],
-                                            YPosition = descriptor.LayersData[offset + 2],
-                                            SpriteIndex = descriptor.LayersData[offset + 3],
+                                            IsFlippedHorizontally = anim.LayersData[offset + 0] == 1,
+                                            XPosition = anim.LayersData[offset + 1],
+                                            YPosition = anim.LayersData[offset + 2],
+                                            SpriteIndex = anim.LayersData[offset + 3],
                                         });
 
                                         offset += 4;
                                     }
                                     else
                                     {
-                                        layers.Add(AnimationLayers[descriptor.LayersData[offset] - 2]);
+                                        layers.Add(AnimationLayers[anim.LayersData[offset] - 2]);
                                         offset++;
                                     }
                                 }
 
-                                descriptor.Layers = layers.ToArray();
+                                anim.Layers = layers.ToArray();
                             }
 
                             curAnimDesc++;

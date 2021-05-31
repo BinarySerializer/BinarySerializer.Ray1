@@ -3,21 +3,21 @@
 namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Attribute for event types
+    /// Attribute for object types
     /// </summary>
     public sealed class ObjTypeInfoAttribute : Attribute
     {
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="flag">The event flag</param>
+        /// <param name="flag">The object flag</param>
         public ObjTypeInfoAttribute(ObjTypeFlag flag)
         {
             Flag = flag;
         }
 
         /// <summary>
-        /// The event flag
+        /// The object type flag
         /// </summary>
         public ObjTypeFlag Flag { get; }
     }

@@ -3,7 +3,7 @@
     // All names starting with "TYPE_" come from the GBA version. All names starting with "MS_" come from Designer. The rest are manually added.
 
     /// <summary>
-    /// The available event types
+    /// The available object types
     /// </summary>
     public enum ObjType : ushort
     {
@@ -473,7 +473,7 @@
         TYPE_PLANCHES = 253,
         TYPE_SLOPEY_PLAT = 254,
 
-        ObjType_255 = 255, // Most likely used to indicate an invalid event type, 0xFF (-1)
+        ObjType_255 = 255, // Most likely used to indicate an invalid obj type, 0xFF (-1)
 
         TYPE_CB_BRIK = 256,
         TYPE_CB_BALL = 257,

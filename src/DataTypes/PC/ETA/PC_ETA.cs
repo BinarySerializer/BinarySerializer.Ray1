@@ -6,7 +6,7 @@
     public class PC_ETA : BinarySerializable
     {
         /// <summary>
-        /// The event states, order by Etat and SubEtat
+        /// The obj states, order by Etat and SubEtat
         /// </summary>
         public ObjState[][] States { get; set; }
 

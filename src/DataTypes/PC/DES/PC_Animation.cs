@@ -1,7 +1,7 @@
 ﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Animation descriptor data for PC
+    /// Animation data for PC
     /// </summary>
     public class PC_Animation : BinarySerializable, IAnimation
     {

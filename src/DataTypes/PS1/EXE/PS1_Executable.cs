@@ -9,7 +9,7 @@ namespace BinarySerializer.Ray1
 
         public ZDCEntry[] TypeZDC { get; set; }
         public ZDCData[] ZDCData { get; set; }
-        public ObjTypeFlags[] EventFlags { get; set; }
+        public ObjTypeFlags[] ObjTypeFlags { get; set; }
         public WorldInfo[] WorldInfo { get; set; }
 
         public byte[][] PS1_LevelBackgroundIndexTable { get; set; }
@@ -30,12 +30,12 @@ namespace BinarySerializer.Ray1
 
             ZDCData = s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ZDCData, required: false), () => s.SerializeObjectArray<ZDCData>(ZDCData, 200, name: nameof(ZDCData)));
 
-            EventFlags = s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.EventFlags, required: false), () => 
+            ObjTypeFlags = s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ObjTypeFlags, required: false), () => 
             {
                 if (settings.EngineVersion == Ray1EngineVersion.Saturn)
-                    return s.SerializeArray<int>(EventFlags?.Select(x => BitHelpers.ReverseBits((int)x)).ToArray(), 256, name: nameof(EventFlags)).Select(BitHelpers.ReverseBits).Select(x => (ObjTypeFlags)x).ToArray();
+                    return s.SerializeArray<int>(ObjTypeFlags?.Select(x => BitHelpers.ReverseBits((int)x)).ToArray(), 256, name: nameof(ObjTypeFlags)).Select(BitHelpers.ReverseBits).Select(x => (ObjTypeFlags)x).ToArray();
                 else
-                    return s.SerializeArray<ObjTypeFlags>(EventFlags, 256, name: nameof(EventFlags));
+                    return s.SerializeArray<ObjTypeFlags>(ObjTypeFlags, 256, name: nameof(ObjTypeFlags));
             });
 
             WorldInfo = s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.WorldInfo, required: false), () => s.SerializeObjectArray<WorldInfo>(WorldInfo, 24, name: nameof(WorldInfo)));

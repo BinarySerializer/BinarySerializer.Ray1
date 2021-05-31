@@ -1,22 +1,22 @@
 ﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// The event type
+    /// The object type
     /// </summary>
     public enum ObjTypeFlag
     {
         /// <summary>
-        /// Normal event - appears in-game
+        /// Normal object - appears in-game
         /// </summary>
         Normal,
 
         /// <summary>
-        /// An always event - works together with a normal event
+        /// An always object - works together with a normal object
         /// </summary>
         Always,
 
         /// <summary>
-        /// Editor event - does not appear in-game
+        /// Editor object - does not appear in-game
         /// </summary>
         Editor
     }

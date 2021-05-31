@@ -3,7 +3,7 @@
     // Since Mapper levels are raw non-compiled levels it doesn't use label offsets. Any command utilizing these is replaced by its counterpart which doesn't. Then when the level is compiled it is "optimized" by having the label offsets be calculated and used instead.
 
     /// <summary>
-    /// The event commands
+    /// The object command types
     /// </summary>
     public enum CommandType : byte
     {

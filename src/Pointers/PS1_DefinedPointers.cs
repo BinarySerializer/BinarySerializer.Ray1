@@ -8,7 +8,7 @@ namespace BinarySerializer.Ray1
         {
             [PS1_DefinedPointer.TypeZDC] = 0x801C1F54,
             [PS1_DefinedPointer.ZDCData] = 0x801C0F54,
-            [PS1_DefinedPointer.EventFlags] = 0x801C0754,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x801C0754,
             [PS1_DefinedPointer.WorldInfo] = 0x801C281C,
             [PS1_DefinedPointer.PS1_LevelBackgroundIndexTable] = 0x801C35C8,
         };
@@ -17,7 +17,7 @@ namespace BinarySerializer.Ray1
         {
             [PS1_DefinedPointer.TypeZDC] = 0x801C2198,
             [PS1_DefinedPointer.ZDCData] = 0x801C1198,
-            [PS1_DefinedPointer.EventFlags] = 0x801C0998,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x801C0998,
             // [PS1_DefinedPointer.WorldInfo] = , // TODO: Find offset
             [PS1_DefinedPointer.PS1_LevelBackgroundIndexTable] = 0x801C380C,
         };
@@ -26,7 +26,7 @@ namespace BinarySerializer.Ray1
         {
             [PS1_DefinedPointer.TypeZDC] = 0x801BFB08,
             [PS1_DefinedPointer.ZDCData] = 0x801BEB08,
-            [PS1_DefinedPointer.EventFlags] = 0x801BE308,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x801BE308,
             [PS1_DefinedPointer.WorldInfo] = 0x801C03D0,
             [PS1_DefinedPointer.PS1_LevelBackgroundIndexTable] = 0x801C1358,
         };
@@ -35,7 +35,7 @@ namespace BinarySerializer.Ray1
         {
             [PS1_DefinedPointer.TypeZDC] = 0x801C2A94,
             [PS1_DefinedPointer.ZDCData] = 0x801C1A94,
-            [PS1_DefinedPointer.EventFlags] = 0x801C1294,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x801C1294,
             [PS1_DefinedPointer.WorldInfo] = 0x801C335C,
             [PS1_DefinedPointer.PS1_LevelBackgroundIndexTable] = 0x801C43A4,
         };
@@ -44,7 +44,7 @@ namespace BinarySerializer.Ray1
         {
             [PS1_DefinedPointer.TypeZDC] = 0x801C05F8,
             [PS1_DefinedPointer.ZDCData] = 0x801BF5F8,
-            [PS1_DefinedPointer.EventFlags] = 0x801BEDF8,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x801BEDF8,
             [PS1_DefinedPointer.WorldInfo] = 0x801C0EC0,
             [PS1_DefinedPointer.PS1_LevelBackgroundIndexTable] = 0x801C1F08,
         };
@@ -53,7 +53,7 @@ namespace BinarySerializer.Ray1
         {
             [PS1_DefinedPointer.TypeZDC] = 0x06010000 + 0x7EB22,
             [PS1_DefinedPointer.ZDCData] = 0x06010000 + 0x7DB22,
-            [PS1_DefinedPointer.EventFlags] = 0x06010000 + 0x7D320,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x06010000 + 0x7D320,
             [PS1_DefinedPointer.WorldInfo] = 0x06010000 + 0x7F3F0,
             [PS1_DefinedPointer.SAT_Palettes] = 0x06010000 + 0x78D14,
             [PS1_DefinedPointer.SAT_FndFileTable] = 0x06010000 + 0x8142C,
@@ -65,7 +65,7 @@ namespace BinarySerializer.Ray1
         {
             [PS1_DefinedPointer.TypeZDC] = 0x06010000 + 0x7EFD2,
             [PS1_DefinedPointer.ZDCData] = 0x06010000 + 0x7DFD2,
-            [PS1_DefinedPointer.EventFlags] = 0x06010000 + 0x7D7D0,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x06010000 + 0x7D7D0,
             [PS1_DefinedPointer.WorldInfo] = 0x06010000 + 0x7F8A0,
             [PS1_DefinedPointer.SAT_Palettes] = 0x06010000 + 0x791C4,
             [PS1_DefinedPointer.SAT_FndFileTable] = 0x06010000 + 0x818E8,
@@ -77,7 +77,7 @@ namespace BinarySerializer.Ray1
         {
             [PS1_DefinedPointer.TypeZDC] = 0x06010000 + 0x832B2,
             [PS1_DefinedPointer.ZDCData] = 0x06010000 + 0x822B2,
-            [PS1_DefinedPointer.EventFlags] = 0x06010000 + 0x81AB0,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x06010000 + 0x81AB0,
             [PS1_DefinedPointer.WorldInfo] = 0x06010000 + 0x83B80,
             [PS1_DefinedPointer.SAT_Palettes] = 0x06010000 + 0x87754,
             [PS1_DefinedPointer.SAT_FndFileTable] = 0x06010000 + 0x85BA0,
@@ -89,7 +89,7 @@ namespace BinarySerializer.Ray1
         {
             [PS1_DefinedPointer.TypeZDC] = 0x06010000 + 0x7F032,
             [PS1_DefinedPointer.ZDCData] = 0x06010000 + 0x7e032,
-            [PS1_DefinedPointer.EventFlags] = 0x06010000 + 0x7D830,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x06010000 + 0x7D830,
             [PS1_DefinedPointer.WorldInfo] = 0x06010000 + 0x7F900,
             [PS1_DefinedPointer.SAT_Palettes] = 0x06010000 + 0x79224,
             [PS1_DefinedPointer.SAT_FndFileTable] = 0x06010000 + 0x81948,
@@ -101,7 +101,7 @@ namespace BinarySerializer.Ray1
         {
             [PS1_DefinedPointer.TypeZDC] = 0x06010000 + 0x7EC56,
             [PS1_DefinedPointer.ZDCData] = 0x06010000 + 0x7DC56,
-            [PS1_DefinedPointer.EventFlags] = 0x06010000 + 0x7D454,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x06010000 + 0x7D454,
             [PS1_DefinedPointer.WorldInfo] = 0x06010000 + 0x7F524,
             [PS1_DefinedPointer.SAT_Palettes] = 0x06010000 + 0x78E48,
             [PS1_DefinedPointer.SAT_FndFileTable] = 0x06010000 + 0x8156C,

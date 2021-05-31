@@ -17,7 +17,6 @@
         public ushort LayersPerFrame { get; set; }
 
         // Parsed
-        //public Jaguar_R1_AnimationDescriptor Animation { get; set; }
         public AnimationLayer[] Layers { get; set; }
 
         /// <summary>

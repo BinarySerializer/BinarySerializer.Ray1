@@ -5,7 +5,7 @@
     /// </summary>
     public enum R2_ObjType : ushort
     {
-        Invalid = 0, // Slots for always events
+        Invalid = 0, // Slots for always objects
         Rayman = 1,
         Fist = 2,
         Oneup = 3,
@@ -61,6 +61,6 @@
         GunshotExplosion = 103,
         WaterFall = 104
 
-        // No more event types after this are defined in the exe
+        // No more object types after this are defined in the exe
     }
 }

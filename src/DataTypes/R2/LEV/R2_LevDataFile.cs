@@ -23,7 +23,7 @@ namespace BinarySerializer.Ray1
         public Pointer AlwaysObjectsPointer { get; set; }
 
         /// <summary>
-        /// Pointer to the allfix image descriptors
+        /// Pointer to the allfix sprites
         /// </summary>
         public Pointer FixSpritesPointer { get; set; }
         
@@ -37,7 +37,7 @@ namespace BinarySerializer.Ray1
         public ushort UShort_3A { get; set; }
 
         /// <summary>
-        /// The number of allfix image descriptors
+        /// The number of allfix sprites
         /// </summary>
         public ushort FixSpritesCount { get; set; }
 
@@ -73,7 +73,7 @@ namespace BinarySerializer.Ray1
         public R2_ObjData[] AlwaysObjects { get; set; }
 
         /// <summary>
-        /// The allfix image descriptors
+        /// The allfix sprites
         /// </summary>
         public Sprite[] FixSprites { get; set; }
 

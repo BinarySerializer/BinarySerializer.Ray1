@@ -8,9 +8,9 @@
         #region Public Properties
 
         /// <summary>
-        /// The pointer to the event block. The game uses this to skip the texture block if the game should use the rough textures.
+        /// The pointer to the object block. The game uses this to skip the texture block if the game should use the rough textures.
         /// </summary>
-        public Pointer EventBlockPointer { get; set; }
+        public Pointer ObjDataBlockPointer { get; set; }
 
         /// <summary>
         /// The pointer to the texture block. The game uses this to skip the rough the textures if the game should use the normal textures.
@@ -53,7 +53,7 @@
         public PC_TileTextureBlock TileTextureData { get; set; }
 
         /// <summary>
-        /// The event data
+        /// The object data
         /// </summary>
         public PC_ObjBlock ObjData { get; set; }
 
@@ -81,7 +81,7 @@
             bool allowInvalid = settings.PCVersion == Ray1PCVersion.PocketPC || 
                                 settings.PCVersion == Ray1PCVersion.Android ||
                                 settings.PCVersion == Ray1PCVersion.iOS;
-            EventBlockPointer = s.SerializePointer(EventBlockPointer, allowInvalid: allowInvalid, name: nameof(EventBlockPointer));
+            ObjDataBlockPointer = s.SerializePointer(ObjDataBlockPointer, allowInvalid: allowInvalid, name: nameof(ObjDataBlockPointer));
             TextureBlockPointer = s.SerializePointer(TextureBlockPointer, allowInvalid: allowInvalid, name: nameof(TextureBlockPointer));
 
             // Serialize the level defines
@@ -115,11 +115,11 @@
             // Serialize the tile textures
             TileTextureData = s.SerializeObject<PC_TileTextureBlock>(TileTextureData, name: nameof(TileTextureData));
 
-            // At this point the stream position should match the event block offset (ignore the Pocket PC version here since it uses leftover pointers from PC version)
-            if (settings.EngineVersion != Ray1EngineVersion.PocketPC && s.CurrentPointer != EventBlockPointer)
-                s.LogWarning("Event block offset is incorrect");
+            // At this point the stream position should match the obj block offset (ignore the Pocket PC version here since it uses leftover pointers from PC version)
+            if (settings.EngineVersion != Ray1EngineVersion.PocketPC && s.CurrentPointer != ObjDataBlockPointer)
+                s.LogWarning("Object block offset is incorrect");
 
-            // Serialize the event data
+            // Serialize the object data
             ObjData = s.SerializeObject<PC_ObjBlock>(ObjData, name: nameof(ObjData));
 
             // Serialize the profile define data (only on By his Fans and 60 Levels)

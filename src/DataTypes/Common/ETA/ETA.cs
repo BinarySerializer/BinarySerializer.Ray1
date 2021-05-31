@@ -22,7 +22,7 @@ namespace BinarySerializer.Ray1
         /// <summary>
         /// Collection of states and substates
         /// </summary>
-        public ObjState[][] EventStates { get; set; }
+        public ObjState[][] States { get; set; }
 
         /// <summary>
         /// Handles the data serialization
@@ -119,12 +119,12 @@ namespace BinarySerializer.Ray1
             }
 
             // Create state array
-            EventStates ??= new ObjState[EtatCount ?? 0][];
+            States ??= new ObjState[EtatCount ?? 0][];
 
             // Serialize the states
             for (int i = 0; i < EtatPointers.Length; i++)
-                s.DoAt(EtatPointers[i], () => EventStates[i] = s.SerializeObjectArray<ObjState>(EventStates[i], SubEtatCount[i], name:
-                    $"{nameof(EventStates)}[{i}]"));
+                s.DoAt(EtatPointers[i], () => States[i] = s.SerializeObjectArray<ObjState>(States[i], SubEtatCount[i], name:
+                    $"{nameof(States)}[{i}]"));
         }
     }
 }

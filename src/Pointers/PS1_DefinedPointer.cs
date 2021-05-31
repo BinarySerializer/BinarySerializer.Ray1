@@ -4,7 +4,7 @@
     {
         TypeZDC,
         ZDCData,
-        EventFlags,
+        ObjTypeFlags,
         WorldInfo,
 
         // PS1

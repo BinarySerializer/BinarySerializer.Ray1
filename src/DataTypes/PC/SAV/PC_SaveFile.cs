@@ -27,7 +27,7 @@
         // Always one less than actual health
         public byte CurrentHealth { get; set; }
 
-        // 32 bytes per map (not counting Breakout). Consists of 256 bits, where each is a flag for an event if it's been collected (cages & lives).
+        // 32 bytes per map (not counting Breakout). Consists of 256 bits, where each is a flag for an object if it's been collected (cages & lives).
         public byte[][] SaveZone { get; set; }
 
         // 32 bits for each world, where each bit indicates if the bonus has been completed for that map

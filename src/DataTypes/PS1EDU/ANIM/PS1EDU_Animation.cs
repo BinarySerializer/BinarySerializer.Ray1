@@ -1,11 +1,11 @@
 ﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Animation descriptor data for EDU on PS1
+    /// Animation data for EDU on PS1
     /// </summary>
     public class PS1EDU_Animation : BinarySerializable, IAnimation
     {
-        #region Descriptor Properties
+        #region Animation Properties
 
         // These get set during runtime
         public uint AnimLayersPointer { get; set; }

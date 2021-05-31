@@ -1,7 +1,7 @@
 ﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Common image descriptor data
+    /// A sprite
     /// </summary>
     public class Sprite : BinarySerializable
     {

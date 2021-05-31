@@ -3,11 +3,11 @@
 namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Event collision data
+    /// Object collision data
     /// </summary>
     public class R2_ObjCollision : BinarySerializable
     {
-        public EventFlags Flags { get; set; }
+        public ObjFlags Flags { get; set; }
         public byte Byte_02 { get; set; }
         public byte Byte_03 { get; set; }
         
@@ -34,7 +34,7 @@ namespace BinarySerializer.Ray1
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            Flags = s.Serialize<EventFlags>(Flags, name: nameof(Flags));
+            Flags = s.Serialize<ObjFlags>(Flags, name: nameof(Flags));
             Byte_02 = s.Serialize<byte>(Byte_02, name: nameof(Byte_02));
             Byte_03 = s.Serialize<byte>(Byte_03, name: nameof(Byte_03));
 
@@ -55,7 +55,7 @@ namespace BinarySerializer.Ray1
         }
 
         [Flags]
-        public enum EventFlags : ushort
+        public enum ObjFlags : ushort
         {
             None = 0,
 

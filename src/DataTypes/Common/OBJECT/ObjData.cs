@@ -13,7 +13,7 @@ namespace BinarySerializer.Ray1
         #region Static Methods
 
         /// <summary>
-        /// Gets a new event instance for Rayman
+        /// Gets a new obj instance for Rayman
         /// </summary>
         public static ObjData GetRayman(Context context, ObjData rayPos) => new ObjData().InitRayman(context, rayPos);
         public static ObjData GetMapObj(Context context, short x, short y, int index) => new ObjData().InitMapObj(context, x, y, index);
@@ -48,7 +48,7 @@ namespace BinarySerializer.Ray1
 
         #endregion
 
-        #region Event Data
+        #region Obj Data
 
         public byte[] PS1Demo_Unk1 { get; set; }
         public uint PS1_Unk1 { get; set; }
@@ -67,7 +67,7 @@ namespace BinarySerializer.Ray1
 
         public uint Uint_30 { get; set; }
 
-        public short Index { get; set; } // This index is used by the game to handle the event links during runtime
+        public short Index { get; set; } // This index is used by the game to handle the obj links during runtime
 
         public short ScreenXPosition { get; set; }
         public short ScreenYPosition { get; set; }
@@ -85,7 +85,7 @@ namespace BinarySerializer.Ray1
 
         public short CurrentCommandOffset { get; set; }
         public short CMD_Arg0 { get; set; } // This along with CMD_Arg1 might be a more generic temp value, so might have other uses too
-        public short Short_4A { get; set; } // For Rayman this holds the index of the object he's standing on. It most likely has different uses for other events based on type. In R2 this is in the type specific data.
+        public short Short_4A { get; set; } // For Rayman this holds the index of the object he's standing on. It most likely has different uses for other objects based on type. In R2 this is in the type specific data.
         public short Short_4C { get; set; }
         public short Short_4E { get; set; }
 
@@ -93,7 +93,7 @@ namespace BinarySerializer.Ray1
         public uint EDU_ExtHitPoints { get; set; }
         
         public short CMD_Arg1 { get; set; }
-        public short Short_52 { get; set; } // Linked event index?
+        public short Short_52 { get; set; } // Linked obj index?
         public short Short_54 { get; set; }
         public short Short_56 { get; set; }
         public short Short_58 { get; set; } // Prev collision type for moving platforms
@@ -125,7 +125,7 @@ namespace BinarySerializer.Ray1
         public byte OffsetHY { get; set; }
 
         /// <summary>
-        /// The sprite index which uses the event collision
+        /// The sprite index which uses the obj collision
         /// </summary>
         public byte FollowSprite { get; set; }
 
@@ -145,7 +145,7 @@ namespace BinarySerializer.Ray1
         public byte InitialHitPoints { get; set; }
 
         /// <summary>
-        /// The layer the event sprite gets drawn to, between 1 and 7
+        /// The layer the obj sprites gets drawn to, between 1 and 7
         /// </summary>
         public byte DisplayPrio { get; set; }
 
@@ -168,9 +168,9 @@ namespace BinarySerializer.Ray1
 
         public byte AnimationsCount { get; set; }
 
-        public PC_EventFlags PC_Flags { get; set; }
+        public PC_ObjFlags PC_Flags { get; set; }
 
-        public PS1_EventFlags PS1_RuntimeFlags { get; set; }
+        public PS1_ObjFlags PS1_RuntimeFlags { get; set; }
         public byte PS1_Flags { get; set; }
         public byte PS1_Unk7 { get; set; }
 
@@ -187,7 +187,7 @@ namespace BinarySerializer.Ray1
         {
             if (IsPCFormat(settings))
             {
-                return PC_Flags.HasFlag(PC_EventFlags.FollowEnabled);
+                return PC_Flags.HasFlag(PC_ObjFlags.FollowEnabled);
             }
             else
             {
@@ -202,9 +202,9 @@ namespace BinarySerializer.Ray1
             if (IsPCFormat(settings))
             {
                 if (value)
-                    PC_Flags |= PC_EventFlags.FollowEnabled;
+                    PC_Flags |= PC_ObjFlags.FollowEnabled;
                 else
-                    PC_Flags &= ~PC_EventFlags.FollowEnabled;
+                    PC_Flags &= ~PC_ObjFlags.FollowEnabled;
             }
             else
             {
@@ -219,14 +219,14 @@ namespace BinarySerializer.Ray1
         #region Parsed From Pointers
 
         /// <summary>
-        /// The image descriptors
+        /// The sprites
         /// </summary>
-        public Sprite[] ImageDescriptors { get; set; }
+        public Sprite[] Sprites { get; set; }
 
         /// <summary>
-        /// The animation descriptors
+        /// The animations
         /// </summary>
-        public Animation[] AnimDescriptors { get; set; }
+        public Animation[] Animations { get; set; }
 
         /// <summary>
         /// Image buffer
@@ -234,7 +234,7 @@ namespace BinarySerializer.Ray1
         public byte[] ImageBuffer { get; set; }
 
         /// <summary>
-        /// The event commands
+        /// The obj commands
         /// </summary>
         public CommandCollection Commands { get; set; }
 
@@ -244,7 +244,7 @@ namespace BinarySerializer.Ray1
         public ushort[] LabelOffsets { get; set; }
 
         /// <summary>
-        /// The event ETA
+        /// The ETA
         /// </summary>
         public ETA ETA { get; set; }
 
@@ -433,7 +433,7 @@ namespace BinarySerializer.Ray1
 
             if (IsPCFormat(settings))
             {
-                PC_Flags = s.Serialize<PC_EventFlags>(PC_Flags, name: nameof(PC_Flags));
+                PC_Flags = s.Serialize<PC_ObjFlags>(PC_Flags, name: nameof(PC_Flags));
                 Ushort_82 = s.Serialize<ushort>(Ushort_82, name: nameof(Ushort_82));
             }
             else
@@ -442,7 +442,7 @@ namespace BinarySerializer.Ray1
                 {
                     if (settings.EngineVersion != Ray1EngineVersion.PS1_JPDemoVol6)
                     {
-                        PS1_RuntimeFlags = s.Serialize<PS1_EventFlags>(PS1_RuntimeFlags, name: nameof(PS1_RuntimeFlags));
+                        PS1_RuntimeFlags = s.Serialize<PS1_ObjFlags>(PS1_RuntimeFlags, name: nameof(PS1_RuntimeFlags));
                         PS1_Flags = s.Serialize<byte>(PS1_Flags, name: nameof(PS1_Flags));
                     }
 
@@ -454,19 +454,19 @@ namespace BinarySerializer.Ray1
             if (IsPCFormat(settings) || Pre_IsSerializingFromMemory || !s.FullSerialize) 
                 return;
 
-            // Serialize the image descriptors
-            s.DoAt(SpritesPointer, () => ImageDescriptors = s.SerializeObjectArray<Sprite>(ImageDescriptors, SpritesCount, name: nameof(ImageDescriptors)));
+            // Serialize the sprites
+            s.DoAt(SpritesPointer, () => Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites)));
 
-            // Serialize the animation descriptors
-            s.DoAt(AnimationsPointer, () => AnimDescriptors = s.SerializeObjectArray<Animation>(AnimDescriptors, AnimationsCount, name: nameof(AnimDescriptors)));
+            // Serialize the animations
+            s.DoAt(AnimationsPointer, () => Animations = s.SerializeObjectArray<Animation>(Animations, AnimationsCount, name: nameof(Animations)));
 
             if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
             {
-                if (ImageBuffer == null && ImageBufferPointer != null && ImageDescriptors != null)
+                if (ImageBuffer == null && ImageBufferPointer != null && Sprites != null)
                 {
                     // Determine length of image buffer
                     uint length = 0;
-                    foreach (Sprite img in ImageDescriptors)
+                    foreach (Sprite img in Sprites)
                     {
                         if (img.ImageType != 2 && img.ImageType != 3)
                             continue;
@@ -509,8 +509,8 @@ namespace BinarySerializer.Ray1
             if (ETAPointer != null)
                 s.DoAt(ETAPointer, () => ETA = s.SerializeObject<ETA>(ETA, name: nameof(ETA)));
 
-            if (ETA?.EventStates?.ElementAtOrDefault(Etat)?.ElementAtOrDefault(SubEtat) == null)
-                s.LogWarning($"Matching event state not found for event {Type} at {XPosition}x{YPosition} with E{Etat},SE{SubEtat} for {settings.EngineVersion} in {settings.World}{settings.Level}");
+            if (ETA?.States?.ElementAtOrDefault(Etat)?.ElementAtOrDefault(SubEtat) == null)
+                s.LogWarning($"Matching obj state not found for obj {Type} at {XPosition}x{YPosition} with E{Etat},SE{SubEtat} for {settings.EngineVersion} in {settings.World}{settings.Level}");
         }
 
         public ObjData InitRayman(Context context, ObjData rayPos)
@@ -637,10 +637,10 @@ namespace BinarySerializer.Ray1
         }
 
         /// <summary>
-        /// Flags for an event on PC. All values are runtime only except for FollowEnabled.
+        /// Flags for an object on PC. All values are runtime only except for FollowEnabled.
         /// </summary>
         [Flags]
-        public enum PC_EventFlags : byte
+        public enum PC_ObjFlags : byte
         {
             None = 0,
 
@@ -652,19 +652,19 @@ namespace BinarySerializer.Ray1
             Test = 1 << 1,
 
             /// <summary>
-            /// Indicates if the event should be drawn on screen
+            /// Indicates if the object should be drawn on screen
             /// </summary>
             SwitchedOn = 1 << 2,
 
             /// <summary>
-            /// Indicates if the event should be flipped
+            /// Indicates if the object should be flipped
             /// </summary>
             IsFlipped = 1 << 3,
 
             Flag_4 = 1 << 4,
-            
+
             /// <summary>
-            /// Indicates if the event has collision
+            /// Indicates if the object has collision
             /// </summary>
             FollowEnabled = 1 << 5,
 
@@ -675,7 +675,7 @@ namespace BinarySerializer.Ray1
         }
 
         [Flags]
-        public enum PS1_EventFlags : byte
+        public enum PS1_ObjFlags : byte
         {
             None = 0,
 
