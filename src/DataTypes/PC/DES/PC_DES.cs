@@ -55,6 +55,50 @@
         public PC_Animation[] Animations { get; set; }
 
         /// <summary>
+        /// Processes the image data
+        /// </summary>
+        /// <param name="imageData">The image data to process</param>
+        /// <returns>The processed image data</returns>
+        public static byte[] ProcessImageData(byte[] imageData)
+        {
+            // Create the output array
+            var processedData = new byte[imageData.Length];
+
+            int flag = -1;
+
+            for (int i = imageData.Length - 1; i >= 0; i--)
+            {
+                // Get the byte
+                var b = imageData[i];
+
+                if (b == 161 || b == 250)
+                {
+                    flag = b;
+                    b = 0;
+                }
+                else if (flag != -1)
+                {
+                    int num6 = (flag < 0xFF) ? (flag + 1) : 0xFF;
+
+                    if (b == num6)
+                    {
+                        b = 0;
+                        flag = num6;
+                    }
+                    else
+                    {
+                        flag = -1;
+                    }
+                }
+
+                // Set the byte
+                processedData[i] = b;
+            }
+
+            return processedData;
+        }
+
+        /// <summary>
         /// Handles the data serialization
         /// </summary>
         /// <param name="s">The serializer object</param>
