@@ -111,7 +111,7 @@ namespace BinarySerializer.Ray1
             }
         }
 
-        public string[] ToTranslatedStrings(ushort[] labelOffsets) 
+        public string[] ToTranslatedStrings(ushort[] labelOffsets, int lineStartIndex = 0) 
         {
             int[] lineNumbers;
             if (Commands == null || Commands.Length == 0) 
@@ -124,11 +124,12 @@ namespace BinarySerializer.Ray1
                 {
                     commandOffsets[i] = curOff;
 
-                    if(i < Commands.Length) 
+                    if (i < Commands.Length) 
                         curOff += Commands[i].Length;
                 }
-                lineNumbers = labelOffsets.Select(l => Array.IndexOf(commandOffsets, (int)l+1)).ToArray();
-            } else 
+                lineNumbers = labelOffsets.Select(l => Array.IndexOf(commandOffsets, l + 1) + lineStartIndex).ToArray();
+            } 
+            else 
             {
                 lineNumbers = new int[0];
             }
