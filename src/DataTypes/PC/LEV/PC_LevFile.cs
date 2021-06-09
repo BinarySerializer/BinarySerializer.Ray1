@@ -77,6 +77,8 @@
             // Serialize the header
             base.SerializeImpl(s);
 
+            var pointersOffset = s.CurrentPointer;
+
             // Serialize the pointers
             bool allowInvalid = settings.PCVersion == Ray1PCVersion.PocketPC || 
                                 settings.PCVersion == Ray1PCVersion.Android ||
@@ -138,6 +140,13 @@
                         EDU_Alpha[i] = s.SerializeArray<byte>(EDU_Alpha[i], 256, name: $"{nameof(EDU_Alpha)}[{i}]");
                 }, ChecksumPlacement.Before, name: nameof(EDU_AlphaChecksum));
             }
+
+            // Correct pointers
+            s.DoAt(pointersOffset, () =>
+            {
+                s.SerializePointer(ObjData.Offset, allowInvalid: allowInvalid, name: nameof(ObjDataBlockPointer));
+                s.SerializePointer(TileTextureData.Offset, allowInvalid: allowInvalid, name: nameof(TextureBlockPointer));
+            });
         }
 
         #endregion
