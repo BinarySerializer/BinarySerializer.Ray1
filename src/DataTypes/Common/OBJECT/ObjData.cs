@@ -154,10 +154,8 @@ namespace BinarySerializer.Ray1
         public byte HitPoints { get; set; }
         public byte InitialHitPoints { get; set; }
 
-        /// <summary>
-        /// The layer the obj sprites gets drawn to, between 1 and 7
-        /// </summary>
-        public byte DisplayPrio { get; set; }
+        // Appears to be unused. Gets set to 7 for some objects in code, but never appears to be used. Is also set from one of the .mlt values. Perhaps the display prio to be used in the editor?
+        public byte UnusedDisplayPrio { get; set; }
 
         public byte HitSprite { get; set; }
 
@@ -172,7 +170,10 @@ namespace BinarySerializer.Ray1
         public byte PS1Demo_Unk7 { get; set; }
         public byte PS1Demo_Unk8 { get; set; }
 
-        public byte InitialDisplayPrio { get; set; }
+        /// <summary>
+        /// The layer the obj sprites gets drawn to, between 1 and 7
+        /// </summary>
+        public byte DisplayPrio { get; set; }
 
         public byte Byte_7F { get; set; }
 
@@ -409,7 +410,7 @@ namespace BinarySerializer.Ray1
             FollowSprite = s.Serialize<byte>(FollowSprite, name: nameof(FollowSprite));
             HitPoints = s.Serialize<byte>(HitPoints, name: nameof(HitPoints));
             InitialHitPoints = s.Serialize<byte>(InitialHitPoints, name: nameof(InitialHitPoints));
-            DisplayPrio = s.Serialize<byte>(DisplayPrio, name: nameof(DisplayPrio));
+            UnusedDisplayPrio = s.Serialize<byte>(UnusedDisplayPrio, name: nameof(UnusedDisplayPrio));
 
             if (!IsPCFormat(settings))
                 Type = (ObjType)s.Serialize<byte>((byte)Type, name: nameof(Type));
@@ -436,7 +437,7 @@ namespace BinarySerializer.Ray1
                 }
             }
 
-            InitialDisplayPrio = s.Serialize<byte>(InitialDisplayPrio, name: nameof(InitialDisplayPrio));
+            DisplayPrio = s.Serialize<byte>(DisplayPrio, name: nameof(DisplayPrio));
             Byte_7F = s.Serialize<byte>(Byte_7F, name: nameof(Byte_7F));
 
             AnimationsCount = s.Serialize<byte>(AnimationsCount, name: nameof(AnimationsCount));
@@ -546,7 +547,7 @@ namespace BinarySerializer.Ray1
             OffsetHY = 20;
             FollowSprite = 0;
             HitPoints = 0;
-            InitialDisplayPrio = DisplayPrio = 7;
+            DisplayPrio = UnusedDisplayPrio = 7;
             HitSprite = 0;
 
             PC_SpritesIndex = 1;
