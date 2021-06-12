@@ -15,8 +15,18 @@ namespace BinarySerializer.Ray1
         /// <summary>
         /// Gets a new obj instance for Rayman
         /// </summary>
-        public static ObjData GetRayman(Context context, ObjData rayPos) => new ObjData().InitRayman(context, rayPos);
-        public static ObjData GetMapObj(Context context, short x, short y, int index) => new ObjData().InitMapObj(context, x, y, index);
+        public static ObjData GetRayman(Context context, ObjData rayPos) => CreateObj(context.GetSettings<Ray1Settings>()).InitRayman(context, rayPos);
+        public static ObjData GetMapObj(Context context, short x, short y, int index) => CreateObj(context.GetSettings<Ray1Settings>()).InitMapObj(context, x, y, index);
+        public static ObjData CreateObj(Ray1Settings settings) => new ObjData
+        {
+            PS1Demo_Unk1 = new byte[40],
+            CommandContexts = new CommandContext[]
+            {
+                new CommandContext()
+            },
+            TypeZDC = new ZDCEntry(),
+            CollisionTypes = new TileCollisionType[settings.EngineVersion != Ray1EngineVersion.PS1_JPDemoVol3 ? 5 : 1],
+        };
 
         #endregion
 
