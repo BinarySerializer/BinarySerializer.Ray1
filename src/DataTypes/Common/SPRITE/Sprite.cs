@@ -81,7 +81,7 @@
             if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
                 return false;
 
-            return Index == 0;
+            return Height == 0 || Width == 0 || Index == 0;
         }
 
         /// <summary>
