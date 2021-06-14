@@ -24,7 +24,7 @@ namespace BinarySerializer.Ray1
 
         // Temp states
         SquishedRayman = 1 << 9,
-        Darkness = 1 << 10,
+        Firefly = 1 << 10, // Darkness
         Unk_11 = 1 << 11, // Toggles ForceRun
         ForceRun = 1 << 12,
         ReverseControls = 1 << 13,
