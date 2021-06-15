@@ -1,6 +1,5 @@
 ﻿using BinarySerializer.PS1;
 using System;
-using System.Linq;
 
 namespace BinarySerializer.Ray1
 {
@@ -29,9 +28,9 @@ namespace BinarySerializer.Ray1
             vram.AddData(lvlGraphics, 256);
 
             int paletteY = 256 - 3; // 480 - 1 page height
-            vram.AddDataAt(1, 1, 0, paletteY++, palLettre.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-            vram.AddDataAt(1, 1, 0, paletteY++, pal4.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-            vram.AddDataAt(1, 1, 0, paletteY++, pal8.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+            vram.AddPalette(palLettre, 1, 1, 0, paletteY++);
+            vram.AddPalette(pal4, 1, 1, 0, paletteY++);
+            vram.AddPalette(pal8, 1, 1, 0, paletteY++);
 
             return vram;
         }
@@ -86,18 +85,18 @@ namespace BinarySerializer.Ray1
                 vram.AddDataAt(12, 1, 0, paletteY++, allFix.Palette4.SelectMany(c => BitConverter.GetBytes(c.Color1555)).ToArray(), 512);*/
                 if (mode == VRAMMode.Level)
                 {
-                    vram.AddDataAt(12, 1, 0, paletteY++, world.ObjPalette1.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                    vram.AddDataAt(12, 1, 0, paletteY++, world.ObjPalette2.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+                    vram.AddPalette(world.ObjPalette1, 12, 1, 0, paletteY++);
+                    vram.AddPalette(world.ObjPalette2, 12, 1, 0, paletteY++);
                 }
                 else
                 {
-                    vram.AddDataAt(12, 1, 0, paletteY++, allFix.Palette3.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                    vram.AddDataAt(12, 1, 0, paletteY++, allFix.Palette4.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+                    vram.AddPalette(allFix.Palette3, 12, 1, 0, paletteY++);
+                    vram.AddPalette(allFix.Palette4, 12, 1, 0, paletteY++);
                 }
-                vram.AddDataAt(12, 1, 0, paletteY++, allFix.Palette1.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                vram.AddDataAt(12, 1, 0, paletteY++, allFix.Palette5.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                vram.AddDataAt(12, 1, 0, paletteY++, allFix.Palette6.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                vram.AddDataAt(12, 1, 0, paletteY++, allFix.Palette2.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+                vram.AddPalette(allFix.Palette1, 12, 1, 0, paletteY++);
+                vram.AddPalette(allFix.Palette5, 12, 1, 0, paletteY++);
+                vram.AddPalette(allFix.Palette6, 12, 1, 0, paletteY++);
+                vram.AddPalette(allFix.Palette2, 12, 1, 0, paletteY++);
 
                 if (mode == VRAMMode.Level)
                 {
@@ -105,14 +104,14 @@ namespace BinarySerializer.Ray1
 
                     // Add tile palettes
                     foreach (var p in world.TilePalettes)
-                        vram.AddDataAt(12, 1, 0, paletteY++, p.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+                        vram.AddPalette(p, 12, 1, 0, paletteY++);
                 }
             }
             else
             {
                 // BigRay
-                vram.AddDataAt(12, 1, 0, paletteY++, bigRay.Palette1.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                vram.AddDataAt(12, 1, 0, paletteY++, bigRay.Palette2.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+                vram.AddPalette(bigRay.Palette1, 12, 1, 0, paletteY++);
+                vram.AddPalette(bigRay.Palette2, 12, 1, 0, paletteY++);
             }
 
             return vram;
@@ -170,22 +169,22 @@ namespace BinarySerializer.Ray1
             int paletteY = 224; // 480 - 1 page height
             if (mode != VRAMMode.BigRay)
             {
-                vram.AddDataAt(1, 1, 0, paletteY++, allFix.Palette2.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                vram.AddDataAt(1, 1, 0, paletteY++, allFix.Palette6.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                vram.AddDataAt(1, 1, 0, paletteY++, allFix.Palette5.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+                vram.AddPalette(allFix.Palette2, 1, 1, 0, paletteY++);
+                vram.AddPalette(allFix.Palette6, 1, 1, 0, paletteY++);
+                vram.AddPalette(allFix.Palette5, 1, 1, 0, paletteY++);
 
                 paletteY += 26;
-                vram.AddDataAt(1, 1, 0, paletteY++, allFix.Palette1.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+                vram.AddPalette(allFix.Palette1, 1, 1, 0, paletteY++);
 
                 if (mode == VRAMMode.Level)
                 {
-                    vram.AddDataAt(1, 1, 0, paletteY++, world.ObjPalette2.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                    vram.AddDataAt(1, 1, 0, paletteY++, world.ObjPalette1.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+                    vram.AddPalette(world.ObjPalette2, 1, 1, 0, paletteY++);
+                    vram.AddPalette(world.ObjPalette1, 1, 1, 0, paletteY++);
                 }
                 else
                 {
-                    vram.AddDataAt(1, 1, 0, paletteY++, allFix.Palette4.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                    vram.AddDataAt(1, 1, 0, paletteY++, allFix.Palette3.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+                    vram.AddPalette(allFix.Palette4, 1, 1, 0, paletteY++);
+                    vram.AddPalette(allFix.Palette3, 1, 1, 0, paletteY++);
                 }
             }
             else
@@ -193,8 +192,8 @@ namespace BinarySerializer.Ray1
                 paletteY += 31;
 
                 // BigRay
-                vram.AddDataAt(1, 1, 0, paletteY++, bigRay.Palette1.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-                vram.AddDataAt(1, 1, 0, paletteY++, bigRay.Palette2.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+                vram.AddPalette(bigRay.Palette1, 1, 1, 0, paletteY++);
+                vram.AddPalette(bigRay.Palette2, 1, 1, 0, paletteY++);
             }
 
             return vram;
@@ -223,17 +222,17 @@ namespace BinarySerializer.Ray1
 
             // Palettes start at y = 256 + 234 (= 490), so page 1 and y=234
             int paletteY = 240;
-            vram.AddDataAt(0, 0, 0, paletteY, spritePalettes.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+            vram.AddPalette(spritePalettes, 0, 0, 0, paletteY);
 
             paletteY = 248;
-            vram.AddDataAt(12, 1, 0, paletteY++, tilePalettes[3].SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-            vram.AddDataAt(12, 1, 0, paletteY++, tilePalettes[2].SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-            vram.AddDataAt(12, 1, 0, paletteY++, tilePalettes[2].SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-            vram.AddDataAt(12, 1, 0, paletteY++, tilePalettes[2].SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-            vram.AddDataAt(12, 1, 0, paletteY++, tilePalettes[2].SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-            vram.AddDataAt(12, 1, 0, paletteY++, tilePalettes[1].SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-            vram.AddDataAt(12, 1, 0, paletteY++, tilePalettes[0].SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
-            vram.AddDataAt(12, 1, 0, paletteY++, tilePalettes[0].SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
+            vram.AddPalette(tilePalettes[3], 12, 1, 0, paletteY++);
+            vram.AddPalette(tilePalettes[2], 12, 1, 0, paletteY++);
+            vram.AddPalette(tilePalettes[2], 12, 1, 0, paletteY++);
+            vram.AddPalette(tilePalettes[2], 12, 1, 0, paletteY++);
+            vram.AddPalette(tilePalettes[2], 12, 1, 0, paletteY++);
+            vram.AddPalette(tilePalettes[1], 12, 1, 0, paletteY++);
+            vram.AddPalette(tilePalettes[0], 12, 1, 0, paletteY++);
+            vram.AddPalette(tilePalettes[0], 12, 1, 0, paletteY++);
             /*vram.AddDataAt(12, 1, 0, paletteY++, allFix.Palette3.SelectMany(c => BitConverter.GetBytes(c.Color1555)).ToArray(), 512);
             vram.AddDataAt(12, 1, 0, paletteY++, allFix.Palette4.SelectMany(c => BitConverter.GetBytes(c.Color1555)).ToArray(), 512);*/
             /*vram.AddDataAt(12, 1, 0, paletteY++, world.EventPalette1.SelectMany(c => BitConverter.GetBytes(c.Color1555)).ToArray(), 512);
@@ -247,7 +246,6 @@ namespace BinarySerializer.Ray1
 
             foreach (var p in world.TilePalettes)
                 vram.AddDataAt(12, 1, 0, paletteY++, p.SelectMany(c => BitConverter.GetBytes(c.Color1555)).ToArray(), 512);*/
-            vram.AddDataAt(0, 0, 0, paletteY, spritePalettes.SelectMany(c => BitConverter.GetBytes((ushort)c.ColorValue)).ToArray(), 512);
 
             return vram;
         }
