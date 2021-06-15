@@ -142,8 +142,8 @@ namespace BinarySerializer.Ray1
                         ImageOffsetInPageY = s.Serialize<byte>(ImageOffsetInPageY, name: nameof(ImageOffsetInPageY));
                         s.SerializeBitValues<ushort>(bitFunc =>
                         {
-                            PaletteX = (byte)bitFunc(PaletteX, 6, name: nameof(PaletteX));
-                            PaletteY = (byte)bitFunc(PaletteY, 10, name: nameof(PaletteY));
+                            PaletteX = (ushort)bitFunc(PaletteX, 6, name: nameof(PaletteX));
+                            PaletteY = (ushort)bitFunc(PaletteY, 10, name: nameof(PaletteY));
                         });
                         TexturePageInfo = s.SerializeObject<PS1_TexturePageInfo>(TexturePageInfo, name: nameof(TexturePageInfo));
                     }
@@ -195,8 +195,8 @@ namespace BinarySerializer.Ray1
                         Unknown4 = s.Serialize<byte>(Unknown4, name: nameof(Unknown4));
                         s.SerializeBitValues<ushort>(bitFunc =>
                         {
-                            PaletteX = (byte)bitFunc(PaletteX, 6, name: nameof(PaletteX));
-                            PaletteY = (byte)bitFunc(PaletteY, 10, name: nameof(PaletteY));
+                            PaletteX = (ushort)bitFunc(PaletteX, 6, name: nameof(PaletteX));
+                            PaletteY = (ushort)bitFunc(PaletteY, 10, name: nameof(PaletteY));
                         });
                         TexturePageInfo = s.SerializeObject<PS1_TexturePageInfo>(TexturePageInfo, name: nameof(TexturePageInfo));
                         ImageOffsetInPageX = s.Serialize<byte>(ImageOffsetInPageX, name: nameof(ImageOffsetInPageX));
