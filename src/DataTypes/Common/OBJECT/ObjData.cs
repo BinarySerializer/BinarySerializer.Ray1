@@ -232,12 +232,12 @@ namespace BinarySerializer.Ray1
         /// <summary>
         /// The sprites
         /// </summary>
-        public Sprite[] Sprites { get; set; }
+        public SpriteCollection SpriteCollection { get; set; }
 
         /// <summary>
         /// The animations
         /// </summary>
-        public Animation[] Animations { get; set; }
+        public AnimationCollection AnimationCollection { get; set; }
 
         /// <summary>
         /// Image buffer
@@ -466,18 +466,18 @@ namespace BinarySerializer.Ray1
                 return;
 
             // Serialize the sprites
-            s.DoAt(SpritesPointer, () => Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites)));
+            s.DoAt(SpritesPointer, () => SpriteCollection = s.SerializeObject<SpriteCollection>(SpriteCollection, x => x.Pre_SpritesCount = SpritesCount, name: nameof(SpriteCollection)));
 
             // Serialize the animations
-            s.DoAt(AnimationsPointer, () => Animations = s.SerializeObjectArray<Animation>(Animations, AnimationsCount, name: nameof(Animations)));
+            s.DoAt(AnimationsPointer, () => AnimationCollection = s.SerializeObject<AnimationCollection>(AnimationCollection, x => x.Pre_AnimationsCount = AnimationsCount, name: nameof(AnimationCollection)));
 
             if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
             {
-                if (ImageBuffer == null && ImageBufferPointer != null && Sprites != null)
+                if (ImageBuffer == null && ImageBufferPointer != null && SpriteCollection != null)
                 {
                     // Determine length of image buffer
                     uint length = 0;
-                    foreach (Sprite img in Sprites)
+                    foreach (Sprite img in SpriteCollection.Sprites)
                     {
                         if (img.ImageType != 2 && img.ImageType != 3)
                             continue;

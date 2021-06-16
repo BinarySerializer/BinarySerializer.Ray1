@@ -21,8 +21,8 @@
 
         // Parsed from pointers
         public byte[] ImageBuffer { get; set; }
-        public Sprite[] Sprites { get; set; }
-        public Animation[] Animations { get; set; }
+        public SpriteCollection SpriteCollection { get; set; }
+        public AnimationCollection AnimationCollection { get; set; }
 
         /// <summary>
         /// Handles the data serialization
@@ -42,8 +42,8 @@
 
             // Serialize data from pointers
             ImageBuffer = s.DoAt(ImageBufferPointer, () => s.SerializeArray<byte>(ImageBuffer, ImageBufferSize, name: nameof(ImageBuffer)));
-            Animations = s.DoAt(AnimationsPointer, () => s.SerializeObjectArray<Animation>(Animations, AnimationsCount, name: nameof(Animations)));
-            Sprites = s.DoAt(SpritesPointer, () => s.SerializeObjectArray<Sprite>(Sprites, SpritesLength / 12, name: nameof(Sprites)));
+            AnimationCollection = s.DoAt(AnimationsPointer, () => s.SerializeObject<AnimationCollection>(AnimationCollection, x => x.Pre_AnimationsCount = AnimationsCount, name: nameof(AnimationCollection)));
+            SpriteCollection = s.DoAt(SpritesPointer, () => s.SerializeObject<SpriteCollection>(SpriteCollection, x => x.Pre_SpritesCount = SpritesLength / 12, name: nameof(SpriteCollection)));
         }
     }
 }

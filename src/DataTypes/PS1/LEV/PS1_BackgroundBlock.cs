@@ -14,7 +14,7 @@
         /// <summary>
         /// The background layer info items
         /// </summary>
-        public Sprite[] BackgroundLayerInfos { get; set; }
+        public SpriteCollection SpriteCollection { get; set; }
 
         public byte[] Unknown4 { get; set; }
 
@@ -32,7 +32,7 @@
 
             Unknown3 = s.SerializeArray<byte>(Unknown3, 16, name: nameof(Unknown3));
 
-            BackgroundLayerInfos = s.SerializeObjectArray<Sprite>(BackgroundLayerInfos, 12, name: nameof(BackgroundLayerInfos));
+            SpriteCollection = s.SerializeObject<SpriteCollection>(SpriteCollection, x => x.Pre_SpritesCount = 12, name: nameof(SpriteCollection));
 
             Unknown4 = s.SerializeArray<byte>(Unknown4, settings.EngineVersion == Ray1EngineVersion.PS1_JP ? 208 : 80, name: nameof(Unknown4));
         }

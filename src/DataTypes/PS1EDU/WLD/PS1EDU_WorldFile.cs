@@ -35,7 +35,7 @@ namespace BinarySerializer.Ray1
 
         public Pointer MainDataBlockPointer { get; set; }
 
-        public Sprite[][] Sprites { get; set; }
+        public SpriteCollection[] SpriteCollections { get; set; }
 
         public PS1EDU_Animation[][] Animations { get; set; }
 
@@ -144,7 +144,7 @@ namespace BinarySerializer.Ray1
                 // Helper method for serializing the DES
                 void SerializeDES()
                 {
-                    Sprites ??= new Sprite[DESCount][];
+                    SpriteCollections ??= new SpriteCollection[DESCount];
                     Animations ??= new PS1EDU_Animation[DESCount][];
 
                     int curAnimDesc = 0;
@@ -153,7 +153,13 @@ namespace BinarySerializer.Ray1
                     for (int i = 0; i < DESCount; i++)
                     {
                         // Serialize sprites
-                        Sprites[i] = s.SerializeObjectArray<Sprite>(Sprites[i], DESData[i].SpritesCount, name: $"{nameof(Sprites)}[{i}]");
+                        if (DESData[i].SpritesCount > 0)
+                            SpriteCollections[i] = s.SerializeObject<SpriteCollection>(SpriteCollections[i], x => x.Pre_SpritesCount = DESData[i].SpritesCount, name: $"{nameof(SpriteCollections)}[{i}]");
+                        else
+                            SpriteCollections[i] = new SpriteCollection()
+                            {
+                                Sprites = new Sprite[0]
+                            };
 
                         // Serialize animations
                         Animations[i] = s.SerializeObjectArray<PS1EDU_Animation>(Animations[i], DESData[i].AnimationsCount, name: $"{nameof(Animations)}[{i}]");

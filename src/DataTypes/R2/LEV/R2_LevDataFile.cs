@@ -75,7 +75,7 @@ namespace BinarySerializer.Ray1
         /// <summary>
         /// The allfix sprites
         /// </summary>
-        public Sprite[] FixSprites { get; set; }
+        public SpriteCollection FixSpriteCollection { get; set; }
 
         public ZDCData[] ZDC { get; set; }
         public ZDC_TriggerFlags[] ZDCTriggerFlags { get; set; }
@@ -123,7 +123,7 @@ namespace BinarySerializer.Ray1
 
             ObjectLinkTable = s.SerializeArray<ushort>(ObjectLinkTable, LoadedObjectsCount, name: nameof(ObjectLinkTable));
 
-            FixSprites = s.DoAt(FixSpritesPointer, () => s.SerializeObjectArray<Sprite>(FixSprites, FixSpritesCount, name: nameof(FixSprites)));
+            FixSpriteCollection = s.DoAt(FixSpritesPointer, () => s.SerializeObject<SpriteCollection>(FixSpriteCollection, x => x.Pre_SpritesCount = FixSpritesCount, name: nameof(FixSpriteCollection)));
 
             Objects = s.DoAt(LoadedObjectsPointer, () => s.SerializeObjectArray<R2_ObjData>(Objects, LoadedObjectsCount, name: nameof(Objects)));
             AlwaysObjects = s.DoAt(AlwaysObjectsPointer, () => s.SerializeObjectArray<R2_ObjData>(AlwaysObjects, AlwaysObjectsCount, name: nameof(AlwaysObjects)));

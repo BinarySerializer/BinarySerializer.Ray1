@@ -6,7 +6,7 @@
         public Pointer ImageBufferPointer { get; set; }
         public byte SpritesCount { get; set; }
 
-        public Sprite[] Sprites { get; set; }
+        public SpriteCollection SpriteCollection { get; set; }
         public byte[] ImageBuffer { get; set; }
 
         /// <summary>
@@ -22,15 +22,15 @@
             SpritesCount = s.Serialize<byte>(SpritesCount, name: nameof(SpritesCount));
             s.SerializePadding(3);
 
-            s.DoAt(SpritesPointer, () => Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites)));
+            s.DoAt(SpritesPointer, () => SpriteCollection = s.SerializeObject<SpriteCollection>(SpriteCollection, x => x.Pre_SpritesCount = SpritesCount, name: nameof(SpriteCollection)));
 
             if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
             {
-                if (ImageBuffer == null && ImageBufferPointer != null && Sprites != null)
+                if (ImageBuffer == null && ImageBufferPointer != null && SpriteCollection != null)
                 {
                     // Determine length of image buffer
                     uint length = 0;
-                    foreach (Sprite img in Sprites)
+                    foreach (Sprite img in SpriteCollection.Sprites)
                     {
                         if (img.ImageType != 2 && img.ImageType != 3)
                             continue;

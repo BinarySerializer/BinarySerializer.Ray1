@@ -42,7 +42,7 @@
         /// <summary>
         /// The sprites
         /// </summary>
-        public Sprite[] Sprites { get; set; }
+        public SpriteCollection SpriteCollection { get; set; }
 
         /// <summary>
         /// The amount of animations
@@ -137,7 +137,7 @@
                 RaymanExeCheckSum2 = s.Serialize<uint>(RaymanExeCheckSum2, name: nameof(RaymanExeCheckSum2));
 
             SpritesCount = s.Serialize<ushort>(SpritesCount, name: nameof(SpritesCount));
-            Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites));
+            SpriteCollection = s.SerializeObject<SpriteCollection>(SpriteCollection, x => x.Pre_SpritesCount = SpritesCount, name: nameof(SpriteCollection));
             AnimationsCount = s.Serialize<byte>(AnimationsCount, name: nameof(AnimationsCount));
             Animations = s.SerializeObjectArray<PC_Animation>(Animations, AnimationsCount, name: nameof(Animations));
         }
