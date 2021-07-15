@@ -55,10 +55,11 @@ namespace BinarySerializer.Ray1
 
         public ushort Saturn_PaletteInfo { get; set; }
 
+        // TODO: Replace with PS1_CBA class
         public ushort PaletteX { get; set; }
         public ushort PaletteY { get; set; }
 
-        public PS1_TexturePageInfo TexturePageInfo { get; set; }
+        public PS1_TSB TexturePageInfo { get; set; }
 
         public byte ImageOffsetInPageX { get; set; }
         public byte ImageOffsetInPageY { get; set; }
@@ -145,7 +146,7 @@ namespace BinarySerializer.Ray1
                             PaletteX = (ushort)bitFunc(PaletteX, 6, name: nameof(PaletteX));
                             PaletteY = (ushort)bitFunc(PaletteY, 10, name: nameof(PaletteY));
                         });
-                        TexturePageInfo = s.SerializeObject<PS1_TexturePageInfo>(TexturePageInfo, name: nameof(TexturePageInfo));
+                        TexturePageInfo = s.SerializeObject<PS1_TSB>(TexturePageInfo, name: nameof(TexturePageInfo));
                     }
                     else if (settings.EngineVersion == Ray1EngineVersion.PS1_JP || 
                              settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ||
@@ -198,7 +199,7 @@ namespace BinarySerializer.Ray1
                             PaletteX = (ushort)bitFunc(PaletteX, 6, name: nameof(PaletteX));
                             PaletteY = (ushort)bitFunc(PaletteY, 10, name: nameof(PaletteY));
                         });
-                        TexturePageInfo = s.SerializeObject<PS1_TexturePageInfo>(TexturePageInfo, name: nameof(TexturePageInfo));
+                        TexturePageInfo = s.SerializeObject<PS1_TSB>(TexturePageInfo, name: nameof(TexturePageInfo));
                         ImageOffsetInPageX = s.Serialize<byte>(ImageOffsetInPageX, name: nameof(ImageOffsetInPageX));
                         ImageOffsetInPageY = s.Serialize<byte>(ImageOffsetInPageY, name: nameof(ImageOffsetInPageY));
                         Unknown6 = s.Serialize<ushort>(Unknown6, name: nameof(Unknown6));
