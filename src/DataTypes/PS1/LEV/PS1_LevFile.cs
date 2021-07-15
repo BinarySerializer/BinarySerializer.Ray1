@@ -65,6 +65,9 @@
 
             // TEXTURE BLOCK
             TextureBlock = s.DoAt(TextureBlockPointer, () => s.SerializeArray<byte>(TextureBlock, FileSize - TextureBlockPointer.FileOffset, name: nameof(TextureBlock)));
+
+            // Go to the end of the file
+            s.Goto(Offset + FileSize);
         }
     }
 }

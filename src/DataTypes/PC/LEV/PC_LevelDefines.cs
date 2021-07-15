@@ -86,7 +86,10 @@ namespace BinarySerializer.Ray1
             Effect_9 = 1 << 9,
             HotEffect = 1 << 10,
             Effect_11 = 1 << 11,
-            // More?
+            HideHUD = 1 << 12,
+            Effect_13 = 1 << 13,
+            Effect_14 = 1 << 14,
+            Effect_15 = 1 << 15,
         }
     }
 }
