@@ -181,7 +181,7 @@ namespace BinarySerializer.Ray1
                             case 0:
                                 return $"{prepend}{(Arguments[1] == 1 ? "": "!")}ISFLIPPED{append}";
                             case 1:
-                                return $"{prepend}RANDOM({Arguments[1]})"; // myRand. RandArray[RandomIndex] % (Argument1 + 1);
+                                return $"{prepend}RANDOM({Arguments[1]}){append}"; // myRand. RandArray[RandomIndex] % (Argument1 + 1);
                             case 2:
                                 return $"{prepend}RAYMAN.X {((Arguments[1] == 1) ? ">" : "<=")} X{append}";
                             case 3:
