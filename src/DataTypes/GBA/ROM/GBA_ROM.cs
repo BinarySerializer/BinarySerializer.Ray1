@@ -108,10 +108,7 @@ namespace BinarySerializer.Ray1
 
                         if (bytes != null) 
                         {
-                            var file = new MemoryMappedByteArrayFile(s.Context, "ETA_" + index, memAddress, bytes)
-                            {
-                                RecreateOnWrite = true
-                            };
+                            var file = new MemoryMappedByteArrayFile(s.Context, "ETA_" + index, memAddress, bytes);
 
                             s.Context.AddFile(file);
                         }

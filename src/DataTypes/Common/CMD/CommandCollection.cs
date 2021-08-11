@@ -40,10 +40,7 @@ namespace BinarySerializer.Ray1
             const string key = "CMDS";
 
             // Add the stream
-            var file = new StreamFile(context, key, memStream)
-            {
-                RecreateOnWrite = true
-            };
+            var file = new StreamFile(context, key, memStream);
 
             context.AddFile(file);
 
@@ -67,10 +64,7 @@ namespace BinarySerializer.Ray1
             const string key = "CMDS";
 
             // Add the stream
-            var file = new StreamFile(context, key, memStream)
-            {
-                RecreateOnWrite = true
-            };
+            var file = new StreamFile(context, key, memStream);
 
             context.AddFile(file);
 

@@ -152,10 +152,7 @@ namespace BinarySerializer.Ray1
 
                 var key = $"{Offset}_Header";
 
-                var file = new StreamFile(s.Context, key, headerStream)
-                {
-                    RecreateOnWrite = true
-                };
+                var file = new StreamFile(s.Context, key, headerStream);
 
                 s.Context.AddFile(file);
 
