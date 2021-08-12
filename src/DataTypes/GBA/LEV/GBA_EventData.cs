@@ -95,7 +95,6 @@ namespace BinarySerializer.Ray1
 
                                         if (off_prev != null) {
                                             if ((off_next.AbsoluteOffset - off_prev.AbsoluteOffset <= 0) || (off_next.AbsoluteOffset - off_prev.AbsoluteOffset >= 0x10000)) break;
-                                            if (off_next.File == off_prev.File || off_next.File == Offset.File) break;
                                         }
                                     }
 
