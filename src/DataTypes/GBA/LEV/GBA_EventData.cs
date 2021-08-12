@@ -90,21 +90,17 @@ namespace BinarySerializer.Ray1
                                 while (true)
                                 {
                                     Pointer off_next = s.SerializePointer(null, allowInvalid: true, name: "TestPointer");
-                                    if (curEtatCount < etatCount 
-                                        || (off_next != null 
-                                        && off_next != ETAPointer
-                                        && (off_prev == null 
-                                        || ((off_next.AbsoluteOffset - off_prev.AbsoluteOffset > 0) && (off_next.AbsoluteOffset - off_prev.AbsoluteOffset < 0x10000))
-                                        || (off_next.File != off_prev.File && off_next.File != Offset.File)
-                                        )))
-                                    {
-                                        curEtatCount++;
-                                        off_prev = off_next;
+                                    if (curEtatCount >= etatCount) {
+                                        if (off_next == null || off_next == ETAPointer) break;
+
+                                        if (off_prev != null) {
+                                            if ((off_next.AbsoluteOffset - off_prev.AbsoluteOffset <= 0) || (off_next.AbsoluteOffset - off_prev.AbsoluteOffset >= 0x10000)) break;
+                                            if (off_next.File == off_prev.File || off_next.File == Offset.File) break;
+                                        }
                                     }
-                                    else
-                                    {
-                                        break;
-                                    }
+
+                                    curEtatCount++;
+                                    off_prev = off_next;
                                 }
                                 etatCount = curEtatCount;
                             });
