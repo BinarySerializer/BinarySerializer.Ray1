@@ -108,5 +108,17 @@ namespace BinarySerializer.Ray1
             [PS1_DefinedPointer.SAT_FndSPFileTable] = 0x06010000 + 0x81963,
             [PS1_DefinedPointer.SAT_FndIndexTable] = 0x06010000 + 0x8189B,
         };
+
+        public static Dictionary<PS1_DefinedPointer, long> SAT_JPDemo => new Dictionary<PS1_DefinedPointer, long>()
+        {
+            [PS1_DefinedPointer.TypeZDC] = 0x06010000 + 0x836F2,
+            [PS1_DefinedPointer.ZDCData] = 0x06010000 + 0x826F2,
+            [PS1_DefinedPointer.ObjTypeFlags] = 0x06010000 + 0x81EF0,
+            [PS1_DefinedPointer.WorldInfo] = 0x06010000 + 0x83FC0,
+            [PS1_DefinedPointer.SAT_Palettes] = 0x06010000 + 0x87B98,
+            [PS1_DefinedPointer.SAT_FndFileTable] = 0x06010000 + 0x85FE0,
+            [PS1_DefinedPointer.SAT_FndSPFileTable] = 0x06010000 + 0x863D7,
+            [PS1_DefinedPointer.SAT_FndIndexTable] = 0x06010000 + 0x8630F,
+        };
     }
 }
