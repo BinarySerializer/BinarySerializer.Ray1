@@ -41,7 +41,7 @@ namespace BinarySerializer.Ray1
             if (settings.EngineVersion == Ray1EngineVersion.PS1_Edu && (settings.Volume.StartsWith("IT") || settings.Volume.StartsWith("CS")))
                 numLangNames = 5;
 
-            if (settings.EngineVersion == Ray1EngineVersion.PC_Edu && (settings.Volume.StartsWith("HN") || settings.Volume.StartsWith("IS") || settings.Volume.StartsWith("NL")))
+            if (settings.EngineVersion == Ray1EngineVersion.PC_Edu && (settings.Volume.StartsWith("HN") || settings.Volume.StartsWith("IS") || settings.Volume.StartsWith("NL") || settings.Volume.StartsWith("PO")))
                 numLangNames = 5;
 
             LanguageNames = s.SerializeStringArray(LanguageNames, numLangNames, 11, name: nameof(LanguageNames));
