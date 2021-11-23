@@ -45,19 +45,19 @@
             else if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 || 
                      settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
             {
-                s.SerializeBitValues<int>(bitFunc =>
+                s.DoBits<int>(b =>
                 {
-                    TileMapX = (ushort)bitFunc(TileMapX, 10, name: nameof(TileMapX));
-                    TileMapY = (ushort)bitFunc(TileMapY, 6, name: nameof(TileMapY));
-                    BlockType = (byte)bitFunc(BlockType, 8, name: nameof(BlockType));
+                    TileMapX = (ushort)b.SerializeBits<int>(TileMapX, 10, name: nameof(TileMapX));
+                    TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 6, name: nameof(TileMapY));
+                    BlockType = (byte)b.SerializeBits<int>(BlockType, 8, name: nameof(BlockType));
                 });
             }
             else if (settings.EngineVersion == Ray1EngineVersion.Saturn)
             {
-                s.SerializeBitValues<ushort>(bitFunc =>
+                s.DoBits<ushort>(b =>
                 {
-                    TileMapX = (ushort)bitFunc(TileMapX, 4, name: nameof(TileMapX));
-                    TileMapY = (ushort)bitFunc(TileMapY, 12, name: nameof(TileMapY));
+                    TileMapX = (ushort)b.SerializeBits<int>(TileMapX, 4, name: nameof(TileMapX));
+                    TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 12, name: nameof(TileMapY));
                 });
 
                 BlockType = s.Serialize<byte>((byte)BlockType, name: nameof(BlockType));
@@ -65,10 +65,10 @@
             }
             else if (settings.EngineBranch == Ray1EngineBranch.Jaguar)
             {
-                s.SerializeBitValues<ushort>(bitFunc =>
+                s.DoBits<ushort>(b =>
                 {
-                    TileMapY = (ushort)bitFunc(TileMapY, 12, name: nameof(TileMapY));
-                    BlockType = (byte)bitFunc(BlockType, 4, name: nameof(BlockType));
+                    TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 12, name: nameof(TileMapY));
+                    BlockType = (byte)b.SerializeBits<int>(BlockType, 4, name: nameof(BlockType));
                 });
 
                 TileMapX = 0;
@@ -77,23 +77,23 @@
             {
                 if (!Pre_SNES_Is8PxTile)
                 {
-                    s.SerializeBitValues<ushort>(bitFunc =>
+                    s.DoBits<ushort>(b =>
                     {
-                        TileMapY = (ushort)bitFunc(TileMapY, 10, name: nameof(TileMapY));
-                        HorizontalFlip = bitFunc(HorizontalFlip ? 1 : 0, 1, name: nameof(HorizontalFlip)) == 1;
-                        VerticalFlip = bitFunc(VerticalFlip ? 1 : 0, 1, name: nameof(VerticalFlip)) == 1;
-                        BlockType = (byte)bitFunc(BlockType, 4, name: nameof(BlockType));
+                        TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 10, name: nameof(TileMapY));
+                        HorizontalFlip = b.SerializeBits<int>(HorizontalFlip ? 1 : 0, 1, name: nameof(HorizontalFlip)) == 1;
+                        VerticalFlip = b.SerializeBits<int>(VerticalFlip ? 1 : 0, 1, name: nameof(VerticalFlip)) == 1;
+                        BlockType = (byte)b.SerializeBits<int>(BlockType, 4, name: nameof(BlockType));
                     });
                 }
                 else
                 {
-                    s.SerializeBitValues<ushort>(bitFunc =>
+                    s.DoBits<ushort>(b =>
                     {
-                        TileMapY = (ushort)bitFunc(TileMapY, 10, name: nameof(TileMapY));
-                        PaletteIndex = (byte)bitFunc(PaletteIndex, 3, name: nameof(PaletteIndex));
-                        Priority = bitFunc(Priority ? 1 : 0, 1, name: nameof(Priority)) == 1;
-                        HorizontalFlip = bitFunc(HorizontalFlip ? 1 : 0, 1, name: nameof(HorizontalFlip)) == 1;
-                        VerticalFlip = bitFunc(VerticalFlip ? 1 : 0, 1, name: nameof(VerticalFlip)) == 1;
+                        TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 10, name: nameof(TileMapY));
+                        PaletteIndex = (byte)b.SerializeBits<int>(PaletteIndex, 3, name: nameof(PaletteIndex));
+                        Priority = b.SerializeBits<int>(Priority ? 1 : 0, 1, name: nameof(Priority)) == 1;
+                        HorizontalFlip = b.SerializeBits<int>(HorizontalFlip ? 1 : 0, 1, name: nameof(HorizontalFlip)) == 1;
+                        VerticalFlip = b.SerializeBits<int>(VerticalFlip ? 1 : 0, 1, name: nameof(VerticalFlip)) == 1;
                     });
                 }
 
@@ -103,19 +103,19 @@
                      settings.EngineVersion == Ray1EngineVersion.PS1_EUDemo ||
                      settings.EngineVersion == Ray1EngineVersion.R2_PS1)
             {
-                s.SerializeBitValues<ushort>(bitFunc =>
+                s.DoBits<ushort>(b =>
                 {
-                    TileMapX = (ushort)bitFunc(TileMapX, 4, name: nameof(TileMapX));
-                    TileMapY = (ushort)bitFunc(TileMapY, 6, name: nameof(TileMapY));
-                    BlockType = (byte)bitFunc(BlockType, 6, name: nameof(BlockType));
+                    TileMapX = (ushort)b.SerializeBits<int>(TileMapX, 4, name: nameof(TileMapX));
+                    TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 6, name: nameof(TileMapY));
+                    BlockType = (byte)b.SerializeBits<int>(BlockType, 6, name: nameof(BlockType));
                 });
             }
             else if (settings.EngineVersion == Ray1EngineVersion.PS1_JP)
             {
-                s.SerializeBitValues<ushort>(bitFunc =>
+                s.DoBits<ushort>(b =>
                 {
-                    TileMapX = (ushort)bitFunc(TileMapX, 9, name: nameof(TileMapX));
-                    BlockType = (byte)bitFunc(BlockType, 7, name: nameof(BlockType));
+                    TileMapX = (ushort)b.SerializeBits<int>(TileMapX, 9, name: nameof(TileMapX));
+                    BlockType = (byte)b.SerializeBits<int>(BlockType, 7, name: nameof(BlockType));
                 });
             }
         }

@@ -258,11 +258,11 @@ namespace BinarySerializer.Ray1
 
             RuntimeFlags1 = s.Serialize<PS1_R2Demo_ObjRuntimeFlags1>(RuntimeFlags1, name: nameof(RuntimeFlags1));
 
-            s.SerializeBitValues<byte>(bitFunc =>
+            s.DoBits<byte>(b =>
             {
-                RuntimeFlipX = bitFunc(RuntimeFlipX ? 1 : 0, 1, name: nameof(RuntimeFlipX)) == 1;
-                RuntimeUnkFlag = bitFunc(RuntimeUnkFlag ? 1 : 0, 1, name: nameof(RuntimeUnkFlag)) == 1;
-                ZDCFlags = (byte)bitFunc(ZDCFlags, 6, name: nameof(ZDCFlags));
+                RuntimeFlipX = b.SerializeBits<int>(RuntimeFlipX ? 1 : 0, 1, name: nameof(RuntimeFlipX)) == 1;
+                RuntimeUnkFlag = b.SerializeBits<int>(RuntimeUnkFlag ? 1 : 0, 1, name: nameof(RuntimeUnkFlag)) == 1;
+                ZDCFlags = (byte)b.SerializeBits<int>(ZDCFlags, 6, name: nameof(ZDCFlags));
             });
 
             RuntimeFlags3 = s.Serialize<byte>(RuntimeFlags3, name: nameof(RuntimeFlags3));

@@ -22,11 +22,11 @@
 
             if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
             {
-                s.SerializeBitValues<ushort>(bitFunc =>
+                s.DoBits<ushort>(b =>
                 {
-                    LayerIndex = (byte)bitFunc(LayerIndex, 5, name: nameof(LayerIndex));
-                    R2_Flags = (byte)bitFunc(R2_Flags, 5, name: nameof(R2_Flags));
-                    ZDC_Flags = (byte)bitFunc(ZDC_Flags, 6, name: nameof(ZDC_Flags));
+                    LayerIndex = (byte)b.SerializeBits<int>(LayerIndex, 5, name: nameof(LayerIndex));
+                    R2_Flags = (byte)b.SerializeBits<int>(R2_Flags, 5, name: nameof(R2_Flags));
+                    ZDC_Flags = (byte)b.SerializeBits<int>(ZDC_Flags, 6, name: nameof(ZDC_Flags));
                 });
             }
             else

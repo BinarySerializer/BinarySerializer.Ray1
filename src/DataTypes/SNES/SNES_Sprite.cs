@@ -16,19 +16,19 @@
 
         public override void SerializeImpl(SerializerObject s)
         {
-            s.SerializeBitValues<byte>(bitFunc => {
-                Padding0 = (byte)bitFunc(Padding0, 3, name: nameof(Padding0));
-                IsEmpty = bitFunc(IsEmpty ? 1 : 0, 1, name: nameof(IsEmpty)) == 1;
-                Padding1 = (byte)bitFunc(Padding1, 3, name: nameof(Padding1));
-                IsLarge = bitFunc(IsLarge ? 1 : 0, 1, name: nameof(IsLarge)) == 1;
+            s.DoBits<byte>(b => {
+                Padding0 = (byte)b.SerializeBits<int>(Padding0, 3, name: nameof(Padding0));
+                IsEmpty = b.SerializeBits<int>(IsEmpty ? 1 : 0, 1, name: nameof(IsEmpty)) == 1;
+                Padding1 = (byte)b.SerializeBits<int>(Padding1, 3, name: nameof(Padding1));
+                IsLarge = b.SerializeBits<int>(IsLarge ? 1 : 0, 1, name: nameof(IsLarge)) == 1;
             });
-            s.SerializeBitValues<ushort>(bitFunc =>
+            s.DoBits<ushort>(b =>
             {
-                TileIndex = (ushort)bitFunc(TileIndex, 9, name: nameof(TileIndex));
-                Palette = bitFunc(Palette, 3, name: nameof(Palette));
-                Priority = bitFunc(Priority, 2, name: nameof(Priority));
-                FlipX = bitFunc(FlipX ? 1 : 0, 1, name: nameof(FlipX)) == 1;
-                FlipY = bitFunc(FlipY ? 1 : 0, 1, name: nameof(FlipY)) == 1;
+                TileIndex = (ushort)b.SerializeBits<int>(TileIndex, 9, name: nameof(TileIndex));
+                Palette = b.SerializeBits<int>(Palette, 3, name: nameof(Palette));
+                Priority = b.SerializeBits<int>(Priority, 2, name: nameof(Priority));
+                FlipX = b.SerializeBits<int>(FlipX ? 1 : 0, 1, name: nameof(FlipX)) == 1;
+                FlipY = b.SerializeBits<int>(FlipY ? 1 : 0, 1, name: nameof(FlipY)) == 1;
             });
         }
     }

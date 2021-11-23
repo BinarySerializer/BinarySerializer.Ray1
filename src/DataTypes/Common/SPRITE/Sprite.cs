@@ -106,10 +106,10 @@ namespace BinarySerializer.Ray1
                 JAG_Byte_03 = s.Serialize<byte>(JAG_Byte_03, name: nameof(JAG_Byte_03));
                 JAG_Byte_04 = s.Serialize<byte>(JAG_Byte_04, name: nameof(JAG_Byte_04));
                 
-                s.SerializeBitValues<ushort>(bitFunc =>
+                s.DoBits<ushort>(b =>
                 {
-                    JAG_Byte_05 = (byte)bitFunc(JAG_Byte_05, 6, name: nameof(JAG_Byte_05));
-                    Height = (ushort)bitFunc(Height, 10, name: nameof(Height));
+                    JAG_Byte_05 = (byte)b.SerializeBits<int>(JAG_Byte_05, 6, name: nameof(JAG_Byte_05));
+                    Height = (ushort)b.SerializeBits<int>(Height, 10, name: nameof(Height));
                 });
 
                 JAG_Ushort_07 = s.Serialize<ushort>(JAG_Ushort_07, name: nameof(JAG_Ushort_07));
@@ -133,18 +133,18 @@ namespace BinarySerializer.Ray1
                         Height = s.Serialize<byte>((byte)Height, name: nameof(Height));
                         HitBoxWidth = s.Serialize<byte>(HitBoxWidth, name: nameof(HitBoxWidth));
                         HitBoxHeight = s.Serialize<byte>(HitBoxHeight, name: nameof(HitBoxHeight));
-                        s.SerializeBitValues<byte>(bitFunc =>
+                        s.DoBits<byte>(b =>
                         {
-                            HitBoxOffsetX = (byte)bitFunc(HitBoxOffsetX, 4, name: nameof(HitBoxOffsetX));
-                            HitBoxOffsetY = (byte)bitFunc(HitBoxOffsetY, 4, name: nameof(HitBoxOffsetY));
+                            HitBoxOffsetX = (byte)b.SerializeBits<int>(HitBoxOffsetX, 4, name: nameof(HitBoxOffsetX));
+                            HitBoxOffsetY = (byte)b.SerializeBits<int>(HitBoxOffsetY, 4, name: nameof(HitBoxOffsetY));
                         });
                         Unknown4 = s.Serialize<byte>(Unknown4, name: nameof(Unknown4));
                         ImageOffsetInPageX = s.Serialize<byte>(ImageOffsetInPageX, name: nameof(ImageOffsetInPageX));
                         ImageOffsetInPageY = s.Serialize<byte>(ImageOffsetInPageY, name: nameof(ImageOffsetInPageY));
-                        s.SerializeBitValues<ushort>(bitFunc =>
+                        s.DoBits<ushort>(b =>
                         {
-                            PaletteX = (ushort)bitFunc(PaletteX, 6, name: nameof(PaletteX));
-                            PaletteY = (ushort)bitFunc(PaletteY, 10, name: nameof(PaletteY));
+                            PaletteX = (ushort)b.SerializeBits<int>(PaletteX, 6, name: nameof(PaletteX));
+                            PaletteY = (ushort)b.SerializeBits<int>(PaletteY, 10, name: nameof(PaletteY));
                         });
                         TexturePageInfo = s.SerializeObject<PS1_TSB>(TexturePageInfo, name: nameof(TexturePageInfo));
                     }
@@ -182,10 +182,10 @@ namespace BinarySerializer.Ray1
                         Height = s.Serialize<byte>((byte)Height, name: nameof(Height));
                         HitBoxWidth = s.Serialize<byte>(HitBoxWidth, name: nameof(HitBoxWidth));
                         HitBoxHeight = s.Serialize<byte>(HitBoxHeight, name: nameof(HitBoxHeight));
-                        s.SerializeBitValues<byte>(bitFunc =>
+                        s.DoBits<byte>(b =>
                         {
-                            HitBoxOffsetX = (byte)bitFunc(HitBoxOffsetX, 4, name: nameof(HitBoxOffsetX));
-                            HitBoxOffsetY = (byte)bitFunc(HitBoxOffsetY, 4, name: nameof(HitBoxOffsetY));
+                            HitBoxOffsetX = (byte)b.SerializeBits<int>(HitBoxOffsetX, 4, name: nameof(HitBoxOffsetX));
+                            HitBoxOffsetY = (byte)b.SerializeBits<int>(HitBoxOffsetY, 4, name: nameof(HitBoxOffsetY));
                         });
                     }
 
@@ -194,10 +194,10 @@ namespace BinarySerializer.Ray1
                     {
                         Unknown3 = s.Serialize<byte>(Unknown3, name: nameof(Unknown3));
                         Unknown4 = s.Serialize<byte>(Unknown4, name: nameof(Unknown4));
-                        s.SerializeBitValues<ushort>(bitFunc =>
+                        s.DoBits<ushort>(b =>
                         {
-                            PaletteX = (ushort)bitFunc(PaletteX, 6, name: nameof(PaletteX));
-                            PaletteY = (ushort)bitFunc(PaletteY, 10, name: nameof(PaletteY));
+                            PaletteX = (ushort)b.SerializeBits<int>(PaletteX, 6, name: nameof(PaletteX));
+                            PaletteY = (ushort)b.SerializeBits<int>(PaletteY, 10, name: nameof(PaletteY));
                         });
                         TexturePageInfo = s.SerializeObject<PS1_TSB>(TexturePageInfo, name: nameof(TexturePageInfo));
                         ImageOffsetInPageX = s.Serialize<byte>(ImageOffsetInPageX, name: nameof(ImageOffsetInPageX));
@@ -213,10 +213,10 @@ namespace BinarySerializer.Ray1
                     Height = s.Serialize<byte>((byte)Height, name: nameof(Height));
                     HitBoxWidth = s.Serialize<byte>(HitBoxWidth, name: nameof(HitBoxWidth));
                     HitBoxHeight = s.Serialize<byte>(HitBoxHeight, name: nameof(HitBoxHeight));
-                    s.SerializeBitValues<byte>(bitFunc =>
+                    s.DoBits<byte>(b =>
                     {
-                        HitBoxOffsetX = (byte)bitFunc(HitBoxOffsetX, 4, name: nameof(HitBoxOffsetX));
-                        HitBoxOffsetY = (byte)bitFunc(HitBoxOffsetY, 4, name: nameof(HitBoxOffsetY));
+                        HitBoxOffsetX = (byte)b.SerializeBits<int>(HitBoxOffsetX, 4, name: nameof(HitBoxOffsetX));
+                        HitBoxOffsetY = (byte)b.SerializeBits<int>(HitBoxOffsetY, 4, name: nameof(HitBoxOffsetY));
                     });
                     Unknown3 = s.Serialize<byte>(Unknown3, name: nameof(Unknown3));
                     Unknown4 = s.Serialize<byte>(Unknown4, name: nameof(Unknown4));

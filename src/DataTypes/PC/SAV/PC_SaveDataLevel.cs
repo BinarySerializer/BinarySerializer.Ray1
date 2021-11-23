@@ -25,12 +25,12 @@
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            s.SerializeBitValues<byte>(bitFunc =>
+            s.DoBits<byte>(b =>
             {
-                IsUnlocked = bitFunc(IsUnlocked ? 1 : 0, 1, name: nameof(IsUnlocked)) == 1;
-                Bits_01 = (byte)bitFunc(Bits_01, 1, name: nameof(Bits_01));
-                Cages = (byte)bitFunc(Cages, 3, name: nameof(Cages));
-                Bits_05 = (byte)bitFunc(Bits_05, 3, name: nameof(Bits_05));
+                IsUnlocked = b.SerializeBits<int>(IsUnlocked ? 1 : 0, 1, name: nameof(IsUnlocked)) == 1;
+                Bits_01 = (byte)b.SerializeBits<int>(Bits_01, 1, name: nameof(Bits_01));
+                Cages = (byte)b.SerializeBits<int>(Cages, 3, name: nameof(Cages));
+                Bits_05 = (byte)b.SerializeBits<int>(Bits_05, 3, name: nameof(Bits_05));
             });
         }
     }

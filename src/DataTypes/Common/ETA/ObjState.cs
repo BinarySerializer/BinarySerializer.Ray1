@@ -96,18 +96,18 @@ namespace BinarySerializer.Ray1
 
                 if (settings.EngineVersion == Ray1EngineVersion.Saturn)
                 {
-                    s.SerializeBitValues<byte>(bitFunc =>
+                    s.DoBits<byte>(b =>
                     {
-                        UnknownValue = (byte)bitFunc(UnknownValue, 4, name: nameof(UnknownValue));
-                        AnimationSpeed = (byte)bitFunc(AnimationSpeed, 4, name: nameof(AnimationSpeed));
+                        UnknownValue = (byte)b.SerializeBits<int>(UnknownValue, 4, name: nameof(UnknownValue));
+                        AnimationSpeed = (byte)b.SerializeBits<int>(AnimationSpeed, 4, name: nameof(AnimationSpeed));
                     });
                 }
                 else
                 {
-                    s.SerializeBitValues<byte>(bitFunc =>
+                    s.DoBits<byte>(b =>
                     {
-                        AnimationSpeed = (byte)bitFunc(AnimationSpeed, 4, name: nameof(AnimationSpeed));
-                        UnknownValue = (byte)bitFunc(UnknownValue, 4, name: nameof(UnknownValue));
+                        AnimationSpeed = (byte)b.SerializeBits<int>(AnimationSpeed, 4, name: nameof(AnimationSpeed));
+                        UnknownValue = (byte)b.SerializeBits<int>(UnknownValue, 4, name: nameof(UnknownValue));
                     });
                 }
 

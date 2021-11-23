@@ -7,10 +7,10 @@
 
         public override void SerializeImpl(SerializerObject s)
         {
-            s.SerializeBitValues<ushort>(bitFunc =>
+            s.DoBits<ushort>(b =>
             {
-                ZDCIndex = (ushort)bitFunc(ZDCIndex, 11, name: nameof(ZDCIndex));
-                ZDCCount = (byte)bitFunc(ZDCCount, 5, name: nameof(ZDCCount));
+                ZDCIndex = (ushort)b.SerializeBits<int>(ZDCIndex, 11, name: nameof(ZDCIndex));
+                ZDCCount = (byte)b.SerializeBits<int>(ZDCCount, 5, name: nameof(ZDCCount));
             });
         }
     }

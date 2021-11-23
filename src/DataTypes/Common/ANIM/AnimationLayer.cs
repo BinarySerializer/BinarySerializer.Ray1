@@ -67,10 +67,10 @@ namespace BinarySerializer.Ray1
 
             if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
             {
-                s.SerializeBitValues<ushort>(bitFunc =>
+                s.DoBits<ushort>(b =>
                 {
-                    SpriteIndex = (ushort)bitFunc(SpriteIndex, 12, name: nameof(SpriteIndex));
-                    Flags = (R2_AnimationLayerFlags)bitFunc((byte)Flags, 4, name: nameof(Flags));
+                    SpriteIndex = (ushort)b.SerializeBits<int>(SpriteIndex, 12, name: nameof(SpriteIndex));
+                    Flags = (R2_AnimationLayerFlags)b.SerializeBits<int>((byte)Flags, 4, name: nameof(Flags));
                 });
 
                 XPosition = s.Serialize<byte>(XPosition, name: nameof(XPosition));
@@ -81,15 +81,15 @@ namespace BinarySerializer.Ray1
             {
                 if (settings.EngineBranch == Ray1EngineBranch.SNES)
                 {
-                    s.SerializeBitValues<byte>(bitFunc =>
+                    s.DoBits<byte>(b =>
                     {
-                        XPosition = (byte)bitFunc(XPosition, 7, name: nameof(XPosition));
-                        IsFlippedHorizontally = bitFunc(IsFlippedHorizontally ? 1 : 0, 1, name: nameof(IsFlippedHorizontally)) == 1;
+                        XPosition = (byte)b.SerializeBits<int>(XPosition, 7, name: nameof(XPosition));
+                        IsFlippedHorizontally = b.SerializeBits<int>(IsFlippedHorizontally ? 1 : 0, 1, name: nameof(IsFlippedHorizontally)) == 1;
                     });
-                    s.SerializeBitValues<byte>(bitFunc =>
+                    s.DoBits<byte>(b =>
                     {
-                        YPosition = (byte)bitFunc(YPosition, 7, name: nameof(YPosition));
-                        IsFlippedVertically = bitFunc(IsFlippedVertically ? 1 : 0, 1, name: nameof(IsFlippedVertically)) == 1;
+                        YPosition = (byte)b.SerializeBits<int>(YPosition, 7, name: nameof(YPosition));
+                        IsFlippedVertically = b.SerializeBits<int>(IsFlippedVertically ? 1 : 0, 1, name: nameof(IsFlippedVertically)) == 1;
                     });
                 }
                 else
