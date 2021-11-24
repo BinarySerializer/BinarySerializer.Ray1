@@ -9,8 +9,8 @@
         {
             s.DoBits<ushort>(b =>
             {
-                ZDCIndex = (ushort)b.SerializeBits<int>(ZDCIndex, 11, name: nameof(ZDCIndex));
-                ZDCCount = (byte)b.SerializeBits<int>(ZDCCount, 5, name: nameof(ZDCCount));
+                ZDCIndex = b.SerializeBits<ushort>(ZDCIndex, 11, name: nameof(ZDCIndex));
+                ZDCCount = b.SerializeBits<byte>(ZDCCount, 5, name: nameof(ZDCCount));
             });
         }
     }

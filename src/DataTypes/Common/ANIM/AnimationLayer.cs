@@ -69,8 +69,8 @@ namespace BinarySerializer.Ray1
             {
                 s.DoBits<ushort>(b =>
                 {
-                    SpriteIndex = (ushort)b.SerializeBits<int>(SpriteIndex, 12, name: nameof(SpriteIndex));
-                    Flags = (R2_AnimationLayerFlags)b.SerializeBits<int>((byte)Flags, 4, name: nameof(Flags));
+                    SpriteIndex = b.SerializeBits<ushort>(SpriteIndex, 12, name: nameof(SpriteIndex));
+                    Flags = b.SerializeBits<R2_AnimationLayerFlags>(Flags, 4, name: nameof(Flags));
                 });
 
                 XPosition = s.Serialize<byte>(XPosition, name: nameof(XPosition));
@@ -83,13 +83,13 @@ namespace BinarySerializer.Ray1
                 {
                     s.DoBits<byte>(b =>
                     {
-                        XPosition = (byte)b.SerializeBits<int>(XPosition, 7, name: nameof(XPosition));
-                        IsFlippedHorizontally = b.SerializeBits<int>(IsFlippedHorizontally ? 1 : 0, 1, name: nameof(IsFlippedHorizontally)) == 1;
+                        XPosition = b.SerializeBits<byte>(XPosition, 7, name: nameof(XPosition));
+                        IsFlippedHorizontally = b.SerializeBits<bool>(IsFlippedHorizontally, 1, name: nameof(IsFlippedHorizontally));
                     });
                     s.DoBits<byte>(b =>
                     {
-                        YPosition = (byte)b.SerializeBits<int>(YPosition, 7, name: nameof(YPosition));
-                        IsFlippedVertically = b.SerializeBits<int>(IsFlippedVertically ? 1 : 0, 1, name: nameof(IsFlippedVertically)) == 1;
+                        YPosition = b.SerializeBits<byte>(YPosition, 7, name: nameof(YPosition));
+                        IsFlippedVertically = b.SerializeBits<bool>(IsFlippedVertically, 1, name: nameof(IsFlippedVertically));
                     });
                 }
                 else

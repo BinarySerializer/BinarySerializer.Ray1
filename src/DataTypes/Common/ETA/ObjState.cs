@@ -98,16 +98,16 @@ namespace BinarySerializer.Ray1
                 {
                     s.DoBits<byte>(b =>
                     {
-                        UnknownValue = (byte)b.SerializeBits<int>(UnknownValue, 4, name: nameof(UnknownValue));
-                        AnimationSpeed = (byte)b.SerializeBits<int>(AnimationSpeed, 4, name: nameof(AnimationSpeed));
+                        UnknownValue = b.SerializeBits<byte>(UnknownValue, 4, name: nameof(UnknownValue));
+                        AnimationSpeed = b.SerializeBits<byte>(AnimationSpeed, 4, name: nameof(AnimationSpeed));
                     });
                 }
                 else
                 {
                     s.DoBits<byte>(b =>
                     {
-                        AnimationSpeed = (byte)b.SerializeBits<int>(AnimationSpeed, 4, name: nameof(AnimationSpeed));
-                        UnknownValue = (byte)b.SerializeBits<int>(UnknownValue, 4, name: nameof(UnknownValue));
+                        AnimationSpeed = b.SerializeBits<byte>(AnimationSpeed, 4, name: nameof(AnimationSpeed));
+                        UnknownValue = b.SerializeBits<byte>(UnknownValue, 4, name: nameof(UnknownValue));
                     });
                 }
 

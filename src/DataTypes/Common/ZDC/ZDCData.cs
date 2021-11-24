@@ -24,9 +24,9 @@
             {
                 s.DoBits<ushort>(b =>
                 {
-                    LayerIndex = (byte)b.SerializeBits<int>(LayerIndex, 5, name: nameof(LayerIndex));
-                    R2_Flags = (byte)b.SerializeBits<int>(R2_Flags, 5, name: nameof(R2_Flags));
-                    ZDC_Flags = (byte)b.SerializeBits<int>(ZDC_Flags, 6, name: nameof(ZDC_Flags));
+                    LayerIndex = b.SerializeBits<byte>(LayerIndex, 5, name: nameof(LayerIndex));
+                    R2_Flags = b.SerializeBits<byte>(R2_Flags, 5, name: nameof(R2_Flags));
+                    ZDC_Flags = b.SerializeBits<byte>(ZDC_Flags, 6, name: nameof(ZDC_Flags));
                 });
             }
             else

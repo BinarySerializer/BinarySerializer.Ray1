@@ -9,8 +9,8 @@
         {
             s.DoBits<ushort>(b =>
             {
-                Data1 = (ushort)b.SerializeBits<int>(Data1, 12, name: nameof(Data1));
-                Data2 = (byte)b.SerializeBits<int>(Data2, 4, name: nameof(Data2));
+                Data1 = b.SerializeBits<ushort>(Data1, 12, name: nameof(Data1));
+                Data2 = b.SerializeBits<byte>(Data2, 4, name: nameof(Data2));
             });
         }
     }

@@ -27,10 +27,10 @@
         {
             s.DoBits<byte>(b =>
             {
-                IsUnlocked = b.SerializeBits<int>(IsUnlocked ? 1 : 0, 1, name: nameof(IsUnlocked)) == 1;
-                Bits_01 = (byte)b.SerializeBits<int>(Bits_01, 1, name: nameof(Bits_01));
-                Cages = (byte)b.SerializeBits<int>(Cages, 3, name: nameof(Cages));
-                Bits_05 = (byte)b.SerializeBits<int>(Bits_05, 3, name: nameof(Bits_05));
+                IsUnlocked = b.SerializeBits<bool>(IsUnlocked, 1, name: nameof(IsUnlocked));
+                Bits_01 = b.SerializeBits<byte>(Bits_01, 1, name: nameof(Bits_01));
+                Cages = b.SerializeBits<byte>(Cages, 3, name: nameof(Cages));
+                Bits_05 = b.SerializeBits<byte>(Bits_05, 3, name: nameof(Bits_05));
             });
         }
     }

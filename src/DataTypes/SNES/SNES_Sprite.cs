@@ -16,19 +16,20 @@
 
         public override void SerializeImpl(SerializerObject s)
         {
-            s.DoBits<byte>(b => {
-                Padding0 = (byte)b.SerializeBits<int>(Padding0, 3, name: nameof(Padding0));
-                IsEmpty = b.SerializeBits<int>(IsEmpty ? 1 : 0, 1, name: nameof(IsEmpty)) == 1;
-                Padding1 = (byte)b.SerializeBits<int>(Padding1, 3, name: nameof(Padding1));
-                IsLarge = b.SerializeBits<int>(IsLarge ? 1 : 0, 1, name: nameof(IsLarge)) == 1;
+            s.DoBits<byte>(b => 
+            {
+                Padding0 = b.SerializeBits<byte>(Padding0, 3, name: nameof(Padding0));
+                IsEmpty = b.SerializeBits<bool>(IsEmpty, 1, name: nameof(IsEmpty));
+                Padding1 = b.SerializeBits<byte>(Padding1, 3, name: nameof(Padding1));
+                IsLarge = b.SerializeBits<bool>(IsLarge, 1, name: nameof(IsLarge));
             });
             s.DoBits<ushort>(b =>
             {
-                TileIndex = (ushort)b.SerializeBits<int>(TileIndex, 9, name: nameof(TileIndex));
+                TileIndex = b.SerializeBits<int>(TileIndex, 9, name: nameof(TileIndex));
                 Palette = b.SerializeBits<int>(Palette, 3, name: nameof(Palette));
                 Priority = b.SerializeBits<int>(Priority, 2, name: nameof(Priority));
-                FlipX = b.SerializeBits<int>(FlipX ? 1 : 0, 1, name: nameof(FlipX)) == 1;
-                FlipY = b.SerializeBits<int>(FlipY ? 1 : 0, 1, name: nameof(FlipY)) == 1;
+                FlipX = b.SerializeBits<bool>(FlipX, 1, name: nameof(FlipX));
+                FlipY = b.SerializeBits<bool>(FlipY, 1, name: nameof(FlipY));
             });
         }
     }

@@ -47,17 +47,17 @@
             {
                 s.DoBits<int>(b =>
                 {
-                    TileMapX = (ushort)b.SerializeBits<int>(TileMapX, 10, name: nameof(TileMapX));
-                    TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 6, name: nameof(TileMapY));
-                    BlockType = (byte)b.SerializeBits<int>(BlockType, 8, name: nameof(BlockType));
+                    TileMapX = b.SerializeBits<ushort>(TileMapX, 10, name: nameof(TileMapX));
+                    TileMapY = b.SerializeBits<ushort>(TileMapY, 6, name: nameof(TileMapY));
+                    BlockType = b.SerializeBits<ushort>(BlockType, 8, name: nameof(BlockType));
                 });
             }
             else if (settings.EngineVersion == Ray1EngineVersion.Saturn)
             {
                 s.DoBits<ushort>(b =>
                 {
-                    TileMapX = (ushort)b.SerializeBits<int>(TileMapX, 4, name: nameof(TileMapX));
-                    TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 12, name: nameof(TileMapY));
+                    TileMapX = b.SerializeBits<ushort>(TileMapX, 4, name: nameof(TileMapX));
+                    TileMapY = b.SerializeBits<ushort>(TileMapY, 12, name: nameof(TileMapY));
                 });
 
                 BlockType = s.Serialize<byte>((byte)BlockType, name: nameof(BlockType));
@@ -67,8 +67,8 @@
             {
                 s.DoBits<ushort>(b =>
                 {
-                    TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 12, name: nameof(TileMapY));
-                    BlockType = (byte)b.SerializeBits<int>(BlockType, 4, name: nameof(BlockType));
+                    TileMapY = b.SerializeBits<ushort>(TileMapY, 12, name: nameof(TileMapY));
+                    BlockType = b.SerializeBits<ushort>(BlockType, 4, name: nameof(BlockType));
                 });
 
                 TileMapX = 0;
@@ -79,21 +79,21 @@
                 {
                     s.DoBits<ushort>(b =>
                     {
-                        TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 10, name: nameof(TileMapY));
-                        HorizontalFlip = b.SerializeBits<int>(HorizontalFlip ? 1 : 0, 1, name: nameof(HorizontalFlip)) == 1;
-                        VerticalFlip = b.SerializeBits<int>(VerticalFlip ? 1 : 0, 1, name: nameof(VerticalFlip)) == 1;
-                        BlockType = (byte)b.SerializeBits<int>(BlockType, 4, name: nameof(BlockType));
+                        TileMapY = b.SerializeBits<ushort>(TileMapY, 10, name: nameof(TileMapY));
+                        HorizontalFlip = b.SerializeBits<bool>(HorizontalFlip, 1, name: nameof(HorizontalFlip));
+                        VerticalFlip = b.SerializeBits<bool>(VerticalFlip, 1, name: nameof(VerticalFlip));
+                        BlockType = b.SerializeBits<ushort>(BlockType, 4, name: nameof(BlockType));
                     });
                 }
                 else
                 {
                     s.DoBits<ushort>(b =>
                     {
-                        TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 10, name: nameof(TileMapY));
-                        PaletteIndex = (byte)b.SerializeBits<int>(PaletteIndex, 3, name: nameof(PaletteIndex));
-                        Priority = b.SerializeBits<int>(Priority ? 1 : 0, 1, name: nameof(Priority)) == 1;
-                        HorizontalFlip = b.SerializeBits<int>(HorizontalFlip ? 1 : 0, 1, name: nameof(HorizontalFlip)) == 1;
-                        VerticalFlip = b.SerializeBits<int>(VerticalFlip ? 1 : 0, 1, name: nameof(VerticalFlip)) == 1;
+                        TileMapY = b.SerializeBits<ushort>(TileMapY, 10, name: nameof(TileMapY));
+                        PaletteIndex = b.SerializeBits<byte>(PaletteIndex, 3, name: nameof(PaletteIndex));
+                        Priority = b.SerializeBits<bool>(Priority, 1, name: nameof(Priority));
+                        HorizontalFlip = b.SerializeBits<bool>(HorizontalFlip, 1, name: nameof(HorizontalFlip));
+                        VerticalFlip = b.SerializeBits<bool>(VerticalFlip, 1, name: nameof(VerticalFlip));
                     });
                 }
 
@@ -105,17 +105,17 @@
             {
                 s.DoBits<ushort>(b =>
                 {
-                    TileMapX = (ushort)b.SerializeBits<int>(TileMapX, 4, name: nameof(TileMapX));
-                    TileMapY = (ushort)b.SerializeBits<int>(TileMapY, 6, name: nameof(TileMapY));
-                    BlockType = (byte)b.SerializeBits<int>(BlockType, 6, name: nameof(BlockType));
+                    TileMapX = b.SerializeBits<ushort>(TileMapX, 4, name: nameof(TileMapX));
+                    TileMapY = b.SerializeBits<ushort>(TileMapY, 6, name: nameof(TileMapY));
+                    BlockType = b.SerializeBits<ushort>(BlockType, 6, name: nameof(BlockType));
                 });
             }
             else if (settings.EngineVersion == Ray1EngineVersion.PS1_JP)
             {
                 s.DoBits<ushort>(b =>
                 {
-                    TileMapX = (ushort)b.SerializeBits<int>(TileMapX, 9, name: nameof(TileMapX));
-                    BlockType = (byte)b.SerializeBits<int>(BlockType, 7, name: nameof(BlockType));
+                    TileMapX = b.SerializeBits<ushort>(TileMapX, 9, name: nameof(TileMapX));
+                    BlockType = b.SerializeBits<ushort>(BlockType, 7, name: nameof(BlockType));
                 });
             }
         }

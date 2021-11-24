@@ -260,9 +260,9 @@ namespace BinarySerializer.Ray1
 
             s.DoBits<byte>(b =>
             {
-                RuntimeFlipX = b.SerializeBits<int>(RuntimeFlipX ? 1 : 0, 1, name: nameof(RuntimeFlipX)) == 1;
-                RuntimeUnkFlag = b.SerializeBits<int>(RuntimeUnkFlag ? 1 : 0, 1, name: nameof(RuntimeUnkFlag)) == 1;
-                ZDCFlags = (byte)b.SerializeBits<int>(ZDCFlags, 6, name: nameof(ZDCFlags));
+                RuntimeFlipX = b.SerializeBits<bool>(RuntimeFlipX, 1, name: nameof(RuntimeFlipX));
+                RuntimeUnkFlag = b.SerializeBits<bool>(RuntimeUnkFlag, 1, name: nameof(RuntimeUnkFlag));
+                ZDCFlags = b.SerializeBits<byte>(ZDCFlags, 6, name: nameof(ZDCFlags));
             });
 
             RuntimeFlags3 = s.Serialize<byte>(RuntimeFlags3, name: nameof(RuntimeFlags3));
