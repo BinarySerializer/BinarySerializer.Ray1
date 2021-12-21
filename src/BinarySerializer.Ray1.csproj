@@ -5,4 +5,10 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\BinarySerializer.GBA\src\BinarySerializer.GBA.csproj" />
+    <ProjectReference Include="..\..\BinarySerializer.PS1\src\BinarySerializer.PS1.csproj" />
+    <ProjectReference Include="..\..\BinarySerializer\src\BinarySerializer.csproj" />
+  </ItemGroup>
+
 </Project>
