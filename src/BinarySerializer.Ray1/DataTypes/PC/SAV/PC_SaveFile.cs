@@ -6,7 +6,7 @@
     public class PC_SaveFile : BinarySerializable
     {
         /// <summary>
-        /// The save file name (maximum of 3 characters)
+        /// The save file name (maximum of 3 characters with the fourth one always being a null terminator)
         /// </summary>
         public string SaveName { get; set; }
 
@@ -20,6 +20,8 @@
 
         public RayEvts RayEvts { get; set; }
 
+        // Fist data
+        // Byte 12 gets set to 0xC when you enter gold fist cheat
         public Poing Poing { get; set; }
 
         public StatusBar StatusBar { get; set; }
