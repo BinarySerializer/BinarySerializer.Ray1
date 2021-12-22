@@ -5,7 +5,7 @@ namespace BinarySerializer.Ray1
 {
     public class Ray1Settings
     {
-        public Ray1Settings(Ray1EngineVersion engineVersion, World world, int level, Ray1PCVersion pcVersion = Ray1PCVersion.None, string volume = null)
+        public Ray1Settings(Ray1EngineVersion engineVersion, World world = World.Jungle, int level = 1, Ray1PCVersion pcVersion = Ray1PCVersion.None, string volume = null)
         {
             EngineVersion = engineVersion;
             World = world;
