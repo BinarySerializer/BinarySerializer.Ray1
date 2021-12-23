@@ -8,7 +8,7 @@ namespace BinarySerializer.Ray1
     /// </summary>
     public class PC_SaveEncoder : IStreamEncoder
     {
-        public string Name => "PC_SaveEncoding";
+        public string Name => "SaveEncoding";
 
         /// <summary>
         /// Decodes the data and returns it in a stream
