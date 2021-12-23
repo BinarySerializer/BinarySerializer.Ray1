@@ -10,14 +10,15 @@
         /// </summary>
         public bool IsUnlocked { get; set; }
 
-        public byte Bits_01 { get; set; }
+        /// <summary>
+        /// Indicates if the level is currently unlocking
+        /// </summary>
+        public byte IsUnlocking { get; set; }
 
         /// <summary>
         /// The amount of cages in the level (0-6)
         /// </summary>
         public byte Cages { get; set; }
-
-        public byte Bits_05 { get; set; }
 
         /// <summary>
         /// Handles the data serialization
@@ -28,9 +29,9 @@
             s.DoBits<byte>(b =>
             {
                 IsUnlocked = b.SerializeBits<bool>(IsUnlocked, 1, name: nameof(IsUnlocked));
-                Bits_01 = b.SerializeBits<byte>(Bits_01, 1, name: nameof(Bits_01));
+                IsUnlocking = b.SerializeBits<byte>(IsUnlocking, 1, name: nameof(IsUnlocking));
                 Cages = b.SerializeBits<byte>(Cages, 3, name: nameof(Cages));
-                Bits_05 = b.SerializeBits<byte>(Bits_05, 3, name: nameof(Bits_05));
+                b.SerializePadding(3, logIfNotNull: true);
             });
         }
     }
