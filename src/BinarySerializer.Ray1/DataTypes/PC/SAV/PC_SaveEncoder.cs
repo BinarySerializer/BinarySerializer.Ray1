@@ -10,17 +10,12 @@ namespace BinarySerializer.Ray1
     {
         public string Name => "SaveEncoding";
 
-        /// <summary>
-        /// Decodes the data and returns it in a stream
-        /// </summary>
-        /// <param name="s">The encoded stream</param>
-        /// <returns>The stream with the decoded data</returns>
-        public Stream DecodeStream(Stream s) 
+        public void DecodeStream(Stream input, Stream output) 
         {
-            var decompressedStream = new MemoryStream();
-
-            using Stream unxor = XORStream(s);
+            using Stream unxor = XORStream(input);
             using Reader reader = new Reader(unxor, isLittleEndian: true);
+
+            var initialOutputPos = output.Position;
 
             byte[] compr_big_window = new byte[256 * 8];
 
@@ -63,8 +58,8 @@ namespace BinarySerializer.Ray1
                 {
                     if (reader.BaseStream.Position >= reader.BaseStream.Length) 
                     {
-                        for (int i = 0; i < 8; i++) 
-                            decompressedStream.WriteByte(compr_window[i]);
+                        for (int i = 0; i < 8; i++)
+                            output.WriteByte(compr_window[i]);
 
                         isFinished = true;
                     } 
@@ -75,8 +70,8 @@ namespace BinarySerializer.Ray1
                         if (reader.BaseStream.Position >= reader.BaseStream.Length) 
                         {
                             // TODO: only if bytes in window > 0
-                            for (int i = 0; i < compressedByte; i++) 
-                                decompressedStream.WriteByte(compr_window[i]);
+                            for (int i = 0; i < compressedByte; i++)
+                                output.WriteByte(compr_window[i]);
 
                             isFinished = true;
                         } 
@@ -84,8 +79,8 @@ namespace BinarySerializer.Ray1
                         {
                             windowUpdateBitArray = reader.ReadByte();
 
-                            for (int i = 0; i < 8; i++) 
-                                decompressedStream.WriteByte(compr_window[i]);
+                            for (int i = 0; i < 8; i++)
+                                output.WriteByte(compr_window[i]);
                         }
                     }
                 }
@@ -110,21 +105,15 @@ namespace BinarySerializer.Ray1
             if (endChecksum != checksum)
                 throw new Exception($"Checksum failed! {checksum} - {endChecksum}");
 
-            if (decompressedStream.Length != decompressedSize)
-                throw new Exception($"Size mismatch! {decompressedStream.Length} - {decompressedSize}");
+            var outLength = output.Length - initialOutputPos;
 
-            // Set position back to 0
-            decompressedStream.Position = 0;
-
-            // Return the compressed data stream
-            return decompressedStream;
+            if (outLength != decompressedSize)
+                throw new Exception($"Size mismatch! {outLength} - {decompressedSize}");
         }
 
-        public Stream EncodeStream(Stream s) 
+        public void EncodeStream(Stream input, Stream output) 
         {
-            var memStream = new MemoryStream();
-
-            Reader reader = new Reader(s);
+            using Reader reader = new Reader(input, leaveOpen: true);
             using Stream temp = new MemoryStream();
             using Writer writer = new Writer(temp);
 
@@ -230,11 +219,8 @@ namespace BinarySerializer.Ray1
             writer.Write((uint)decompressedSize);
             writer.BaseStream.Position = 0;
 
-            using (Stream xor = XORStream(writer.BaseStream)) 
-                xor.CopyTo(memStream);
-
-            memStream.Position = 0;
-            return memStream;
+            using Stream xor = XORStream(writer.BaseStream);
+            xor.CopyTo(output);
         }
 
         private static Stream XORStream(Stream s) 

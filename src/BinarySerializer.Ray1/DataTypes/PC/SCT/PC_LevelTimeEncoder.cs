@@ -31,10 +31,10 @@ namespace BinarySerializer.Ray1
 
         public string Name => nameof(PC_LevelTimeEncoder);
         
-        public Stream DecodeStream(Stream s)
+        public void DecodeStream(Stream input, Stream output)
         {
             var buffer = new byte[17];
-            s.Read(buffer, 0, buffer.Length);
+            input.Read(buffer, 0, buffer.Length);
 
             int xorIndex = World - 1 + 6 * (Level - 1);
             byte[] xorTable1 = Revision == SaveRevision.KIT ? XORTable1_KIT : XORTable1_FAN;
@@ -52,8 +52,6 @@ namespace BinarySerializer.Ray1
             int value_1 = buffer[3] ^ 0x63;
             int value_0 = buffer[5] ^ 0x6F;
 
-            var output = new MemoryStream();
-
             if (ghostCheckValue == checkValue &&
                 ghostValue_3 == value_2 &&
                 ghostValue_2 == value_3 &&
@@ -70,11 +68,9 @@ namespace BinarySerializer.Ray1
                 // If it doesn't match we default to -1
                 output.Write(Enumerable.Repeat((byte)0xFF, 4).ToArray(), 0, 4);
             }
-
-            return output;
         }
 
-        public Stream EncodeStream(Stream s)
+        public void EncodeStream(Stream input, Stream output)
         {
             int xorIndex = World - 1 + 6 * (Level - 1);
             byte[] xorTable1 = Revision == SaveRevision.KIT ? XORTable1_KIT : XORTable1_FAN;
@@ -82,10 +78,10 @@ namespace BinarySerializer.Ray1
 
             var buffer = new byte[17];
 
-            buffer[7] = buffer[13] = (byte)s.ReadByte();
-            buffer[4] = buffer[9] = (byte)s.ReadByte();
-            buffer[16] = buffer[3] = (byte)s.ReadByte();
-            buffer[1] = buffer[5] = (byte)s.ReadByte();
+            buffer[7] = buffer[13] = (byte)input.ReadByte();
+            buffer[4] = buffer[9] = (byte)input.ReadByte();
+            buffer[16] = buffer[3] = (byte)input.ReadByte();
+            buffer[1] = buffer[5] = (byte)input.ReadByte();
 
             throw new NotImplementedException();
         }
