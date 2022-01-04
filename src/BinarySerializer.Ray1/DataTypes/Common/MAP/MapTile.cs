@@ -13,7 +13,7 @@
         public bool VerticalFlip { get; set; }
 
         public byte PC_Byte_03 { get; set; }
-        public PC_TransparencyMode TransparencyMode { get; set; }
+        public PC_TransparencyMode PC_RuntimeTransparencyMode { get; set; }
         public byte PC_Byte_05 { get; set; }
 
         public byte PaletteIndex { get; set; }
@@ -39,7 +39,7 @@
                 TileMapX = 0;
                 BlockType = s.Serialize<byte>((byte)BlockType, name: nameof(BlockType));
                 PC_Byte_03 = s.Serialize<byte>(PC_Byte_03, name: nameof(PC_Byte_03));
-                TransparencyMode = s.Serialize<PC_TransparencyMode>(TransparencyMode, name: nameof(TransparencyMode));
+                PC_RuntimeTransparencyMode = s.Serialize<PC_TransparencyMode>(PC_RuntimeTransparencyMode, name: nameof(PC_RuntimeTransparencyMode));
                 PC_Byte_05 = s.Serialize<byte>(PC_Byte_05, name: nameof(PC_Byte_05));
             }
             else if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 || 

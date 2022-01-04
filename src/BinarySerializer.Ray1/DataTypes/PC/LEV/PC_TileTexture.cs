@@ -10,7 +10,7 @@
         /// <summary>
         /// Flags determining the tile transparency mode
         /// </summary>
-        public uint TransparencyMode { get; set; }
+        public uint TransparencyMode { get; set; } // 2 bits per row of the tile, determines transparency for each
 
         /// <summary>
         /// Unknown array of bytes. Appears to be leftover garbage data.
