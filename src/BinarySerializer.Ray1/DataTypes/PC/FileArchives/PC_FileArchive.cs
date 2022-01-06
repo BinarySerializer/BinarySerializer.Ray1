@@ -160,23 +160,11 @@ namespace BinarySerializer.Ray1
             }
             else
             {
-                // Serialize the file table
-                if (Entries == null)
-                {
-                    var tempList = new List<PC_FileArchiveEntry>();
-
-                    while (!tempList.Any() || tempList.Last().FileName != "ENDFILE")
-                        tempList.Add(s.SerializeObject<PC_FileArchiveEntry>(null, name: $"{nameof(Entries)} [{tempList.Count}]"));
-
-                    Entries = tempList.Take(tempList.Count - 1).ToArray();
-                }
-                else
-                {
-                    if (s is BinarySerializer)
-                        throw new Exception($"Use {nameof(RepackArchive)} for writing");
-
-                    //s.SerializeObjectArray<R1_PC_EncryptedFileArchiveEntry>(Entries, Entries.Length, name: nameof(Entries));
-                }
+                Entries = s.SerializeObjectArrayUntil(
+                    obj: Entries,
+                    conditionCheckFunc: x => x.FileName == "ENDFILE",
+                    getLastObjFunc: () => new PC_FileArchiveEntry() { FileName = "ENDFILE" },
+                    name: nameof(Entries));
             }
         }
     }
