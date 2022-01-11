@@ -45,7 +45,7 @@ namespace BinarySerializer.Ray1
             context.AddFile(file);
 
             // Deserialize the bytes
-            return FileFactory.Read<CommandCollection>(key, context);
+            return FileFactory.Read<CommandCollection>(context, key);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace BinarySerializer.Ray1
             context.AddFile(file);
 
             // Serialize the command
-            FileFactory.Write<CommandCollection>(key, this, context);
+            FileFactory.Write<CommandCollection>(context, key, this);
 
             // Return the bytes
             return memStream.ToArray();
