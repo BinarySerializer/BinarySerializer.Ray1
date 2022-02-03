@@ -1,4 +1,5 @@
-﻿using BinarySerializer.GBA;
+﻿using System.Linq;
+using BinarySerializer.GBA;
 
 namespace BinarySerializer.Ray1.GBA
 {
@@ -61,22 +62,24 @@ namespace BinarySerializer.Ray1.GBA
 
             // Serialize data from pointers
 
+            BlockIndices = s.DoAt(BlockIndicesPointer, () => s.SerializeArray<ushort>(BlockIndices, Width * Height, name: nameof(BlockIndices)));
+
             s.DoAt(ImageDataPointer, () => 
             {
+                int tilesCount = BlockIndices.Max() + 1;
+
                 if (settings.EngineVersion == Ray1EngineVersion.DSi)
                 {
                     if (isImgDataCompressed)
-                        s.DoEncoded(new GBA_LZSSEncoder(), () => ImageData = s.SerializeArray<byte>(ImageData, 0x40 * Width * Height, name: nameof(ImageData)));
+                        s.DoEncoded(new GBA_LZSSEncoder(), () => ImageData = s.SerializeArray<byte>(ImageData, 0x40 * tilesCount, name: nameof(ImageData)));
                     else
-                        ImageData = s.SerializeArray<byte>(ImageData, 0x40 * Width * Height, name: nameof(ImageData));
+                        ImageData = s.SerializeArray<byte>(ImageData, 0x40 * tilesCount, name: nameof(ImageData));
                 } 
                 else 
                 {
-                    ImageData = s.SerializeArray<byte>(ImageData, 0x20 * Width * Height, name: nameof(ImageData));
+                    ImageData = s.SerializeArray<byte>(ImageData, 0x20 * tilesCount, name: nameof(ImageData));
                 }
             });
-
-            BlockIndices = s.DoAt(BlockIndicesPointer, () => s.SerializeArray<ushort>(BlockIndices, Width * Height, name: nameof(BlockIndices)));
 
             PaletteIndices = s.DoAt(PaletteIndicesPointer, () => s.SerializeArray<byte>(PaletteIndices, Width * Height, name: nameof(PaletteIndices)));
 
