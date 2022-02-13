@@ -42,7 +42,7 @@
                 MemoryBank = s.Serialize<byte>(MemoryBank, name: nameof(MemoryBank));
             Pointer = s.Serialize<ushort>(Pointer, name: nameof(Pointer));
 
-            s.Log($"Pointer: {GetPointer()}");
+            s.Log("Pointer: {0}", GetPointer());
         }
     }
 }

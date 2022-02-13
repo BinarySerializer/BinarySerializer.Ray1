@@ -74,7 +74,7 @@
                 DiscSecond = s.Serialize<byte>(DiscSecond, name: nameof(DiscSecond));
                 DiscFrame = s.Serialize<byte>(DiscFrame, name: nameof(DiscFrame));
                 s.Serialize<byte>(default, name: "Padding");
-                s.Log($"LBA: {LBA}");
+                s.Log("LBA: {0}", LBA);
                 FileSize = s.Serialize<uint>(FileSize, name: nameof(FileSize));
                 s.SerializePadding(settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6 ? 12 : 8);
             }
@@ -87,7 +87,7 @@
                 DiscSecond = s.Serialize<byte>(DiscSecond, name: nameof(DiscSecond));
                 DiscFrame = s.Serialize<byte>(DiscFrame, name: nameof(DiscFrame));
                 s.SerializePadding(1);
-                s.Log($"LBA: {LBA}");
+                s.Log("LBA: {0}", LBA);
                 FileSize = s.Serialize<uint>(FileSize, name: nameof(FileSize));
                 FileName = s.SerializeString(FileName, 16, name: nameof(FileName));
 
