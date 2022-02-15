@@ -43,12 +43,14 @@
             ObjectLinksCount = s.Serialize<uint>(ObjectLinksCount, name: nameof(ObjectLinksCount));
 
             // Serialize data from pointers
-            Objects = s.DoAt(ObjectsPointer, () => s.SerializeObjectArray<ObjData>(Objects, ObjectsCount, name: nameof(Objects)));
+            s.DoAt(ObjectsPointer, () => Objects = s.SerializeObjectArray<ObjData>(Objects, ObjectsCount, name: nameof(Objects)));
 
             if (UnknownObjTablePointer != null)
-                UnknownObjTable = s.DoAt(UnknownObjTablePointer, () => s.SerializeObjectArray<PS1_JPDemoVol3_UnknownObjTableItem>(UnknownObjTable, ObjectsCount, name: nameof(UnknownObjTable)));
+                s.DoAt(UnknownObjTablePointer, () => 
+                    UnknownObjTable = s.SerializeObjectArray<PS1_JPDemoVol3_UnknownObjTableItem>(UnknownObjTable, ObjectsCount, name: nameof(UnknownObjTable)));
 
-            ObjectLinkTable = s.DoAt(ObjectsLinkTablePointer, () => s.SerializeArray<byte>(ObjectLinkTable, ObjectLinksCount, name: nameof(ObjectLinkTable)));
+            s.DoAt(ObjectsLinkTablePointer, () => 
+                ObjectLinkTable = s.SerializeArray<byte>(ObjectLinkTable, ObjectLinksCount, name: nameof(ObjectLinkTable)));
         }
     }
 }

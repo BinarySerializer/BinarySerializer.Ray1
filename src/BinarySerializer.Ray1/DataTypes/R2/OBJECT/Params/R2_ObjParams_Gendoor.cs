@@ -27,8 +27,10 @@ namespace BinarySerializer.Ray1
             RuntimeHasTriggered = s.Serialize<byte>(RuntimeHasTriggered, name: nameof(RuntimeHasTriggered));
             s.SerializePadding(1);
 
-            LinkedObjects = s.DoAt(LinkedObjectsPointer, () => s.SerializeArray<short>(LinkedObjects, LinkedObjectsCount, name: nameof(LinkedObjects)));
-            TriggerObjects = s.DoAt(TriggerObjectsPointer, () => s.SerializeArray<short>(TriggerObjects, TriggerObjectsCount, name: nameof(TriggerObjects)));
+            s.DoAt(LinkedObjectsPointer, () => 
+                LinkedObjects = s.SerializeArray<short>(LinkedObjects, LinkedObjectsCount, name: nameof(LinkedObjects)));
+            s.DoAt(TriggerObjectsPointer, () => 
+                TriggerObjects = s.SerializeArray<short>(TriggerObjects, TriggerObjectsCount, name: nameof(TriggerObjects)));
         }
 
         [Flags]

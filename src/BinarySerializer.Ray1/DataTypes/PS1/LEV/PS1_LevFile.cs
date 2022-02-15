@@ -55,16 +55,18 @@
             base.SerializeImpl(s);
 
             // BACKGROUND BLOCK
-            BackgroundData = s.DoAt(BackgroundBlockPointer, () => s.SerializeObject<PS1_BackgroundBlock>(BackgroundData, name: nameof(BackgroundData)));
+            s.DoAt(BackgroundBlockPointer, () => 
+                BackgroundData = s.SerializeObject<PS1_BackgroundBlock>(BackgroundData, name: nameof(BackgroundData)));
 
             // OBJECT BLOCK
-            ObjData = s.DoAt(ObjectBlockPointer, () => s.SerializeObject<PS1_ObjBlock>(ObjData, name: nameof(ObjData)));
+            s.DoAt(ObjectBlockPointer, () => ObjData = s.SerializeObject<PS1_ObjBlock>(ObjData, name: nameof(ObjData)));
 
             // MAP BLOCK
-            MapData = s.DoAt(MapBlockPointer, () => s.SerializeObject<MapData>(MapData, name: nameof(MapData)));
+            s.DoAt(MapBlockPointer, () => MapData = s.SerializeObject<MapData>(MapData, name: nameof(MapData)));
 
             // TEXTURE BLOCK
-            TextureBlock = s.DoAt(TextureBlockPointer, () => s.SerializeArray<byte>(TextureBlock, FileSize - TextureBlockPointer.FileOffset, name: nameof(TextureBlock)));
+            s.DoAt(TextureBlockPointer, () => 
+                TextureBlock = s.SerializeArray<byte>(TextureBlock, FileSize - TextureBlockPointer.FileOffset, name: nameof(TextureBlock)));
 
             // Go to the end of the file
             s.Goto(Offset + FileSize);

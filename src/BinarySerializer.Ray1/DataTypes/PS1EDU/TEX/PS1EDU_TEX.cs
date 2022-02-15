@@ -41,7 +41,8 @@
             Descriptors = s.SerializeObjectArray(Descriptors, Descriptors.Length, name: nameof(Descriptors));
 
             for (int i = 0; i < TexturePages.Length; i++)
-                TexturePages[i] = s.DoAt(PagePointers[i], () => s.SerializeArray<byte>(TexturePages[i], PageLength, name: $"{nameof(TexturePages)}[{i}]"));
+                s.DoAt(PagePointers[i], () => 
+                    TexturePages[i] = s.SerializeArray<byte>(TexturePages[i], PageLength, name: $"{nameof(TexturePages)}[{i}]"));
         }
 
         private uint PaletteLength =>

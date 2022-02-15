@@ -91,7 +91,7 @@
                 FileSize = s.Serialize<uint>(FileSize, name: nameof(FileSize));
                 FileName = s.SerializeString(FileName, 16, name: nameof(FileName));
 
-                FilePath = s.DoAt(FilePathPointer, () => s.SerializeString(FilePath, name: nameof(FilePath)));
+                s.DoAt(FilePathPointer, () => FilePath = s.SerializeString(FilePath, name: nameof(FilePath)));
             }
 
             ProcessedFilePath = FilePath.Replace('\\', '/').Replace(";1", "").TrimStart('/');

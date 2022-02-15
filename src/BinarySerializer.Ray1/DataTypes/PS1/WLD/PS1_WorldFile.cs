@@ -110,25 +110,31 @@
             base.SerializeImpl(s);
 
             // DATA BLOCK
-            DataBlock = s.DoAt(DataBlockPointer, () => s.SerializeArray<byte>(DataBlock, SecondBlockPointer - s.CurrentPointer, name: nameof(DataBlock)));
+            s.DoAt(DataBlockPointer, () => 
+                DataBlock = s.SerializeArray<byte>(DataBlock, SecondBlockPointer - s.CurrentPointer, name: nameof(DataBlock)));
 
             // BLOCK 2
-            SecondBlock = s.DoAt(SecondBlockPointer, () => s.SerializeArray<byte>(SecondBlock, TextureBlockPointer - s.CurrentPointer, name: nameof(SecondBlock)));
+            s.DoAt(SecondBlockPointer, () => 
+                SecondBlock = s.SerializeArray<byte>(SecondBlock, TextureBlockPointer - s.CurrentPointer, name: nameof(SecondBlock)));
 
             // TEXTURE BLOCK
-            TextureBlock = s.DoAt(TextureBlockPointer, () => s.SerializeArray<byte>(TextureBlock, ObjPalette1BlockPointer - s.CurrentPointer, name: nameof(TextureBlock)));
+            s.DoAt(TextureBlockPointer, () => 
+                TextureBlock = s.SerializeArray<byte>(TextureBlock, ObjPalette1BlockPointer - s.CurrentPointer, name: nameof(TextureBlock)));
 
             // OBJECT PALETTE 1
-            ObjPalette1 = s.DoAt(ObjPalette1BlockPointer, () => s.SerializeObjectArray<RGBA5551Color>(ObjPalette1, 256, name: nameof(ObjPalette1)));
+            s.DoAt(ObjPalette1BlockPointer, () => 
+                ObjPalette1 = s.SerializeObjectArray<RGBA5551Color>(ObjPalette1, 256, name: nameof(ObjPalette1)));
 
             // OBJECT PALETTE 2
-            ObjPalette2 = s.DoAt(ObjPalette2BlockPointer, () => s.SerializeObjectArray<RGBA5551Color>(ObjPalette2, 256, name: nameof(ObjPalette2)));
+            s.DoAt(ObjPalette2BlockPointer, () => 
+                ObjPalette2 = s.SerializeObjectArray<RGBA5551Color>(ObjPalette2, 256, name: nameof(ObjPalette2)));
 
             if (settings.EngineVersion == Ray1EngineVersion.PS1 ||
                 settings.EngineVersion == Ray1EngineVersion.PS1_EUDemo)
             {
                 // TILES
-                PalettedTiles = s.DoAt(TilesBlockPointer, () => s.SerializeArray<byte>(PalettedTiles, TilePaletteBlockPointer - TilesBlockPointer, name: nameof(PalettedTiles)));
+                s.DoAt(TilesBlockPointer, () => 
+                    PalettedTiles = s.SerializeArray<byte>(PalettedTiles, TilePaletteBlockPointer - TilesBlockPointer, name: nameof(PalettedTiles)));
 
                 // TILE PALETTES
                 s.DoAt(TilePaletteBlockPointer, () => 
@@ -141,7 +147,8 @@
                 });
 
                 // TILE PALETTE ASSIGN
-                TilePaletteIndexTable = s.DoAt(PaletteIndexBlockPointer, () => s.SerializeArray<byte>(TilePaletteIndexTable, FileSize - PaletteIndexBlockPointer.FileOffset, name: nameof(TilePaletteIndexTable)));
+                s.DoAt(PaletteIndexBlockPointer, () => 
+                    TilePaletteIndexTable = s.SerializeArray<byte>(TilePaletteIndexTable, FileSize - PaletteIndexBlockPointer.FileOffset, name: nameof(TilePaletteIndexTable)));
             }
             else if (settings.EngineVersion == Ray1EngineVersion.PS1_JP)
             {

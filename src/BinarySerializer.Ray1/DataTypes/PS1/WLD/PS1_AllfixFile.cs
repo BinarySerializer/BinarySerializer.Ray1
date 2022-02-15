@@ -60,28 +60,30 @@
             base.SerializeImpl(s);
 
             // DATA BLOCK
-            AllfixData = s.DoAt(DataBlockPointer, () => s.SerializeObject<PS1_AllfixBlock>(AllfixData, x => x.Pre_Length = TextureBlockPointer - s.CurrentPointer, name: nameof(AllfixData)));
+            s.DoAt(DataBlockPointer, () => 
+                AllfixData = s.SerializeObject<PS1_AllfixBlock>(AllfixData, x => x.Pre_Length = TextureBlockPointer - s.CurrentPointer, name: nameof(AllfixData)));
 
             // TEXTURE BLOCK
-            TextureBlock = s.DoAt(TextureBlockPointer, () => s.SerializeArray<byte>(TextureBlock, Palette1Pointer - s.CurrentPointer, name: nameof(TextureBlock)));
+            s.DoAt(TextureBlockPointer, () => 
+                TextureBlock = s.SerializeArray<byte>(TextureBlock, Palette1Pointer - s.CurrentPointer, name: nameof(TextureBlock)));
 
             // PALETTE 1
-            Palette1 = s.DoAt(Palette1Pointer, () => s.SerializeObjectArray<RGBA5551Color>(Palette1, 256, name: nameof(Palette1)));
+            s.DoAt(Palette1Pointer, () => Palette1 = s.SerializeObjectArray<RGBA5551Color>(Palette1, 256, name: nameof(Palette1)));
 
             // PALETTE 2
-            Palette2 = s.DoAt(Palette2Pointer, () => s.SerializeObjectArray<RGBA5551Color>(Palette2, 256, name: nameof(Palette2)));
+            s.DoAt(Palette2Pointer, () => Palette2 = s.SerializeObjectArray<RGBA5551Color>(Palette2, 256, name: nameof(Palette2)));
 
             // PALETTE 3
-            Palette3 = s.DoAt(Palette3Pointer, () => s.SerializeObjectArray<RGBA5551Color>(Palette3, 256, name: nameof(Palette3)));
+            s.DoAt(Palette3Pointer, () => Palette3 = s.SerializeObjectArray<RGBA5551Color>(Palette3, 256, name: nameof(Palette3)));
 
             // PALETTE 4
-            Palette4 = s.DoAt(Palette4Pointer, () => s.SerializeObjectArray<RGBA5551Color>(Palette4, 256, name: nameof(Palette4)));
+            s.DoAt(Palette4Pointer, () => Palette4 = s.SerializeObjectArray<RGBA5551Color>(Palette4, 256, name: nameof(Palette4)));
 
             // PALETTE 5
-            Palette5 = s.DoAt(Palette5Pointer, () => s.SerializeObjectArray<RGBA5551Color>(Palette5, 256, name: nameof(Palette5)));
+            s.DoAt(Palette5Pointer, () => Palette5 = s.SerializeObjectArray<RGBA5551Color>(Palette5, 256, name: nameof(Palette5)));
 
             // PALETTE 6
-            Palette6 = s.DoAt(Palette6Pointer, () => s.SerializeObjectArray<RGBA5551Color>(Palette6, 256, name: nameof(Palette6)));
+            s.DoAt(Palette6Pointer, () => Palette6 = s.SerializeObjectArray<RGBA5551Color>(Palette6, 256, name: nameof(Palette6)));
         }
 
         #endregion

@@ -156,7 +156,8 @@ namespace BinarySerializer.Ray1
 
                 s.Context.AddFile(file);
 
-                Entries = s.DoAt(s.Context.GetFile(key).StartPointer, () => s.SerializeObjectArray<PC_FileArchiveEntry>(Entries, headerLength, name: nameof(Entries)));
+                s.DoAt(s.Context.GetFile(key).StartPointer, () => 
+                    Entries = s.SerializeObjectArray<PC_FileArchiveEntry>(Entries, headerLength, name: nameof(Entries)));
             }
             else
             {

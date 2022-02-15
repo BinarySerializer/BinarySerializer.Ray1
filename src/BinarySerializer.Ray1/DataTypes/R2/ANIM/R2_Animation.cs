@@ -101,10 +101,11 @@ namespace BinarySerializer.Ray1
             });
 
             // Serialize frames
-            Frames = s.DoAt(FramesPointer, () => s.SerializeObjectArray<AnimationFrame>(Frames, FrameCount, name: nameof(Frames)));
+            s.DoAt(FramesPointer, () => Frames = s.SerializeObjectArray<AnimationFrame>(Frames, FrameCount, name: nameof(Frames)));
 
             // Serialize unknown animation data
-            UnkAnimData = s.DoAt(UnkAnimDataPointer, () => s.SerializeObjectArray<R2_UnknownAnimData>(UnkAnimData, UnkAnimDataCount, name: nameof(UnkAnimData)));
+            s.DoAt(UnkAnimDataPointer, () => 
+                UnkAnimData = s.SerializeObjectArray<R2_UnknownAnimData>(UnkAnimData, UnkAnimDataCount, name: nameof(UnkAnimData)));
         }
     }
 }

@@ -123,15 +123,22 @@ namespace BinarySerializer.Ray1
 
             ObjectLinkTable = s.SerializeArray<ushort>(ObjectLinkTable, LoadedObjectsCount, name: nameof(ObjectLinkTable));
 
-            FixSpriteCollection = s.DoAt(FixSpritesPointer, () => s.SerializeObject<SpriteCollection>(FixSpriteCollection, x => x.Pre_SpritesCount = FixSpritesCount, name: nameof(FixSpriteCollection)));
+            s.DoAt(FixSpritesPointer, () => 
+                FixSpriteCollection = s.SerializeObject<SpriteCollection>(FixSpriteCollection, x => x.Pre_SpritesCount = FixSpritesCount, name: nameof(FixSpriteCollection)));
 
-            Objects = s.DoAt(LoadedObjectsPointer, () => s.SerializeObjectArray<R2_ObjData>(Objects, LoadedObjectsCount, name: nameof(Objects)));
-            AlwaysObjects = s.DoAt(AlwaysObjectsPointer, () => s.SerializeObjectArray<R2_ObjData>(AlwaysObjects, AlwaysObjectsCount, name: nameof(AlwaysObjects)));
+            s.DoAt(LoadedObjectsPointer, () => 
+                Objects = s.SerializeObjectArray<R2_ObjData>(Objects, LoadedObjectsCount, name: nameof(Objects)));
+            s.DoAt(AlwaysObjectsPointer, () => 
+                AlwaysObjects = s.SerializeObjectArray<R2_ObjData>(AlwaysObjects, AlwaysObjectsCount, name: nameof(AlwaysObjects)));
 
-            ZDC = s.DoAt(ZDCDataPointer, () => s.SerializeObjectArray<ZDCData>(ZDC, 237, name: nameof(ZDC)));
-            ZDCTriggerFlags = s.DoAt(ZDCArray1Pointer, () => s.SerializeArray<ZDC_TriggerFlags>(ZDCTriggerFlags, 237, name: nameof(ZDCTriggerFlags)));
-            ZDCArray2 = s.DoAt(ZDCArray2Pointer, () => s.SerializeArray<ushort>(ZDCArray2, 474, name: nameof(ZDCArray2)));
-            ZDCArray3 = s.DoAt(ZDCArray3Pointer, () => s.SerializeObjectArray<R2_ZDCUnkData>(ZDCArray3, 16, name: nameof(ZDCArray3)));
+            s.DoAt(ZDCDataPointer, () => 
+                ZDC = s.SerializeObjectArray<ZDCData>(ZDC, 237, name: nameof(ZDC)));
+            s.DoAt(ZDCArray1Pointer, () => 
+                ZDCTriggerFlags = s.SerializeArray<ZDC_TriggerFlags>(ZDCTriggerFlags, 237, name: nameof(ZDCTriggerFlags)));
+            s.DoAt(ZDCArray2Pointer, () => 
+                ZDCArray2 = s.SerializeArray<ushort>(ZDCArray2, 474, name: nameof(ZDCArray2)));
+            s.DoAt(ZDCArray3Pointer, () => 
+                ZDCArray3 = s.SerializeObjectArray<R2_ZDCUnkData>(ZDCArray3, 16, name: nameof(ZDCArray3)));
         }
 
         #endregion

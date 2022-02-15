@@ -39,10 +39,12 @@
             Bytes_1C = s.SerializeArray<byte>(Bytes_1C, 66, name: nameof(Bytes_1C));
 
             // Serialize Rayman's animation data
-            RaymanAnimData = s.DoAt(RaymanAnimDataPointer, () => s.SerializeObject<R2_AnimationData>(RaymanAnimData, name: nameof(RaymanAnimData)));
+            s.DoAt(RaymanAnimDataPointer, () => 
+                RaymanAnimData = s.SerializeObject<R2_AnimationData>(RaymanAnimData, name: nameof(RaymanAnimData)));
 
             // Serialize collision data
-            RaymanCollisionData = s.DoAt(RaymanCollisionDataPointer, () => s.SerializeObject<R2_ObjCollision>(RaymanCollisionData, name: nameof(RaymanCollisionData)));
+            s.DoAt(RaymanCollisionDataPointer, () => 
+                RaymanCollisionData = s.SerializeObject<R2_ObjCollision>(RaymanCollisionData, name: nameof(RaymanCollisionData)));
         }
     }
 }

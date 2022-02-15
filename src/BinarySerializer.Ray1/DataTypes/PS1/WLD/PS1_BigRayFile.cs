@@ -44,16 +44,18 @@
             base.SerializeImpl(s);
 
             // DATA BLOCK
-            BigRayData = s.DoAt(DataBlockPointer, () => s.SerializeObject<PS1_BigRayBlock>(BigRayData, x => x.Pre_Length = TextureBlockPointer - s.CurrentPointer, name: nameof(BigRayData)));
+            s.DoAt(DataBlockPointer, () => 
+                BigRayData = s.SerializeObject<PS1_BigRayBlock>(BigRayData, x => x.Pre_Length = TextureBlockPointer - s.CurrentPointer, name: nameof(BigRayData)));
 
             // TEXTURE BLOCK
-            TextureBlock = s.DoAt(TextureBlockPointer, () => s.SerializeArray<byte>(TextureBlock, Palette1Pointer - s.CurrentPointer, name: nameof(TextureBlock)));
+            s.DoAt(TextureBlockPointer, () => 
+                TextureBlock = s.SerializeArray<byte>(TextureBlock, Palette1Pointer - s.CurrentPointer, name: nameof(TextureBlock)));
 
             // PALETTE 1
-            Palette1 = s.DoAt(Palette1Pointer, () => s.SerializeObjectArray<RGBA5551Color>(Palette1, 256, name: nameof(Palette1)));
+            s.DoAt(Palette1Pointer, () => Palette1 = s.SerializeObjectArray<RGBA5551Color>(Palette1, 256, name: nameof(Palette1)));
 
             // PALETTE 2
-            Palette2 = s.DoAt(Palette2Pointer, () => s.SerializeObjectArray<RGBA5551Color>(Palette2, 256, name: nameof(Palette2)));
+            s.DoAt(Palette2Pointer, () => Palette2 = s.SerializeObjectArray<RGBA5551Color>(Palette2, 256, name: nameof(Palette2)));
         }
 
         #endregion

@@ -16,7 +16,8 @@
             LinkedObjectsCount = s.Serialize<ushort>(LinkedObjectsCount, name: nameof(LinkedObjectsCount));
             Flags = s.Serialize<ushort>(Flags, name: nameof(Flags));
 
-            LinkedObjects = s.DoAt(LinkedObjectsPointer, () => s.SerializeArray<short>(LinkedObjects, LinkedObjectsCount, name: nameof(LinkedObjects)));
+            s.DoAt(LinkedObjectsPointer, () => 
+                LinkedObjects = s.SerializeArray<short>(LinkedObjects, LinkedObjectsCount, name: nameof(LinkedObjects)));
         }
     }
 }

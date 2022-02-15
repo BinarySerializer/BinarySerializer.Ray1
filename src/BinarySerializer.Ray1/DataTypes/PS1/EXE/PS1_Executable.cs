@@ -26,19 +26,22 @@ namespace BinarySerializer.Ray1
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            TypeZDC = s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.TypeZDC, required: false), () => s.SerializeObjectArray<ZDCEntry>(TypeZDC, 256, name: nameof(TypeZDC)));
+            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.TypeZDC, required: false), () => 
+                TypeZDC = s.SerializeObjectArray<ZDCEntry>(TypeZDC, 256, name: nameof(TypeZDC)));
 
-            ZDCData = s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ZDCData, required: false), () => s.SerializeObjectArray<ZDCData>(ZDCData, 200, name: nameof(ZDCData)));
+            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ZDCData, required: false), () => 
+                ZDCData = s.SerializeObjectArray<ZDCData>(ZDCData, 200, name: nameof(ZDCData)));
 
-            ObjTypeFlags = s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ObjTypeFlags, required: false), () => 
+            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ObjTypeFlags, required: false), () => 
             {
                 if (settings.EngineVersion == Ray1EngineVersion.Saturn)
-                    return s.SerializeArray<int>(ObjTypeFlags?.Select(x => BitHelpers.ReverseBits((int)x)).ToArray(), 256, name: nameof(ObjTypeFlags)).Select(BitHelpers.ReverseBits).Select(x => (ObjTypeFlags)x).ToArray();
+                    ObjTypeFlags = s.SerializeArray<int>(ObjTypeFlags?.Select(x => BitHelpers.ReverseBits((int)x)).ToArray(), 256, name: nameof(ObjTypeFlags)).Select(BitHelpers.ReverseBits).Select(x => (ObjTypeFlags)x).ToArray();
                 else
-                    return s.SerializeArray<ObjTypeFlags>(ObjTypeFlags, 256, name: nameof(ObjTypeFlags));
+                    ObjTypeFlags = s.SerializeArray<ObjTypeFlags>(ObjTypeFlags, 256, name: nameof(ObjTypeFlags));
             });
 
-            WorldInfo = s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.WorldInfo, required: false), () => s.SerializeObjectArray<WorldInfo>(WorldInfo, 24, name: nameof(WorldInfo)));
+            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.WorldInfo, required: false), () => 
+                WorldInfo = s.SerializeObjectArray<WorldInfo>(WorldInfo, 24, name: nameof(WorldInfo)));
 
             PS1_LevelBackgroundIndexTable ??= new byte[6][];
 
@@ -50,7 +53,8 @@ namespace BinarySerializer.Ray1
 
             if (settings.EngineVersion == Ray1EngineVersion.Saturn)
             {
-                SAT_Palettes = s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.SAT_Palettes), () => s.SerializeObjectArray<RGBA5551Color>(SAT_Palettes, 25 * 256 * 2, name: nameof(SAT_Palettes)));
+                s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.SAT_Palettes), () => 
+                    SAT_Palettes = s.SerializeObjectArray<RGBA5551Color>(SAT_Palettes, 25 * 256 * 2, name: nameof(SAT_Palettes)));
 
                 SAT_FNDFileTable ??= new string[6][];
 

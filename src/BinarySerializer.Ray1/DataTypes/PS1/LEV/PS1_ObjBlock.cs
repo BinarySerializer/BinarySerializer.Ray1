@@ -52,8 +52,10 @@
             if (ObjectsCount != ObjectLinksCount)
                 s.LogWarning("Object counts don't match");
 
-            Objects = s.DoAt(ObjectsPointer, () => s.SerializeObjectArray<ObjData>(Objects, ObjectsCount, name: nameof(Objects)));
-            ObjectLinkingTable = s.DoAt(ObjectLinksPointer, () => s.SerializeArray<byte>(ObjectLinkingTable, ObjectLinksCount, name: nameof(ObjectLinkingTable)));
+            s.DoAt(ObjectsPointer, () => 
+                Objects = s.SerializeObjectArray<ObjData>(Objects, ObjectsCount, name: nameof(Objects)));
+            s.DoAt(ObjectLinksPointer, () => 
+                ObjectLinkingTable = s.SerializeArray<byte>(ObjectLinkingTable, ObjectLinksCount, name: nameof(ObjectLinkingTable)));
         }
     }
 }

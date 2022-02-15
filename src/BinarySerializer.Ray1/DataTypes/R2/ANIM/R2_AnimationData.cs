@@ -58,10 +58,11 @@
             Unknown = s.Serialize<ushort>(Unknown, name: nameof(Unknown));
 
             // Serialize the animations
-            Animations = s.DoAt(AnimationsPointer, () => s.SerializeObjectArray<R2_Animation>(Animations, AnimationsCount, name: nameof(Animations)));
+            s.DoAt(AnimationsPointer, () => 
+                Animations = s.SerializeObjectArray<R2_Animation>(Animations, AnimationsCount, name: nameof(Animations)));
 
             // Serialize ETA
-            ETA = s.DoAt(ETAPointer, () => s.SerializeObject<ETA>(ETA, name: nameof(ETA)));
+            s.DoAt(ETAPointer, () => ETA = s.SerializeObject<ETA>(ETA, name: nameof(ETA)));
         }
 
         #endregion
