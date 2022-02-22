@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -81,28 +80,9 @@ namespace BinarySerializer.Ray1
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            if (Commands == null)
-            {
-                // Create a temporary list
-                var cmd = new List<Command>();
-
-                int index = 0;
-
-                // Loop until we reach the invalid command
-                while (cmd.LastOrDefault()?.CommandType != CommandType.INVALID_CMD && cmd.LastOrDefault()?.CommandType != CommandType.INVALID_CMD_DEMO)
-                {
-                    cmd.Add(s.SerializeObject((Command)null, name: $"{nameof(Commands)}[{index}]"));
-                    index++;
-                }
-
-                // Set the commands
-                Commands = cmd.ToArray();
-            }
-            else
-            {
-                // Serialize the commands
-                s.SerializeObjectArray(Commands, Commands.Length, name: nameof(Commands));
-            }
+            Commands = s.SerializeObjectArrayUntil<Command>(Commands, 
+                x => x.CommandType == CommandType.INVALID_CMD || 
+                     x.CommandType == CommandType.INVALID_CMD_DEMO, name: nameof(Commands));
         }
 
         public string[] ToTranslatedStrings(ushort[] labelOffsets, int lineStartIndex = 0) 

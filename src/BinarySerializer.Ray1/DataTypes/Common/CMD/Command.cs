@@ -231,5 +231,65 @@ namespace BinarySerializer.Ray1
                 }
             }
         }
+
+        public static int GetArgumentsCount(Ray1EngineVersion engineVersion, CommandType type, byte[] args)
+        {
+            switch (type)
+            {
+                case CommandType.GO_LEFT:
+                case CommandType.GO_RIGHT:
+                case CommandType.GO_WAIT:
+                case CommandType.GO_UP:
+                case CommandType.GO_DOWN:
+                case CommandType.GO_SUBSTATE:
+                case CommandType.GO_SKIP:
+                case CommandType.GO_ADD:
+                case CommandType.GO_STATE:
+                case CommandType.GO_PREPARELOOP:
+                case CommandType.GO_LABEL:
+                case CommandType.GO_GOTO:
+                case CommandType.GO_GOSUB:
+                case CommandType.GO_BRANCHTRUE:
+                case CommandType.GO_BRANCHFALSE:
+                case CommandType.GO_SETTEST:
+                case CommandType.GO_WAITSTATE:
+                case CommandType.RESERVED_GO_SKIP:
+                case CommandType.RESERVED_GO_GOTO:
+                case CommandType.RESERVED_GO_GOSUB:
+                case CommandType.RESERVED_GO_GOTOT:
+                case CommandType.RESERVED_GO_GOTOF:
+                case CommandType.RESERVED_GO_SKIPT:
+                case CommandType.RESERVED_GO_SKIPF:
+                case CommandType.GO_NOP:
+                case CommandType.GO_SKIPTRUE:
+                case CommandType.GO_SKIPFALSE:
+                case CommandType.INVALID_CMD:
+                case CommandType.INVALID_CMD_DEMO:
+                    return 1;
+
+                case CommandType.GO_DOLOOP:
+                case CommandType.GO_RETURN:
+                    return engineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ? 1 : 0;
+
+                case CommandType.GO_TEST:
+                    if (args == null || args.Length == 0)
+                        return 2;
+
+                    if (args[0] <= 4)
+                        return 2;
+                    else
+                        return 1;
+
+                case CommandType.GO_SPEED:
+                    return 3;
+
+                case CommandType.GO_X:
+                case CommandType.GO_Y:
+                    return 2;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
     }
 }
