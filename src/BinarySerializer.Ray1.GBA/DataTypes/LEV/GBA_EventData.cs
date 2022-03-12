@@ -137,8 +137,8 @@ namespace BinarySerializer.Ray1.GBA
                             }
                             else
                             {
-                                if (EtatPointers[j].File is MemoryMappedByteArrayFile && EtatPointers[j].FileOffset == 0) {
-                                    count = (int)(((MemoryMappedByteArrayFile)(EtatPointers[j].File)).Length / 8);
+                                if (EtatPointers[j].File is MemoryMappedStreamFile && EtatPointers[j].FileOffset == 0) {
+                                    count = (int)(((MemoryMappedStreamFile)(EtatPointers[j].File)).Length / 8);
                                 } else {
                                     Pointer nextPointer = j < EtatPointers.Length - 1 ? EtatPointers[j + 1] : ETAPointer;
                                     count = (int)((nextPointer - EtatPointers[j]) / 8);

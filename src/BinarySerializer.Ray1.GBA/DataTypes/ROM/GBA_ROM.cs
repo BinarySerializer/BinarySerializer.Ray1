@@ -108,7 +108,7 @@ namespace BinarySerializer.Ray1.GBA
 
                         if (bytes != null) 
                         {
-                            var file = new MemoryMappedByteArrayFile(s.Context, "ETA_" + index, memAddress, bytes);
+                            var file = new MemoryMappedStreamFile(s.Context, "ETA_" + index, memAddress, bytes);
 
                             s.Context.AddFile(file);
                         }

@@ -126,7 +126,7 @@ namespace BinarySerializer.Ray1.Jaguar
                     s.DoAt(s.GetPreDefinedPointer(JAG_DefinedPointer.EventDefinitions), () =>
                     {
                         byte[] eventDefsDataBytes = s.SerializeArray<byte>(null, config.EventCount * 0x28, name: nameof(eventDefsDataBytes));
-                        var file = new MemoryMappedByteArrayFile(s.Context, key, 0x001f9000, eventDefsDataBytes, Endian.Big);
+                        var file = new MemoryMappedStreamFile(s.Context, key, 0x001f9000, eventDefsDataBytes, Endian.Big);
                         s.Context.AddFile(file);
                         s.DoAt(file.StartPointer, () => EventDefinitions = s.SerializeObjectArray<JAG_EventDefinition>(EventDefinitions, config.EventCount, name: nameof(EventDefinitions)));
                     });
