@@ -104,7 +104,15 @@ namespace BinarySerializer.Ray1
                                 break;
 
                             // Read the next state
-                            s.SerializeObject<ObjState>(null, name: $"Dummy state {count}");
+                            ObjState state = s.SerializeObject<ObjState>(null, name: $"Dummy state {count}");
+
+                            // Additional check to make sure only valid state data gets read
+                            if (state.LinkedEtat >= EtatPointers.Length && 
+                                // The vol 3 demo has some states with garbage data before valid ones, so don't include this
+                                settings.EngineVersion != Ray1EngineVersion.PS1_JPDemoVol3 &&
+                                // Rayman 2 uses 0xFF for the last state in a link-chain for when always objects should be deleted
+                                !(state.LinkedEtat == 0xFF && settings.EngineVersion == Ray1EngineVersion.R2_PS1))
+                                break;
 
                             // Make sure we haven't reached the max
                             if (count > maxCount)
