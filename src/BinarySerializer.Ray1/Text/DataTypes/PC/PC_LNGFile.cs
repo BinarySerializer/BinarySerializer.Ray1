@@ -19,7 +19,8 @@ namespace BinarySerializer.Ray1
             switch (parser.GameSettings.PCVersion)
             {
                 // Same loc as 1.00
-                case Ray1PCVersion.PC_Demo_1:
+                case Ray1PCVersion.PC_Demo_19951204:
+                case Ray1PCVersion.PC_Demo_19951207:
                     values = new KeyValuePair<uint, byte>[]
                     {
                         new KeyValuePair<uint, byte>(0, 0xE4)
@@ -46,7 +47,7 @@ namespace BinarySerializer.Ray1
                     };
                     break;
 
-                case Ray1PCVersion.PC_Demo_2:
+                case Ray1PCVersion.PC_Demo_19960215:
                 case Ray1PCVersion.PC_1_12:
                     values = new KeyValuePair<uint, byte>[]
                     {

@@ -386,7 +386,7 @@ namespace BinarySerializer.Ray1
 
                         case Ray1PCVersion.PC_1_10:
                         case Ray1PCVersion.PC_1_12:
-                        case Ray1PCVersion.PC_Demo_2:
+                        case Ray1PCVersion.PC_Demo_19960215:
                         case Ray1PCVersion.PC_1_20:
                         case Ray1PCVersion.PC_1_21_JP:
                         case Ray1PCVersion.Android:
@@ -396,7 +396,8 @@ namespace BinarySerializer.Ray1
                         case Ray1PCVersion.PC_1_21:
                             return VIGNET_1_21;
 
-                        case Ray1PCVersion.PC_Demo_1:
+                        case Ray1PCVersion.PC_Demo_19951204:
+                        case Ray1PCVersion.PC_Demo_19951207:
                             return VIGNET_Demo1;
 
                         case Ray1PCVersion.PocketPC:
@@ -407,10 +408,12 @@ namespace BinarySerializer.Ray1
                     }
 
                 case "SNDD8B.DAT":
-                    return settings.PCVersion == Ray1PCVersion.PC_Demo_1 ? SNDD8B_Demo1 : SNDD8B;
+                    return settings.PCVersion == Ray1PCVersion.PC_Demo_19951207 || 
+                           settings.PCVersion == Ray1PCVersion.PC_Demo_19951204 ? SNDD8B_Demo1 : SNDD8B;
                 
                 case "SNDH8B.DAT":
-                    return settings.PCVersion == Ray1PCVersion.PC_Demo_1 ? SNDH8B_Demo1 : SNDH8B;
+                    return settings.PCVersion == Ray1PCVersion.PC_Demo_19951207 ||
+                           settings.PCVersion == Ray1PCVersion.PC_Demo_19951204 ? SNDH8B_Demo1 : SNDH8B;
                 
                 case "SNDVIG.DAT":
                     return SNDVIG;

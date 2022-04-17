@@ -9,8 +9,9 @@
         PC_1_20,
         PC_1_21_JP,
         PC_1_21,
-        PC_Demo_1,
-        PC_Demo_2,
+        PC_Demo_19951204,
+        PC_Demo_19951207, // Previously named "PC_Demo_1"
+        PC_Demo_19960215, // Previously named "PC_Demo_2"
         PocketPC,
         Android,
         iOS,
