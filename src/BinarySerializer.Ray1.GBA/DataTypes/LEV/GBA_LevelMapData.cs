@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using BinarySerializer.GBA;
+using BinarySerializer.Nintendo;
 
 namespace BinarySerializer.Ray1.GBA
 {

@@ -1,4 +1,4 @@
-﻿using BinarySerializer.GBA;
+﻿using BinarySerializer.Nintendo;
 using System.Text;
 
 namespace BinarySerializer.Ray1.GBA
