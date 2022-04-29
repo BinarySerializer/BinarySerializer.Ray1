@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using BinarySerializer.Nintendo;
+using BinarySerializer.Nintendo.GBA;
 
 namespace BinarySerializer.Ray1.GBA
 {
@@ -71,7 +71,7 @@ namespace BinarySerializer.Ray1.GBA
                 if (settings.EngineVersion == Ray1EngineVersion.DSi)
                 {
                     if (isImgDataCompressed)
-                        s.DoEncoded(new GBA_LZSSEncoder(), () => ImageData = s.SerializeArray<byte>(ImageData, 0x40 * tilesCount, name: nameof(ImageData)));
+                        s.DoEncoded(new LZSSEncoder(), () => ImageData = s.SerializeArray<byte>(ImageData, 0x40 * tilesCount, name: nameof(ImageData)));
                     else
                         ImageData = s.SerializeArray<byte>(ImageData, 0x40 * tilesCount, name: nameof(ImageData));
                 } 

@@ -1,4 +1,4 @@
-﻿using BinarySerializer.Nintendo;
+﻿using BinarySerializer.Nintendo.GBA;
 using System.Text;
 
 namespace BinarySerializer.Ray1.GBA
@@ -6,7 +6,7 @@ namespace BinarySerializer.Ray1.GBA
     /// <summary>
     /// ROM data
     /// </summary>
-    public class GBA_ROM : GBA_ROMBase, IGBAData
+    public class GBA_ROM : ROMBase, IGBAData
     {
         /// <summary>
         /// The map data for the current level

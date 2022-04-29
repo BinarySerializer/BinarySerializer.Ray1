@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BinarySerializer.GBA\src\BinarySerializer.GBA.csproj" />
+    <ProjectReference Include="..\..\..\BinarySerializer.Nintendo\src\BinarySerializer.Nintendo.csproj" />
     <ProjectReference Include="..\..\..\BinarySerializer\src\BinarySerializer.csproj" />
     <ProjectReference Include="..\BinarySerializer.Ray1\BinarySerializer.Ray1.csproj" />
   </ItemGroup>

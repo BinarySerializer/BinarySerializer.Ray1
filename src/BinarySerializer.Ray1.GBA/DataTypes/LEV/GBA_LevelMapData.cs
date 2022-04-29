@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using BinarySerializer.Nintendo;
+using BinarySerializer.Nintendo.GBA;
 
 namespace BinarySerializer.Ray1.GBA
 {
@@ -124,7 +124,7 @@ namespace BinarySerializer.Ray1.GBA
                 s.DoAt(MapDataPointer, () => 
                 {
                     if ((CompressionFlags & 1) == 1)
-                        MapData = s.DoEncoded(new GBA_LZSSEncoder(), () => s.SerializeObject<MapData>(MapData, name: nameof(MapData)));
+                        MapData = s.DoEncoded(new LZSSEncoder(), () => s.SerializeObject<MapData>(MapData, name: nameof(MapData)));
                     else
                         MapData = s.SerializeObject<MapData>(MapData, name: nameof(MapData));
                 });
@@ -132,7 +132,7 @@ namespace BinarySerializer.Ray1.GBA
                 {
                     if ((CompressionFlags & 2) == 2)
                     {
-                        s.DoEncoded(new GBA_LZSSEncoder(), () => TilePaletteIndices = s.SerializeArray<byte>(TilePaletteIndices, s.CurrentLength, name: nameof(TilePaletteIndices)));
+                        s.DoEncoded(new LZSSEncoder(), () => TilePaletteIndices = s.SerializeArray<byte>(TilePaletteIndices, s.CurrentLength, name: nameof(TilePaletteIndices)));
                     }
                     else
                     {
@@ -153,9 +153,9 @@ namespace BinarySerializer.Ray1.GBA
             else if (settings.EngineVersion == Ray1EngineVersion.DSi)
             {
                 MapData = s.DoAt(MapDataPointer, () => 
-                    s.DoEncoded(new GBA_LZSSEncoder(), () => s.SerializeObject<MapData>(MapData, name: nameof(MapData))));
+                    s.DoEncoded(new LZSSEncoder(), () => s.SerializeObject<MapData>(MapData, name: nameof(MapData))));
                 TileData = s.DoAt(TileDataPointer, () => 
-                    s.DoEncoded(new GBA_LZSSEncoder(), () => s.SerializeArray<byte>(TileData, s.CurrentLength, name: nameof(TileData))));
+                    s.DoEncoded(new LZSSEncoder(), () => s.SerializeArray<byte>(TileData, s.CurrentLength, name: nameof(TileData))));
                 TilePalettes = s.DoAt(TilePalettePointer, () => 
                     s.SerializeObjectArray<RGBA5551Color>(TilePalettes, 256, name: nameof(TilePalettes)));
                 TileBlockIndices = s.DoAt(TileBlockIndicesPointer, () => 
