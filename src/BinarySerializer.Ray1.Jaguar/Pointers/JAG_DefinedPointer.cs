@@ -7,5 +7,6 @@
         WorldSprites,
         MapData,
         Music,
+        WorldInfos,
     }
 }

@@ -94,7 +94,8 @@ namespace BinarySerializer.Ray1.Jaguar
                 0x00BF90FC,
                 0x00BF9124,
                 0x00BF9164,
-            }
+            },
+            worldInfoCount: 23
         );
 
         public static JAG_ROMConfig JAG_Demo => new JAG_ROMConfig(
@@ -204,7 +205,8 @@ namespace BinarySerializer.Ray1.Jaguar
                 0x0086DAE6,
 
                 0x0086F23A,
-            }
+            },
+            worldInfoCount: 8
         );
 
         public static JAG_ROMConfig JAG_Proto => new JAG_ROMConfig(
@@ -212,7 +214,8 @@ namespace BinarySerializer.Ray1.Jaguar
             extraMapCommands: null,
             vignette: null,
             eventCount: 0x1C,
-            additionalEventDefinitionPointers: null
+            additionalEventDefinitionPointers: null,
+            worldInfoCount: 0
         );
 
         public static JAG_ROMConfig FromEngineVersion(Ray1EngineVersion e) => e switch
@@ -227,13 +230,14 @@ namespace BinarySerializer.Ray1.Jaguar
 
         #region Constructor
 
-        public JAG_ROMConfig(KeyValuePair<World, int>[] numLevels, int[] extraMapCommands, KeyValuePair<uint, int>[] vignette, uint eventCount, uint[] additionalEventDefinitionPointers)
+        public JAG_ROMConfig(KeyValuePair<World, int>[] numLevels, int[] extraMapCommands, KeyValuePair<uint, int>[] vignette, uint eventCount, uint[] additionalEventDefinitionPointers, int worldInfoCount)
         {
             NumLevels = numLevels;
             ExtraMapCommands = extraMapCommands;
             Vignette = vignette;
             EventCount = eventCount;
             AdditionalEventDefinitionPointers = additionalEventDefinitionPointers;
+            WorldInfoCount = worldInfoCount;
         }
 
         #endregion
@@ -255,6 +259,8 @@ namespace BinarySerializer.Ray1.Jaguar
         public uint EventCount { get; }
 
         public uint[] AdditionalEventDefinitionPointers { get; }
+
+        public int WorldInfoCount { get; }
 
         #endregion
     }

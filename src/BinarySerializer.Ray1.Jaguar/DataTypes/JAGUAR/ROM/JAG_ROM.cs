@@ -64,11 +64,13 @@ namespace BinarySerializer.Ray1.Jaguar
         public Pointer BackgroundPointer { get; set; }
         public GBR655Color[] Background { get; set; }
 
+        public JAG_WorldInfo[] WorldInfos { get; set; } // World map
+
         // Prototype only
         public Dictionary<uint, Sprite[]> ImageBufferSprites { get; set; }
 
         #endregion
-        
+
         #region Methods
 
         /// <summary>
@@ -321,6 +323,15 @@ namespace BinarySerializer.Ray1.Jaguar
 
                 if (BackgroundPointer != null)
                     s.DoAt(BackgroundPointer, () => s.DoEncoded(new RNC2Encoder(), () => Background = s.SerializeObjectArray<GBR655Color>(Background, s.CurrentLength / 2, name: nameof(Background))));
+
+                // Although this isn't an array it's easiest to parse it like this. The game however has pointers to each entry
+                // from pointer tables which appear right before this.
+                s.DoAt(s.GetPreDefinedPointer(JAG_DefinedPointer.WorldInfos), () => 
+                    WorldInfos = s.SerializeObjectArray<JAG_WorldInfo>(WorldInfos, config.WorldInfoCount, name: nameof(WorldInfos)));
+
+                foreach (JAG_WorldInfo worldInfo in WorldInfos)
+                    foreach (JAG_WorldInfoLink link in worldInfo.Links)
+                        link.EntryPointer.Resolve(s);
             }
             else
             {
