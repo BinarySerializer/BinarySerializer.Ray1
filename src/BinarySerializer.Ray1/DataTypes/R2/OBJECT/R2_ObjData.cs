@@ -15,7 +15,7 @@ namespace BinarySerializer.Ray1
         public static R2_ObjData GetRayman(R2_ObjData rayPos, R2_AllfixFooter data) => new R2_ObjData()
         {
             // Gets loaded at 0x80178DF0 during runtime
-            ObjParamsPointer = data.RaymanBehaviorPointer,
+            ObjParamsPointer = data.RaymanObjParamsPointer,
             CollisionDataPointer = data.RaymanCollisionDataPointer,
             AnimDataPointer = data.RaymanAnimDataPointer,
             XPosition = (short)(rayPos != null ? (rayPos.XPosition + rayPos.CollisionData.OffsetBX - data.RaymanCollisionData.OffsetBX) : 100),

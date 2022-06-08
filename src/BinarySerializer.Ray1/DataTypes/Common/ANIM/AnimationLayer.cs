@@ -69,6 +69,7 @@ namespace BinarySerializer.Ray1
             {
                 s.DoBits<ushort>(b =>
                 {
+                    // TODO: The game uses 14 bits here instead of 12
                     SpriteIndex = b.SerializeBits<ushort>(SpriteIndex, 12, name: nameof(SpriteIndex));
                     Flags = b.SerializeBits<R2_AnimationLayerFlags>(Flags, 4, name: nameof(Flags));
                 });
