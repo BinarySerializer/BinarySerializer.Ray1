@@ -7,7 +7,6 @@
         /// </summary>
         public short LivesCount { get; set; }
 
-        public byte Byte_01 { get; set; } // Related to the graphics index for the lives count
         public byte LivesDigit0 { get; set; }
         public byte LivesDigit1 { get; set; }
         public byte Byte_04 { get; set; }
@@ -45,8 +44,7 @@
             }
             else
             {
-                LivesCount = s.Serialize<byte>((byte)LivesCount, name: nameof(LivesCount));
-                Byte_01 = s.Serialize<byte>(Byte_01, name: nameof(Byte_01));
+                LivesCount = s.Serialize<short>(LivesCount, name: nameof(LivesCount));
                 LivesDigit0 = s.Serialize<byte>(LivesDigit0, name: nameof(LivesDigit0));
                 LivesDigit1 = s.Serialize<byte>(LivesDigit1, name: nameof(LivesDigit1));
                 Byte_04 = s.Serialize<byte>(Byte_04, name: nameof(Byte_04));

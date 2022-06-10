@@ -63,7 +63,7 @@ namespace BinarySerializer.Ray1
         public byte[] PS1Demo_Unk1 { get; set; }
         public uint PS1_Unk1 { get; set; }
 
-        public CommandContext[] CommandContexts { get; set; }
+        public CommandContext[] CommandContexts { get; set; } // cmd_return
 
         // How many of these uints are a part of the CMD context array?
         public uint Uint_1C { get; set; }
@@ -76,6 +76,7 @@ namespace BinarySerializer.Ray1
         public short PS1Demo_Unk3 { get; set; }
 
         public uint Uint_30 { get; set; }
+        public byte GBA_Byte_31 { get; set; }
 
         public short Index { get; set; } // This index is used by the game to handle the obj links during runtime
 
@@ -93,8 +94,8 @@ namespace BinarySerializer.Ray1
 
         public ushort SpritesCount { get; set; }
 
-        public short CurrentCommandOffset { get; set; }
-        public short CMD_Arg0 { get; set; } // This along with CMD_Arg1 might be a more generic temp value, so might have other uses too
+        public short CurrentCommandOffset { get; set; } // cmd_offset
+        public short CMD_Arg0 { get; set; } // nb_cmd - This along with CMD_Arg1 might be a more generic temp value, so might have other uses too
         public short Short_4A { get; set; } // For Rayman this holds the index of the object he's standing on. It most likely has different uses for other objects based on type. In R2 this is in the type specific data.
         public short Short_4C { get; set; }
         public short Short_4E { get; set; }
@@ -163,7 +164,7 @@ namespace BinarySerializer.Ray1
 
         public byte Byte_7A { get; set; }
         public byte Byte_7B { get; set; }
-        public byte CurrentCommandContext { get; set; }
+        public byte CurrentCommandContext { get; set; } // cmd_depth
         public byte Byte_7D { get; set; }
         public byte PS1Demo_Unk5 { get; set; }
         public byte PS1Demo_Unk6 { get; set; }
@@ -179,7 +180,9 @@ namespace BinarySerializer.Ray1
 
         public byte AnimationsCount { get; set; }
 
+        public byte GBA_ActiveFlags { get; set; }
         public PC_ObjFlags PC_Flags { get; set; }
+        public byte GBA_Byte_71 { get; set; }
 
         public PS1_ObjFlags PS1_RuntimeFlags { get; set; }
         public byte PS1_Flags { get; set; }
@@ -263,9 +266,12 @@ namespace BinarySerializer.Ray1
 
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetSettings<Ray1Settings>();
+            bool isPCFormat = IsPCFormat(settings);
+            bool isGBAFormat = settings.EngineVersion == Ray1EngineVersion.GBA ||
+                               settings.EngineVersion == Ray1EngineVersion.DSi;
 
-            if (!IsPCFormat(settings) || Pre_IsSerializingFromMemory || settings.EngineVersion == Ray1EngineVersion.GBA || settings.EngineVersion == Ray1EngineVersion.DSi)
+            if (!isPCFormat || Pre_IsSerializingFromMemory || isGBAFormat)
             {
                 SpritesPointer = s.SerializePointer(SpritesPointer, name: nameof(SpritesPointer));
                 AnimationsPointer = s.SerializePointer(AnimationsPointer, name: nameof(AnimationsPointer));
@@ -286,7 +292,7 @@ namespace BinarySerializer.Ray1
                 {
                     LabelOffsetsPointer = s.SerializePointer(LabelOffsetsPointer, name: nameof(LabelOffsetsPointer));
 
-                    if (!IsPCFormat(settings))
+                    if (!isPCFormat)
                         PS1_Unk1 = s.Serialize<uint>(PS1_Unk1, name: nameof(PS1_Unk1));
                 }
             }
@@ -301,15 +307,24 @@ namespace BinarySerializer.Ray1
                 PC_RuntimeLabelOffsetsPointer = s.Serialize<uint>(PC_RuntimeLabelOffsetsPointer, name: nameof(PC_RuntimeLabelOffsetsPointer));
             }
 
-            if (IsPCFormat(settings))
+            if (isPCFormat)
             {
                 CommandContexts = s.SerializeObjectArray<CommandContext>(CommandContexts, 1, name: nameof(CommandContexts));
-                Uint_1C = s.Serialize<uint>(Uint_1C, name: nameof(Uint_1C));
-                Uint_20 = s.Serialize<uint>(Uint_20, name: nameof(Uint_20));
-                IsActive = s.Serialize<uint>(IsActive, name: nameof(IsActive));
+
+                if (isGBAFormat)
+                {
+                    Uint_30 = s.Serialize<byte>((byte)Uint_30, name: nameof(Uint_30));
+                    GBA_Byte_31 = s.Serialize<byte>(GBA_Byte_31, name: nameof(GBA_Byte_31));
+                }
+                else
+                {
+                    Uint_1C = s.Serialize<uint>(Uint_1C, name: nameof(Uint_1C));
+                    Uint_20 = s.Serialize<uint>(Uint_20, name: nameof(Uint_20));
+                    IsActive = s.Serialize<uint>(IsActive, name: nameof(IsActive));
+                }
             }
 
-            if (IsPCFormat(settings))
+            if (!isGBAFormat && isPCFormat)
             {
                 XPosition = s.Serialize<int>(XPosition, name: nameof(XPosition));
                 YPosition = s.Serialize<int>(YPosition, name: nameof(YPosition));
@@ -326,7 +341,7 @@ namespace BinarySerializer.Ray1
             }
             else
             {
-                if (IsPCFormat(settings))
+                if (!isGBAFormat && isPCFormat)
                     Uint_30 = s.Serialize<uint>(Uint_30, name: nameof(Uint_30));
 
                 Index = s.Serialize<short>(Index, name: nameof(Index));
@@ -372,7 +387,7 @@ namespace BinarySerializer.Ray1
             TypeZDC = s.SerializeObject<ZDCEntry>(TypeZDC, name: nameof(TypeZDC));
             Short_5E = s.Serialize<short>(Short_5E, name: nameof(Short_5E));
 
-            if (IsPCFormat(settings))
+            if (isPCFormat)
                 Type = s.Serialize<ObjType>(Type, name: nameof(Type));
 
             CollisionTypes = s.SerializeArray<TileCollisionType>(CollisionTypes, settings.EngineVersion != Ray1EngineVersion.PS1_JPDemoVol3 ? 5 : 1, name: nameof(CollisionTypes));
@@ -384,7 +399,7 @@ namespace BinarySerializer.Ray1
             CurrentAnimationIndex = s.Serialize<byte>(CurrentAnimationIndex, name: nameof(CurrentAnimationIndex));
             CurrentAnimationFrame = s.Serialize<byte>(CurrentAnimationFrame, name: nameof(CurrentAnimationFrame));
 
-            if (IsPCFormat(settings))
+            if (isPCFormat)
             {
                 SubEtat = s.Serialize<byte>(SubEtat, name: nameof(SubEtat));
                 Etat = s.Serialize<byte>(Etat, name: nameof(Etat));
@@ -412,12 +427,12 @@ namespace BinarySerializer.Ray1
             InitialHitPoints = s.Serialize<byte>(InitialHitPoints, name: nameof(InitialHitPoints));
             UnusedDisplayPrio = s.Serialize<byte>(UnusedDisplayPrio, name: nameof(UnusedDisplayPrio));
 
-            if (!IsPCFormat(settings))
+            if (!isPCFormat)
                 Type = (ObjType)s.Serialize<byte>((byte)Type, name: nameof(Type));
 
             HitSprite = s.Serialize<byte>(HitSprite, name: nameof(HitSprite));
 
-            if (!IsPCFormat(settings))
+            if (!isPCFormat)
                 PS1_Unk5 = s.Serialize<byte>(PS1_Unk5, name: nameof(PS1_Unk5));
 
             Byte_7A = s.Serialize<byte>(Byte_7A, name: nameof(Byte_7A));
@@ -442,9 +457,18 @@ namespace BinarySerializer.Ray1
 
             AnimationsCount = s.Serialize<byte>(AnimationsCount, name: nameof(AnimationsCount));
 
-            if (IsPCFormat(settings))
+            if (isPCFormat)
             {
+                if (isGBAFormat)
+                    GBA_ActiveFlags = s.Serialize<byte>(GBA_ActiveFlags, name: nameof(GBA_ActiveFlags));
+
                 PC_Flags = s.Serialize<PC_ObjFlags>(PC_Flags, name: nameof(PC_Flags));
+
+                // Padding below here?
+
+                if (isGBAFormat)
+                    GBA_Byte_71 = s.Serialize<byte>(GBA_Byte_71, name: nameof(GBA_Byte_71));
+                
                 Ushort_82 = s.Serialize<ushort>(Ushort_82, name: nameof(Ushort_82));
             }
             else
@@ -462,7 +486,7 @@ namespace BinarySerializer.Ray1
             }
 
             // Parse data from pointers only on PS1 and if we're not reading from processed memory
-            if (IsPCFormat(settings) || Pre_IsSerializingFromMemory || !s.FullSerialize) 
+            if (isPCFormat || Pre_IsSerializingFromMemory || !s.FullSerialize) 
                 return;
 
             // Serialize the sprites
