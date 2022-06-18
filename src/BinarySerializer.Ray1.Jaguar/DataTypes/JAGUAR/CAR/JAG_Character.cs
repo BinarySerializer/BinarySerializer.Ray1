@@ -23,10 +23,9 @@
         public short ColHeight { get; set; }
 
         public JAG_Type Type { get; set; }
-        public short CollisionNumber { get; set; } // Count?
+        public short CollisionNumber { get; set; } // Some count?
 
-        public short UnknownCollideValue { get; set; }
-        public JAG_Collide Collide { get; set; }
+        public JAG_Collide[] Collides { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
         {
@@ -53,13 +52,11 @@
             Type = s.Serialize<JAG_Type>(Type, name: nameof(Type));
             CollisionNumber = s.Serialize<short>(CollisionNumber, name: nameof(CollisionNumber));
 
-            UnknownCollideValue = s.Serialize<short>(UnknownCollideValue, name: nameof(UnknownCollideValue));
-
-            if (CollisionNumber != 0 && UnknownCollideValue > -1)
-            {
-                Collide = s.SerializeObject<JAG_Collide>(Collide, name: nameof(Collide));
-                s.Serialize<short>(-1, name: "Terminator");
-            }
+            if (CollisionNumber != 0)
+                Collides = s.SerializeObjectArrayUntil(Collides, x => x.Short_00 == -1, () => new JAG_Collide()
+                {
+                    Short_00 = -1
+                }, name: nameof(Collides));
         }
     }
 }
