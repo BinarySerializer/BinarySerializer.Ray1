@@ -12,7 +12,7 @@
         public string String { get; set; }
 
         public override bool UseShortLog => true;
-        public override string ToString() => $"Ref_{Type}('{String}' = {DataPointer?.ToString() ?? $"{DataValue:X8}"})";
+        public override string ToString() => $"Ref_{Type}('{String}' = {DataPointer?.ToString() ?? $"0x{DataValue:X8}"})";
 
         /// <summary>
         /// Handles the data serialization

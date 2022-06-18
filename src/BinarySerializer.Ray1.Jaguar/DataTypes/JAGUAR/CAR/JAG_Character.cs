@@ -7,9 +7,9 @@
         public int Tech3 { get; set; }
         public int Tech4 { get; set; }
 
-        public byte Car1 { get; set; }
-        public byte Car2 { get; set; }
-        public byte Car3 { get; set; }
+        public byte _1 { get; set; }
+        public byte _2 { get; set; }
+        public byte _3 { get; set; }
 
         public byte DisplayPrio { get; set; }
         public byte Force { get; set; } // ?
@@ -22,7 +22,7 @@
         public short ColWidth { get; set; }
         public short ColHeight { get; set; }
 
-        public short Type { get; set; }
+        public JAG_Type Type { get; set; }
         public short CollisionNumber { get; set; } // Count?
 
         public short UnknownCollideValue { get; set; }
@@ -35,9 +35,9 @@
             Tech3 = s.Serialize<int>(Tech3, name: nameof(Tech3));
             Tech4 = s.Serialize<int>(Tech4, name: nameof(Tech4));
 
-            Car1 = s.Serialize<byte>(Car1, name: nameof(Car1));
-            Car2 = s.Serialize<byte>(Car2, name: nameof(Car2));
-            Car3 = s.Serialize<byte>(Car3, name: nameof(Car3));
+            _1 = s.Serialize<byte>(_1, name: nameof(_1));
+            _2 = s.Serialize<byte>(_2, name: nameof(_2));
+            _3 = s.Serialize<byte>(_3, name: nameof(_3));
 
             DisplayPrio = s.Serialize<byte>(DisplayPrio, name: nameof(DisplayPrio));
             Force = s.Serialize<byte>(Force, name: nameof(Force));
@@ -50,7 +50,7 @@
             ColWidth = s.Serialize<short>(ColWidth, name: nameof(ColWidth));
             ColHeight = s.Serialize<short>(ColHeight, name: nameof(ColHeight));
 
-            Type = s.Serialize<short>(Type, name: nameof(Type));
+            Type = s.Serialize<JAG_Type>(Type, name: nameof(Type));
             CollisionNumber = s.Serialize<short>(CollisionNumber, name: nameof(CollisionNumber));
 
             UnknownCollideValue = s.Serialize<short>(UnknownCollideValue, name: nameof(UnknownCollideValue));
