@@ -53,8 +53,8 @@ namespace BinarySerializer.Ray1.Jaguar
         /// </summary>
         public GBR655Color[] TileData { get; set; }
 
-        public JAG_EventDefinition[] EventDefinitions { get; set; }
-        public JAG_EventDefinition[] AdditionalEventDefinitions { get; set; }
+        public JAG_MultiSprite[] EventDefinitions { get; set; }
+        public JAG_MultiSprite[] AdditionalEventDefinitions { get; set; }
 
         /// <summary>
         /// The image buffers for the current level, with the key being the memory pointer pointer
@@ -130,7 +130,7 @@ namespace BinarySerializer.Ray1.Jaguar
                         byte[] eventDefsDataBytes = s.SerializeArray<byte>(null, config.EventCount * 0x28, name: nameof(eventDefsDataBytes));
                         var file = new MemoryMappedStreamFile(s.Context, key, 0x001f9000, eventDefsDataBytes, Endian.Big);
                         s.Context.AddFile(file);
-                        s.DoAt(file.StartPointer, () => EventDefinitions = s.SerializeObjectArray<JAG_EventDefinition>(EventDefinitions, config.EventCount, name: nameof(EventDefinitions)));
+                        s.DoAt(file.StartPointer, () => EventDefinitions = s.SerializeObjectArray<JAG_MultiSprite>(EventDefinitions, config.EventCount, name: nameof(EventDefinitions)));
                     });
                 }
             }
@@ -139,7 +139,7 @@ namespace BinarySerializer.Ray1.Jaguar
                 var offset = settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto ? GetProtoDataPointer(JAG_Proto_References.MS_rayman) : s.GetPreDefinedPointer(JAG_DefinedPointer.EventDefinitions);
 
                 // Pointers all point to the ROM, not RAM
-                s.DoAt(offset, () => EventDefinitions = s.SerializeObjectArray<JAG_EventDefinition>(EventDefinitions,
+                s.DoAt(offset, () => EventDefinitions = s.SerializeObjectArray<JAG_MultiSprite>(EventDefinitions,
                     config.EventCount, name: nameof(EventDefinitions)));
             }
 
@@ -149,7 +149,7 @@ namespace BinarySerializer.Ray1.Jaguar
                 {
                     AdditionalEventDefinitions = config.AdditionalEventDefinitionPointers.Select(p =>
                     {
-                        return s.DoAt(new Pointer(p, s.GetPreDefinedPointer(JAG_DefinedPointer.EventDefinitions).File), () => s.SerializeObject<JAG_EventDefinition>(default, name: nameof(AdditionalEventDefinitions)));
+                        return s.DoAt(new Pointer(p, s.GetPreDefinedPointer(JAG_DefinedPointer.EventDefinitions).File), () => s.SerializeObject<JAG_MultiSprite>(default, name: nameof(AdditionalEventDefinitions)));
                     }).ToArray();
                 }
                 else

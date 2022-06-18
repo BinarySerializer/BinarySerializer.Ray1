@@ -1,6 +1,6 @@
 ﻿namespace BinarySerializer.Ray1
 {
-    // Same struct as JAG_EventInstance
+    // Same struct as JAG_Event
     public class Mapper_SaveEventInstance
     {
         public short IsValid { get; set; }

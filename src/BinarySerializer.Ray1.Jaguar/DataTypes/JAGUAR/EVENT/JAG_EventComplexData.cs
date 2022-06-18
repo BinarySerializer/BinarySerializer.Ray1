@@ -9,8 +9,8 @@ namespace BinarySerializer.Ray1.Jaguar
 	/// </summary>
 	public class JAG_EventComplexData : BinarySerializable
 	{
-		public ushort Pre_StructType { get; set; } // Read from EventDefinition
-		public ushort Pre_NumLayers { get; set; }
+		public ushort Pre_Verbe { get; set; } // Read from MultiSprite
+		public ushort Pre_SpritesCount { get; set; }
 
 		public Pointer[] UnkPointers { get; set; }
 		public byte[] UnkBytes { get; set; }
@@ -29,24 +29,25 @@ namespace BinarySerializer.Ray1.Jaguar
 		{
 			var settings = s.GetSettings<Ray1Settings>();
 
-			if (settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto && Pre_StructType != 29)
+			if (settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto && Pre_Verbe != 29)
 				UnkPointers = s.SerializePointerArray(UnkPointers, 64, allowInvalid: true, name: nameof(UnkPointers));
 
-			if (Pre_StructType != 29)
+			if (Pre_Verbe != 29)
 				UnkBytes = s.SerializeArray<byte>(UnkBytes, 0x10, name: nameof(UnkBytes));
 
 			SpritesPointer = s.SerializePointer(SpritesPointer, name: nameof(SpritesPointer));
 
-			if (Pre_StructType != 29) 
+			if (Pre_Verbe != 29) 
 			{
 				Transitions = s.SerializeObjectArray<JAG_EventComplexDataTransition>(Transitions, settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto ? 5 : 7, onPreSerialize: g => {
-					g.Pre_StructType = Pre_StructType;
-					g.Pre_NumLayers = Pre_NumLayers;
+					g.Pre_Verbe = Pre_Verbe;
+					g.Pre_NumLayers = Pre_SpritesCount;
 				}, name: nameof(Transitions));
 			}
 
 			// Serialize from first state index
 			{
+                // TODO: This isn't always accurate
 				var temp = new List<JAG_EventComplexDataState>();
 
 				var index = 0;
@@ -79,7 +80,7 @@ namespace BinarySerializer.Ray1.Jaguar
 							if (!success) break;
 						}
 					}
-					var i = s.SerializeObject<JAG_EventComplexDataState>(default, onPreSerialize: state => state.LayersPerFrame = Pre_NumLayers, name: $"{nameof(States)}[{index}]");
+					var i = s.SerializeObject<JAG_EventComplexDataState>(default, onPreSerialize: state => state.LayersPerFrame = Pre_SpritesCount, name: $"{nameof(States)}[{index}]");
 
 					temp.Add(i);
 

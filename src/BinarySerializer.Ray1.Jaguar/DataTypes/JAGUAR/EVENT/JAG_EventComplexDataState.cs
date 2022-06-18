@@ -6,12 +6,16 @@
     public class JAG_EventComplexDataState : BinarySerializable
     {
         public Pointer AnimationPointer { get; set; }
-        public byte Byte_04 { get; set; }
-        public byte Byte_05 { get; set; }
-        public byte Byte_06 { get; set; }
-        public byte LinkedStateIndex { get; set; }
+        public byte Deplacement { get; set; } // Some offset?
+        public byte FlipInt { get; set; } // 6 bits, 1 bit, 1 bit
+        public byte LoopsCount { get; set; } // Number of times to play animation before switching state
+        public byte Chain { get; set; } // Linked state index
         public byte FramesCount { get; set; }
-        public byte[] Bytes_09 { get; set; }
+        public byte Speed { get; set; } // Speed
+        public byte FlipAnim { get; set; }
+        public byte ZddId { get; set; } // ZDD index
+        public byte ZddValue { get; set; }
+        public byte Insertion { get; set; } // Index to object to spawn from table. 0 = no object.
 
         // Passed from other structs
         public ushort LayersPerFrame { get; set; }
@@ -26,12 +30,17 @@
         public override void SerializeImpl(SerializerObject s)
         {
             AnimationPointer = s.SerializePointer(AnimationPointer, name: nameof(AnimationPointer));
-            Byte_04 = s.Serialize<byte>(Byte_04, name: nameof(Byte_04));
-            Byte_05 = s.Serialize<byte>(Byte_05, name: nameof(Byte_05));
-            Byte_06 = s.Serialize<byte>(Byte_06, name: nameof(Byte_06));
-            LinkedStateIndex = s.Serialize<byte>(LinkedStateIndex, name: nameof(LinkedStateIndex));
+            Deplacement = s.Serialize<byte>(Deplacement, name: nameof(Deplacement));
+            FlipInt = s.Serialize<byte>(FlipInt, name: nameof(FlipInt));
+            LoopsCount = s.Serialize<byte>(LoopsCount, name: nameof(LoopsCount));
+            Chain = s.Serialize<byte>(Chain, name: nameof(Chain));
             FramesCount = s.Serialize<byte>(FramesCount, name: nameof(FramesCount));
-            Bytes_09 = s.SerializeArray<byte>(Bytes_09, 7, name: nameof(Bytes_09));
+            Speed = s.Serialize<byte>(Speed, name: nameof(Speed));
+            FlipAnim = s.Serialize<byte>(FlipAnim, name: nameof(FlipAnim));
+            ZddId = s.Serialize<byte>(ZddId, name: nameof(ZddId));
+            ZddValue = s.Serialize<byte>(ZddValue, name: nameof(ZddValue));
+            Insertion = s.Serialize<byte>(Insertion, name: nameof(Insertion));
+            s.SerializePadding(2, logIfNotNull: true);
 
             if (AnimationPointer != null) 
             {

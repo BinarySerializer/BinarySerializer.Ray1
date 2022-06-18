@@ -5,15 +5,15 @@ using System.Linq;
 namespace BinarySerializer.Ray1.Jaguar
 {
     /// <summary>
-    /// Event definition data
+    /// A multi-sprite (MS)
     /// </summary>
-    public class JAG_EventDefinition : BinarySerializable 
+    public class JAG_MultiSprite : BinarySerializable 
     {
 		#region Event Data
 
-		public short NumLayers { get; set; }
-		public Pointer CarPointer { get; set; } // Points to a struct of size 0x26. just some shorts, no pointers (named car_xxx in prototype)
-		public ushort StructType { get; set; }
+		public short SpritesCount { get; set; } // Number of layers in an animation
+		public Pointer CharacterPointer { get; set; }
+		public ushort Verbe { get; set; } // Index to function list
 
 		public Pointer CodePointer { get; set; }
 		public Pointer CurrentStatePointer { get; set; }
@@ -48,7 +48,7 @@ namespace BinarySerializer.Ray1.Jaguar
 
 		#region Parsed from Pointers
 
-		public byte[] CarData { get; set; }
+		public JAG_Character Character { get; set; }
 		public Sprite[] Sprites { get; set; }
 		public JAG_EventState[] States { get; set; }
 		public JAG_EventComplexData ComplexData { get; set; }
@@ -65,10 +65,10 @@ namespace BinarySerializer.Ray1.Jaguar
         {
 			var settings = s.GetSettings<Ray1Settings>();
 
-			NumLayers = s.Serialize<short>(NumLayers, name: nameof(NumLayers));
-			CarPointer = s.SerializePointer(CarPointer, name: nameof(CarPointer));
-			StructType = s.Serialize<ushort>(StructType, name: nameof(StructType));
-			if (StructType == 29) {
+			SpritesCount = s.Serialize<short>(SpritesCount, name: nameof(SpritesCount));
+			CharacterPointer = s.SerializePointer(CharacterPointer, name: nameof(CharacterPointer));
+			Verbe = s.Serialize<ushort>(Verbe, name: nameof(Verbe));
+			if (Verbe == 29) {
 				CurrentStatePointer = s.SerializePointer(CurrentStatePointer, name: nameof(CurrentStatePointer));
 				ComplexDataPointer = s.SerializePointer(ComplexDataPointer, name: nameof(ComplexDataPointer));
 				UShort_10 = s.Serialize<ushort>(UShort_10, name: nameof(UShort_10));
@@ -83,7 +83,7 @@ namespace BinarySerializer.Ray1.Jaguar
                 Byte_25 = s.Serialize<byte>(Byte_25, name: nameof(Byte_25));
                 Byte_26 = s.Serialize<byte>(Byte_26, name: nameof(Byte_26));
 				CodePointer = s.SerializePointer(CodePointer, name: nameof(CodePointer));
-			} else if (StructType == 6 || StructType == 7 || StructType == 30 || StructType == 31 || (settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto && StructType == 15)) {
+			} else if (Verbe == 6 || Verbe == 7 || Verbe == 30 || Verbe == 31 || (settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto && Verbe == 15)) {
 				CurrentStatePointer = s.SerializePointer(CurrentStatePointer, name: nameof(CurrentStatePointer));
 				ComplexDataPointer = s.SerializePointer(ComplexDataPointer, name: nameof(ComplexDataPointer));
 				UShort_10 = s.Serialize<ushort>(UShort_10, name: nameof(UShort_10));
@@ -101,27 +101,27 @@ namespace BinarySerializer.Ray1.Jaguar
 				Byte_25 = s.Serialize<byte>(Byte_25, name: nameof(Byte_25));
 				Byte_26 = s.Serialize<byte>(Byte_26, name: nameof(Byte_26));
 				Byte_27 = s.Serialize<byte>(Byte_27, name: nameof(Byte_27));
-			} else if (StructType == 23 || StructType == 11 || StructType == 2 || (settings.EngineVersion == Ray1EngineVersion.Jaguar_Demo && StructType == 10)) {
+			} else if (Verbe == 23 || Verbe == 11 || Verbe == 2 || (settings.EngineVersion == Ray1EngineVersion.Jaguar_Demo && Verbe == 10)) {
 				CodePointer = s.SerializePointer(CodePointer, name: nameof(CodePointer));
 				UnkBytes = s.SerializeArray<byte>(UnkBytes, 0x1c, name: nameof(UnkBytes));
-			} else if (StructType == 36 || StructType == 37 || StructType == 56) {
+			} else if (Verbe == 36 || Verbe == 37 || Verbe == 56) {
 				Byte_20 = s.Serialize<byte>(Byte_20, name: nameof(Byte_20));
 				Byte_21 = s.Serialize<byte>(Byte_21, name: nameof(Byte_21));
 				Byte_22 = s.Serialize<byte>(Byte_22, name: nameof(Byte_22));
 				Byte_23 = s.Serialize<byte>(Byte_23, name: nameof(Byte_23));
 				UnkBytes = s.SerializeArray<byte>(UnkBytes, 0x1C, name: nameof(UnkBytes));
-			} else if (StructType == 111 || StructType == 17) {
+			} else if (Verbe == 111 || Verbe == 17) {
 				UnkBytes = s.SerializeArray<byte>(UnkBytes, 0x8, name: nameof(UnkBytes));
 				UInt_1C = s.Serialize<uint>(UInt_1C, name: nameof(UInt_1C));
 				UShort_10 = s.Serialize<ushort>(UShort_10, name: nameof(UShort_10));
 				CodePointer = s.SerializePointer(CodePointer, name: nameof(CodePointer));
 				UnkPointer1 = s.SerializePointer(UnkPointer1, name: nameof(UnkPointer1));
 				UnkBytes = s.SerializeArray<byte>(UnkBytes, 0xA, name: nameof(UnkBytes));
-			} else if (StructType == 112 || StructType == 113 || StructType == 114 || StructType == 26) {
+			} else if (Verbe == 112 || Verbe == 113 || Verbe == 114 || Verbe == 26) {
 				UShort_10 = s.Serialize<ushort>(UShort_10, name: nameof(UShort_10));
 				CodePointer = s.SerializePointer(CodePointer, name: nameof(CodePointer));
 				UnkBytes = s.SerializeArray<byte>(UnkBytes, 0x1a, name: nameof(UnkBytes));
-			} else if (StructType == 25) {
+			} else if (Verbe == 25) {
 				SpritesPointer = s.SerializePointer(SpritesPointer, name: nameof(SpritesPointer));
 				AnimationPointer = s.SerializePointer(AnimationPointer, name: nameof(AnimationPointer));
 				CodePointer = s.SerializePointer(CodePointer, name: nameof(CodePointer));
@@ -130,13 +130,13 @@ namespace BinarySerializer.Ray1.Jaguar
 				FrameCount = s.Serialize<byte>(FrameCount, name: nameof(FrameCount));
 				Byte_23 = s.Serialize<byte>(Byte_23, name: nameof(Byte_23));
 				UnkBytes = s.SerializeArray<byte>(UnkBytes, 0x10, name: nameof(UnkBytes));
-			} else if(settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto && (StructType == 10 || StructType == 26 || StructType == 19)) {
-				if (StructType == 10) {
+			} else if(settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto && (Verbe == 10 || Verbe == 26 || Verbe == 19)) {
+				if (Verbe == 10) {
 					UInt_1C = s.Serialize<uint>(UInt_1C, name: nameof(UInt_1C));
 					UShort_10 = s.Serialize<ushort>(UShort_10, name: nameof(UShort_10));
 					CodePointer = s.SerializePointer(CodePointer, name: nameof(CodePointer));
 					UnkBytes = s.SerializeArray<byte>(UnkBytes, 0x16, name: nameof(UnkBytes));
-				} else if (StructType == 26 || StructType == 19) {
+				} else if (Verbe == 26 || Verbe == 19) {
 					UShort_10 = s.Serialize<ushort>(UShort_10, name: nameof(UShort_10));
 					UnkPointer1 = s.SerializePointer(UnkPointer1, name: nameof(UnkPointer1));
 					UnkBytes = s.SerializeArray<byte>(UnkBytes, 0x1A, name: nameof(UnkBytes));
@@ -158,7 +158,7 @@ namespace BinarySerializer.Ray1.Jaguar
                 Byte_26 = s.Serialize<byte>(Byte_26, name: nameof(Byte_26));
 			}
 
-            s.DoAt(CarPointer, () => CarData = s.SerializeArray<byte>(CarData, 0x26, name: nameof(CarData)));
+            s.DoAt(CharacterPointer, () => Character = s.SerializeObject<JAG_Character>(Character, name: nameof(Character)));
 
 			if (!s.FullSerialize)
 				return;
@@ -231,18 +231,18 @@ namespace BinarySerializer.Ray1.Jaguar
 				});
 			} else if (ComplexDataPointer != null) {
 				// TODO: Why does this not work for the proto?
-				if (!(StructType == 30 && NumLayers == 5)) { // Different struct in this case, that only has states with code pointers
+				if (!(Verbe == 30 && SpritesCount == 5)) { // Different struct in this case, that only has states with code pointers
 					s.DoAt(ComplexDataPointer, () => {
 						ComplexData = s.SerializeObject<JAG_EventComplexData>(ComplexData, onPreSerialize: cd => {
-							cd.Pre_StructType = StructType;
-							cd.Pre_NumLayers = (ushort)NumLayers;
+							cd.Pre_Verbe = Verbe;
+							cd.Pre_SpritesCount = (ushort)SpritesCount;
 						}, name: nameof(ComplexData));
 					});
 				}
 			}
 
 			s.DoAt(AnimationPointer, () => {
-				int layers = NumLayers > 0 ? NumLayers : 1;
+				int layers = SpritesCount > 0 ? SpritesCount : 1;
 				AnimationLayers = s.SerializeObjectArray<AnimationLayer>(AnimationLayers, layers * FrameCount, name: nameof(AnimationLayers));
 			});
 
@@ -250,7 +250,7 @@ namespace BinarySerializer.Ray1.Jaguar
 			if (settings.EngineVersion != Ray1EngineVersion.Jaguar_Proto)
             {
                 s.DoAt(SpritesPointer, () => {
-                    if (StructType == 25)
+                    if (Verbe == 25)
                     {
                         ImageBufferMemoryPointerPointer = s.Serialize<uint>(ImageBufferMemoryPointerPointer, name: nameof(ImageBufferMemoryPointerPointer));
                     }

@@ -1,12 +1,12 @@
 ﻿namespace BinarySerializer.Ray1.Jaguar
 {
     /// <summary>
-    /// Data necessary to spawn an instance of an event
+    /// An event instance in the map. This is used to spawn a multi-sprite character.
     /// </summary>
-    public class JAG_EventInstance : BinarySerializable
+    public class JAG_Event : BinarySerializable
     {
         // This value is 0 if the event is not valid
-        public ushort Unk_00 { get; set; }
+        public ushort IsValid { get; set; }
 
         // Offsets for the position
         public short OffsetX { get; set; }
@@ -20,7 +20,7 @@
         public ushort EventIndex { get; set; }
 
         // Parsed
-        public JAG_EventDefinition EventDefinition { get; set; }
+        public JAG_MultiSprite MultiSprite { get; set; }
 
         /// <summary>
         /// Handles the data serialization
@@ -28,9 +28,9 @@
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            Unk_00 = s.Serialize<ushort>(Unk_00, name: nameof(Unk_00));
+            IsValid = s.Serialize<ushort>(IsValid, name: nameof(IsValid));
 
-            if (Unk_00 == 0)
+            if (IsValid == 0)
                 return;
 
             OffsetX = s.Serialize<short>(OffsetX, name: nameof(OffsetX));
@@ -39,7 +39,7 @@
             Unk_0A = s.Serialize<ushort>(Unk_0A, name: nameof(Unk_0A));
             EventIndex = s.Serialize<ushort>(EventIndex, name: nameof(EventIndex));
 
-            EventDefinition = s.DoAt(EventDefinitionPointer, () => s.SerializeObject<JAG_EventDefinition>(EventDefinition, name: nameof(EventDefinition)));
+            MultiSprite = s.DoAt(EventDefinitionPointer, () => s.SerializeObject<JAG_MultiSprite>(MultiSprite, name: nameof(MultiSprite)));
         }
     }
 }

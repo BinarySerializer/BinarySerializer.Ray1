@@ -16,7 +16,7 @@ namespace BinarySerializer.Ray1.Jaguar
         // Indexed, with offsets to the data table
         public ushort[] EventOffsetTable { get; set; }
 
-        public JAG_EventInstance[][] EventData { get; set; }
+        public JAG_Event[][] EventData { get; set; }
 
         /// <summary>
         /// Handles the data serialization
@@ -29,7 +29,7 @@ namespace BinarySerializer.Ray1.Jaguar
             // Serialize next data block, skipping the padding
             s.DoAt(Pre_OffListPointer ?? (Offset + 0x1208), () => EventOffsetTable = s.SerializeArray<ushort>(EventOffsetTable, MapEvents.EventIndexMap.Max(), name: nameof(EventOffsetTable)));
 
-            EventData ??= new JAG_EventInstance[EventOffsetTable.Length][];
+            EventData ??= new JAG_Event[EventOffsetTable.Length][];
 
             // Serialize the events based on the offsets
             for (int i = 0; i < EventData.Length; i++)
@@ -38,12 +38,12 @@ namespace BinarySerializer.Ray1.Jaguar
                 {
                     if (EventData[i] == null)
                     {
-                        var temp = new List<JAG_EventInstance>();
+                        var temp = new List<JAG_Event>();
 
                         var index = 0;
-                        while (temp.LastOrDefault()?.Unk_00 != 0)
+                        while (temp.LastOrDefault()?.IsValid != 0)
                         {
-                            temp.Add(s.SerializeObject<JAG_EventInstance>(default, name: $"{nameof(EventData)}[{i}][{index}]"));
+                            temp.Add(s.SerializeObject<JAG_Event>(default, name: $"{nameof(EventData)}[{i}][{index}]"));
                             index++;
                         }
 
@@ -55,9 +55,9 @@ namespace BinarySerializer.Ray1.Jaguar
                     else
                     {
                         for (int j = 0; j < EventData[i].Length; j++)
-                            EventData[i][j] = s.SerializeObject<JAG_EventInstance>(EventData[i][j], name: $"{nameof(EventData)}[{i}][{j}]");
+                            EventData[i][j] = s.SerializeObject<JAG_Event>(EventData[i][j], name: $"{nameof(EventData)}[{i}][{j}]");
 
-                        s.Serialize<ushort>(0, name: nameof(JAG_EventInstance.Unk_00));
+                        s.Serialize<ushort>(0, name: nameof(JAG_Event.IsValid));
                     }
                 });
             }

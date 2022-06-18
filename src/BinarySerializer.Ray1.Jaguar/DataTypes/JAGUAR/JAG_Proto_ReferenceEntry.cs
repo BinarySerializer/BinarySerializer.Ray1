@@ -11,6 +11,9 @@
 
         public string String { get; set; }
 
+        public override bool UseShortLog => true;
+        public override string ToString() => $"Ref_{Type}('{String}' = {DataPointer?.ToString() ?? $"{DataValue:X8}"})";
+
         /// <summary>
         /// Handles the data serialization
         /// </summary>
@@ -19,29 +22,35 @@
         {
             StringPointer = s.SerializePointer(StringPointer, anchor: Pre_StringBasePointer, name: nameof(StringPointer));
             Type = s.Serialize<EntryType>(Type, name: nameof(Type));
-            s.SerializePadding(3);
+            s.SerializePadding(3, logIfNotNull: true);
 
-            if (Type == EntryType.DataBlock)
+            if (Type == EntryType.ROM)
                 DataPointer = s.SerializePointer(DataPointer, name: nameof(DataPointer));
             else
                 DataValue = s.Serialize<uint>(DataValue, name: nameof(DataValue));
 
             s.DoAt(StringPointer, () => String = s.SerializeString(String, name: nameof(String)));
 
-            if (Type == EntryType.DataBlock)
+            if (Type == EntryType.ROM)
                 Offset.File.AddLabel(DataPointer.FileOffset, String);
         }
 
         public enum EntryType : byte
         {
-            Unk_2 = 2,
+            /// <summary>
+            /// A constant value
+            /// </summary>
+            Const = 2,
 
             /// <summary>
-            /// Pointer to a data block or function
+            /// Pointer to a data block or function in the ROM
             /// </summary>
-            DataBlock = 6,
+            ROM = 6,
 
-            Unk_8 = 8
+            /// <summary>
+            /// Pointer to data in RAM
+            /// </summary>
+            RAM = 8
         }
     }
 }
