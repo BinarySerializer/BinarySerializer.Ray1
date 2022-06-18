@@ -7,7 +7,7 @@
         public short YPos { get; set; }
         public short Width { get; set; }
         public short Height { get; set; }
-        public ushort Type { get; set; } // Flags
+        public JAG_Type Type { get; set; }
         public short BackToDisplay { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
@@ -21,7 +21,7 @@
             YPos = s.Serialize<short>(YPos, name: nameof(YPos));
             Width = s.Serialize<short>(Width, name: nameof(Width));
             Height = s.Serialize<short>(Height, name: nameof(Height));
-            Type = s.Serialize<ushort>(Type, name: nameof(Type));
+            Type = s.Serialize<JAG_Type>(Type, name: nameof(Type));
             BackToDisplay = s.Serialize<short>(BackToDisplay, name: nameof(BackToDisplay));
         }
     }

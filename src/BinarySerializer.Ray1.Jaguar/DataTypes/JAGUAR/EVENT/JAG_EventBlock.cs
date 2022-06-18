@@ -41,7 +41,7 @@ namespace BinarySerializer.Ray1.Jaguar
                         var temp = new List<JAG_Event>();
 
                         var index = 0;
-                        while (temp.LastOrDefault()?.IsValid != 0)
+                        while (temp.LastOrDefault()?.Ushort_00 != 0)
                         {
                             temp.Add(s.SerializeObject<JAG_Event>(default, name: $"{nameof(EventData)}[{i}][{index}]"));
                             index++;
@@ -57,7 +57,7 @@ namespace BinarySerializer.Ray1.Jaguar
                         for (int j = 0; j < EventData[i].Length; j++)
                             EventData[i][j] = s.SerializeObject<JAG_Event>(EventData[i][j], name: $"{nameof(EventData)}[{i}][{j}]");
 
-                        s.Serialize<ushort>(0, name: nameof(JAG_Event.IsValid));
+                        s.Serialize<ushort>(0, name: nameof(JAG_Event.Ushort_00));
                     }
                 });
             }

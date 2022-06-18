@@ -17,6 +17,7 @@
         public byte DispScore { get; set; } // ?
         public byte Family { get; set; }
         
+        // TODO: Maybe all of this is part of the collides array?
         public short ColX { get; set; }
         public short ColY { get; set; }
         public short ColWidth { get; set; }

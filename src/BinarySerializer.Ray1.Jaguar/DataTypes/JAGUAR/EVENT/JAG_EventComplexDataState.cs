@@ -40,7 +40,7 @@
             ZddId = s.Serialize<byte>(ZddId, name: nameof(ZddId));
             ZddValue = s.Serialize<byte>(ZddValue, name: nameof(ZddValue));
             Insertion = s.Serialize<byte>(Insertion, name: nameof(Insertion));
-            s.SerializePadding(2, logIfNotNull: true);
+            s.SerializePadding(2, logIfNotNull: false); // TODO: Enable this once we don't serialize invalid states
 
             if (AnimationPointer != null) 
             {

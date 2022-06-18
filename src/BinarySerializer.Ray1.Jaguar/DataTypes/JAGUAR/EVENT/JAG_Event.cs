@@ -6,7 +6,7 @@
     public class JAG_Event : BinarySerializable
     {
         // This value is 0 if the event is not valid
-        public ushort IsValid { get; set; }
+        public ushort Ushort_00 { get; set; }
 
         // Offsets for the position
         public short OffsetX { get; set; }
@@ -28,9 +28,9 @@
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            IsValid = s.Serialize<ushort>(IsValid, name: nameof(IsValid));
+            Ushort_00 = s.Serialize<ushort>(Ushort_00, name: nameof(Ushort_00));
 
-            if (IsValid == 0)
+            if (Ushort_00 == 0)
                 return;
 
             OffsetX = s.Serialize<short>(OffsetX, name: nameof(OffsetX));
