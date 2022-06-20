@@ -28,6 +28,9 @@
         public byte EvType { get; set; }
         public Pointer EvPointer { get; set; } // Event pointer?
 
+        // Serialized from pointers
+        public JAG_Collide Collision { get; set; }
+
         public override void SerializeImpl(SerializerObject s)
         {
             CollisionPointer = s.SerializePointer(CollisionPointer, name: nameof(CollisionPointer));
@@ -55,6 +58,8 @@
 
             EvType = s.Serialize<byte>(EvType, name: nameof(EvType));
             EvPointer = s.SerializePointer(EvPointer, size: PointerSize.Pointer16, name: nameof(EvPointer));
+
+            s.DoAt(CollisionPointer, () => Collision = s.SerializeObject<JAG_Collide>(Collision, name: nameof(Collision)));
         }
     }
 }

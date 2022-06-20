@@ -17,16 +17,15 @@
         public byte DispScore { get; set; } // ?
         public byte Family { get; set; }
         
-        // TODO: Maybe all of this is part of the collides array?
         public short ColX { get; set; }
         public short ColY { get; set; }
         public short ColWidth { get; set; }
         public short ColHeight { get; set; }
 
-        public JAG_Type Type { get; set; }
-        public short CollisionNumber { get; set; } // Some count?
+        public JAG_CollideType Type { get; set; }
+        public short ColSprite { get; set; } // Offset to displays. If 0 it's relative to the object itself instead.
 
-        public JAG_Collide[] Collides { get; set; }
+        public JAG_CharacterCollide[] Collides { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
         {
@@ -50,14 +49,13 @@
             ColWidth = s.Serialize<short>(ColWidth, name: nameof(ColWidth));
             ColHeight = s.Serialize<short>(ColHeight, name: nameof(ColHeight));
 
-            Type = s.Serialize<JAG_Type>(Type, name: nameof(Type));
-            CollisionNumber = s.Serialize<short>(CollisionNumber, name: nameof(CollisionNumber));
+            Type = s.Serialize<JAG_CollideType>(Type, name: nameof(Type));
+            ColSprite = s.Serialize<short>(ColSprite, name: nameof(ColSprite));
 
-            if (CollisionNumber != 0)
-                Collides = s.SerializeObjectArrayUntil(Collides, x => x.Short_00 == -1, () => new JAG_Collide()
-                {
-                    Short_00 = -1
-                }, name: nameof(Collides));
+            Collides = s.SerializeObjectArrayUntil(Collides, x => x.Sprite == -1, () => new JAG_CharacterCollide()
+            {
+                Sprite = -1
+            }, name: nameof(Collides));
         }
     }
 }
