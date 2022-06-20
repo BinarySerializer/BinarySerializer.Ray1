@@ -262,16 +262,16 @@ namespace BinarySerializer.Ray1.Jaguar
                 var mapCommands = LevelLoadCommands[Array.FindIndex(levels, x => x.Key == settings.World)][settings.Level - 1].Commands;
 
                 // Get pointers
-                var mapPointer = mapCommands.FirstOrDefault(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.LevelMap)?.LevelMapBlockPointer;
-                var eventPointer = mapCommands.FirstOrDefault(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.LevelMap)?.LevelEventBlockPointer;
+                var mapPointer = mapCommands.FirstOrDefault(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Map)?.LevelMapBlockPointer;
+                var eventPointer = mapCommands.FirstOrDefault(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Map)?.LevelEventBlockPointer;
                 var palPointer = mapCommands.FirstOrDefault(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Palette || x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.PaletteDemo)?.PalettePointer;
 
                 Pointer tilesPointer;
 
                 if (settings.EngineVersion == Ray1EngineVersion.Jaguar)
-                    tilesPointer = mapCommands.LastOrDefault(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Graphics && x.ImageBufferMemoryPointer == 0x001B3B68)?.ImageBufferPointer ?? WorldLoadCommands[Array.FindIndex(levels, x => x.Key == settings.World)].Commands.First(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Graphics && x.ImageBufferMemoryPointer == 0x001B3B68).ImageBufferPointer;
+                    tilesPointer = mapCommands.LastOrDefault(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Unzip && x.ImageBufferMemoryPointer == 0x001B3B68)?.ImageBufferPointer ?? WorldLoadCommands[Array.FindIndex(levels, x => x.Key == settings.World)].Commands.First(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Unzip && x.ImageBufferMemoryPointer == 0x001B3B68).ImageBufferPointer;
                 else
-                    tilesPointer = WorldLoadCommands[Array.FindIndex(levels, x => x.Key == settings.World)].Commands.Last(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Graphics && x.ImageBufferMemoryPointer == 0x001BD800).ImageBufferPointer;
+                    tilesPointer = WorldLoadCommands[Array.FindIndex(levels, x => x.Key == settings.World)].Commands.Last(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Unzip && x.ImageBufferMemoryPointer == 0x001BD800).ImageBufferPointer;
 
                 // Serialize map and event data
                 s.DoAt(mapPointer, () => s.DoEncoded(new RNC2Encoder(), () => MapData = s.SerializeObject<MapData>(MapData, name: nameof(MapData))));
@@ -319,7 +319,7 @@ namespace BinarySerializer.Ray1.Jaguar
 
                 // Serialize background
                 var vigs = config.Vignette;
-                BackgroundPointer = mapCommands.Concat(wldCommands.Commands).FirstOrDefault(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Graphics && vigs.Any(y => y.Key == x.ImageBufferPointer.AbsoluteOffset))?.ImageBufferPointer;
+                BackgroundPointer = mapCommands.Concat(wldCommands.Commands).FirstOrDefault(x => x.Type == JAG_LevelLoadCommand.LevelLoadCommandType.Unzip && vigs.Any(y => y.Key == x.ImageBufferPointer.AbsoluteOffset))?.ImageBufferPointer;
 
                 if (BackgroundPointer != null)
                     s.DoAt(BackgroundPointer, () => s.DoEncoded(new RNC2Encoder(), () => Background = s.SerializeObjectArray<GBR655Color>(Background, s.CurrentLength / 2, name: nameof(Background))));

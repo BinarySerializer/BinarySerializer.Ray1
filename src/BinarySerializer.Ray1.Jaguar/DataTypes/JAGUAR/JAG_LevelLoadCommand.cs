@@ -51,7 +51,7 @@ namespace BinarySerializer.Ray1.Jaguar
                     Short1 = s.Serialize<short>(Short1, name: nameof(Short1));
                     break;
 
-                case LevelLoadCommandType.LevelMap:
+                case LevelLoadCommandType.Map:
                     UInt1 = s.Serialize<uint>(UInt1, name: nameof(UInt1));
                     LevelMapBlockPointer = s.SerializePointer(LevelMapBlockPointer, name: nameof(LevelMapBlockPointer));
 
@@ -62,13 +62,13 @@ namespace BinarySerializer.Ray1.Jaguar
 
                     break;
 
-                case LevelLoadCommandType.Graphics:
+                case LevelLoadCommandType.Unzip:
                     // Used for vignettes/backgrounds/tiles
                     ImageBufferPointer = s.SerializePointer(ImageBufferPointer, name: nameof(ImageBufferPointer));
                     ImageBufferMemoryPointer = s.Serialize<uint>(ImageBufferMemoryPointer, name: nameof(ImageBufferMemoryPointer));
                     break;
 
-                case LevelLoadCommandType.Unk1:
+                case LevelLoadCommandType.Fill:
                     UInt1 = s.Serialize<uint>(UInt1, name: nameof(UInt1));
                     UInt2 = s.Serialize<uint>(UInt2, name: nameof(UInt2));
 
@@ -84,7 +84,7 @@ namespace BinarySerializer.Ray1.Jaguar
                     Short1 = s.Serialize<short>(Short1, name: nameof(Short1));
                     break;
 
-                case LevelLoadCommandType.MoveGraphics:
+                case LevelLoadCommandType.Copy:
                     ImageBufferMemoryPointer = s.Serialize<uint>(ImageBufferMemoryPointer, name: nameof(ImageBufferMemoryPointer));
                     TargetImageBufferMemoryPointer = s.Serialize<uint>(TargetImageBufferMemoryPointer, name: nameof(TargetImageBufferMemoryPointer));
                     Short1 = s.Serialize<short>(Short1, name: nameof(Short1));
@@ -138,16 +138,16 @@ namespace BinarySerializer.Ray1.Jaguar
                     throw new InvalidDataException($"Level load command type {Type} at {Offset} is not yet implemented.");
             }
         }
-
+        
         public enum LevelLoadCommandType : ushort
         {
             End = 0x00,
-            PaletteDemo = 0x04,
-            LevelMap = 0x08,
-            Graphics = 0x0C,
-            Unk1 = 0x10,
-            SpritesProto = 0x14,
-            MoveGraphics = 0x18,
+            PaletteDemo = 0x04, // "trans"
+            Map = 0x08,
+            Unzip = 0x0C, // Graphics
+            Fill = 0x10,
+            SpritesProto = 0x14, // "tranl"
+            Copy = 0x18, // Move graphics
             Unk3 = 0x1C,
             UnkEventDef1 = 0x20,
             Sprites = 0x24,
