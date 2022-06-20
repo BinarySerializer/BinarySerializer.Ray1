@@ -100,6 +100,7 @@ namespace BinarySerializer.Ray1
         {
             var settings = s.GetSettings<Ray1Settings>();
 
+            // TODO: For Jaguar we should serialize sprites as JAG_Object instead
             if (settings.EngineBranch == Ray1EngineBranch.Jaguar)
             {
                 ImageBufferOffset = s.Serialize<UInt24>((UInt24)ImageBufferOffset, name: nameof(ImageBufferOffset));

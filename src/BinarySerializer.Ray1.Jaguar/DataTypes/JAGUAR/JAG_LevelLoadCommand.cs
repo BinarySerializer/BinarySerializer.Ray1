@@ -153,8 +153,11 @@ namespace BinarySerializer.Ray1.Jaguar
             Sprites = 0x24,
             NotImplemented3 = 0x28,
             NotImplemented4 = 0x2C,
+
+            // TODO: These probably load the multi-sprite data for the parallax scrolling sprites. Those verbe types reference tables with the sprite data.
             UnkEventDef2 = 0x30, // Pointer to code pointer
             UnkEventDef3 = 0x34, // Pointer to an empty entry with only first pointer and a code pointer.
+            
             Palette = 0x38,
             NotImplemented5 = 0x3C,
             NotImplemented6 = 0x40,

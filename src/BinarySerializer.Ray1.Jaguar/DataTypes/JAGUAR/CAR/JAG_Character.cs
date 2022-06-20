@@ -2,10 +2,7 @@
 {
     public class JAG_Character : BinarySerializable
     {
-        public int Tech1 { get; set; }
-        public int Tech2 { get; set; }
-        public int Tech3 { get; set; }
-        public int Tech4 { get; set; }
+        public JAG_Object Tech { get; set; }
 
         public byte _1 { get; set; }
         public byte _2 { get; set; }
@@ -29,10 +26,7 @@
 
         public override void SerializeImpl(SerializerObject s)
         {
-            Tech1 = s.Serialize<int>(Tech1, name: nameof(Tech1));
-            Tech2 = s.Serialize<int>(Tech2, name: nameof(Tech2));
-            Tech3 = s.Serialize<int>(Tech3, name: nameof(Tech3));
-            Tech4 = s.Serialize<int>(Tech4, name: nameof(Tech4));
+            Tech = s.SerializeObject<JAG_Object>(Tech, name: nameof(Tech));
 
             _1 = s.Serialize<byte>(_1, name: nameof(_1));
             _2 = s.Serialize<byte>(_2, name: nameof(_2));
