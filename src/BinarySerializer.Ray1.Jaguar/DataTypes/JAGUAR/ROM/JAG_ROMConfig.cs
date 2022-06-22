@@ -5,6 +5,20 @@ namespace BinarySerializer.Ray1.Jaguar
     public class JAG_ROMConfig
     {
         #region Static Properties and Methods
+            
+        /*
+        World 7:
+        0 = World Map
+        1 = Breakout
+        2 = ? (crashes)
+        3 = Player Select
+        4 = Game Over
+        5 = Big Ray
+        6 = Credits
+        7 = Intro
+        8 = Demo
+        9 = Ubi Logo
+        */
 
         public static JAG_ROMConfig JAG => new JAG_ROMConfig(
             numLevels: new KeyValuePair<World, int>[]
