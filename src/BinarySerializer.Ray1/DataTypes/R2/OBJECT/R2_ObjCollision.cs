@@ -60,6 +60,8 @@ namespace BinarySerializer.Ray1
             None = 0,
 
             HurtsRayman = 1 << 2,
+
+            BlockCollision = 1 << 6, // Indicates if effected by tile collision
         }
     }
 }

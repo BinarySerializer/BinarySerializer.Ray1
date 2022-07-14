@@ -22,7 +22,7 @@ namespace BinarySerializer.Ray1
             YPosition = (short)(rayPos != null ? (rayPos.YPosition + rayPos.CollisionData.OffsetBY - data.RaymanCollisionData.OffsetBY) : 10),
             Etat = 0, // It's supposed to be Etat 2, SubEtat 2, but the ray pos state has a better looking speed
             SubEtat = 19,
-            MapLayer = ObjMapLayer.Front,
+            InitialMapLayer = ObjMapLayer.Front,
             Unk2 = new byte[17],
             ObjType = R2_ObjType.Rayman,
             DisplayPrio = 7,
@@ -77,7 +77,7 @@ namespace BinarySerializer.Ray1
 
         public byte InitialDisplayPrio { get; set; }
 
-        public ObjMapLayer MapLayer { get; set; }
+        public ObjMapLayer InitialMapLayer { get; set; }
 
         // 26 (0x24)
 
@@ -146,7 +146,7 @@ namespace BinarySerializer.Ray1
 
         // 100 (0x64)
 
-        public ObjMapLayer RuntimeMapLayer { get; set; }
+        public ObjMapLayer MapLayer { get; set; }
 
         public byte[] Bytes_65 { get; set; }
 
@@ -207,7 +207,7 @@ namespace BinarySerializer.Ray1
             InitialSubEtat = s.Serialize<byte>(InitialSubEtat, name: nameof(InitialSubEtat));
             InitialHitPoints = s.Serialize<byte>(InitialHitPoints, name: nameof(InitialHitPoints));
             InitialDisplayPrio = s.Serialize<byte>(InitialDisplayPrio, name: nameof(InitialDisplayPrio));
-            MapLayer = s.Serialize<ObjMapLayer>(MapLayer, name: nameof(MapLayer));
+            InitialMapLayer = s.Serialize<ObjMapLayer>(InitialMapLayer, name: nameof(InitialMapLayer));
 
             Byte_25 = s.Serialize<byte>(Byte_25, name: nameof(Byte_25));
             Flags = s.Serialize<PS1_R2Demo_ObjFlags>(Flags, name: nameof(Flags));
@@ -252,7 +252,7 @@ namespace BinarySerializer.Ray1
 
             Bytes_5B = s.SerializeArray(Bytes_5B, 9, name: nameof(Bytes_5B));
 
-            RuntimeMapLayer = s.Serialize<ObjMapLayer>(RuntimeMapLayer, name: nameof(RuntimeMapLayer));
+            MapLayer = s.Serialize<ObjMapLayer>(MapLayer, name: nameof(MapLayer));
 
             Bytes_65 = s.SerializeArray(Bytes_65, 2, name: nameof(Bytes_65));
 
