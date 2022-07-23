@@ -112,14 +112,14 @@
 
             // At this point the stream position should match the texture block offset
             if (s.CurrentPointer != TextureBlockPointer)
-                s.LogWarning("Texture block offset is incorrect");
+                s.Context.Logger?.LogWarning("Texture block offset is incorrect");
 
             // Serialize the tile textures
             TileTextureData = s.SerializeObject<PC_TileTextureBlock>(TileTextureData, name: nameof(TileTextureData));
 
             // At this point the stream position should match the obj block offset (ignore the Pocket PC version here since it uses leftover pointers from PC version)
             if (settings.EngineVersion != Ray1EngineVersion.PocketPC && s.CurrentPointer != ObjDataBlockPointer)
-                s.LogWarning("Object block offset is incorrect");
+                s.Context.Logger?.LogWarning("Object block offset is incorrect");
 
             // Serialize the object data
             ObjData = s.SerializeObject<PC_ObjBlock>(ObjData, name: nameof(ObjData));
