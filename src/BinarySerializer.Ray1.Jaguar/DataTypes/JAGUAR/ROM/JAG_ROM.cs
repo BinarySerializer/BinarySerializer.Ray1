@@ -310,7 +310,7 @@ namespace BinarySerializer.Ray1.Jaguar
                         }
                         catch (Exception ex)
                         {
-                            s.LogWarning($"Failed to serialize image buffer at {cmd.ImageBufferMemoryPointerPointer} with error {ex.Message}");
+                            s.SystemLog?.LogWarning($"Failed to serialize image buffer at {cmd.ImageBufferMemoryPointerPointer} with error {ex.Message}");
                             ImageBuffers[cmd.ImageBufferMemoryPointerPointer] = new byte[0];
                         }
                         index++;
@@ -331,7 +331,7 @@ namespace BinarySerializer.Ray1.Jaguar
 
                 foreach (JAG_WorldInfo worldInfo in WorldInfos)
                     foreach (JAG_WorldInfoLink link in worldInfo.Links)
-                        link.EntryPointer.Resolve(s);
+                        link.EntryPointer?.ResolveObject(s);
             }
             else
             {

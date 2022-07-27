@@ -545,7 +545,7 @@ namespace BinarySerializer.Ray1
                 s.DoAt(ETAPointer, () => ETA = s.SerializeObject<ETA>(ETA, name: nameof(ETA)));
 
             if (ETA?.States?.ElementAtOrDefault(Etat)?.ElementAtOrDefault(SubEtat) == null)
-                s.Context.Logger?.LogWarning($"Matching obj state not found for obj {Type} at {XPosition}x{YPosition} with E{Etat},SE{SubEtat} for {settings.EngineVersion} in {settings.World}{settings.Level}");
+                s.Context.SystemLog?.LogWarning($"Matching obj state not found for obj {Type} at {XPosition}x{YPosition} with E{Etat},SE{SubEtat} for {settings.EngineVersion} in {settings.World}{settings.Level}");
         }
 
         public ObjData InitRayman(Context context, ObjData rayPos)

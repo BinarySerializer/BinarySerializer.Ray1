@@ -28,8 +28,8 @@
             if (settings.EngineVersion == Ray1EngineVersion.Jaguar)
             {
                 Bytes_0E = s.SerializeArray<byte>(Bytes_0E, 4, name: nameof(Bytes_0E));
-                WorldNamePointer = s.SerializePointer<Jag_ColoredString>(WorldNamePointer, resolve: true, name: nameof(WorldNamePointer));
-                LevelNamePointer = s.SerializePointer<Jag_ColoredString>(LevelNamePointer, resolve: true, name: nameof(LevelNamePointer));
+                WorldNamePointer = s.SerializePointer<Jag_ColoredString>(WorldNamePointer, name: nameof(WorldNamePointer))?.ResolveObject(s);
+                LevelNamePointer = s.SerializePointer<Jag_ColoredString>(LevelNamePointer, name: nameof(LevelNamePointer))?.ResolveObject(s);
                 UnusedPointer = s.SerializePointer(UnusedPointer, name: nameof(UnusedPointer));
             }
 

@@ -46,7 +46,7 @@ namespace BinarySerializer.Ray1
                     if (p.File != pointer.File || 
                         p.AbsoluteOffset < pointer.AbsoluteOffset + 4 || 
                         (p.AbsoluteOffset - pointer.AbsoluteOffset) % 4 != 0)
-                        s.Context.Logger?.LogWarning("Number of ETAs wasn't correctly determined");
+                        s.Context.SystemLog?.LogWarning("Number of ETAs wasn't correctly determined");
 
                     EtatCount = (p.AbsoluteOffset - pointer.AbsoluteOffset) / 4;
                 });
@@ -80,7 +80,7 @@ namespace BinarySerializer.Ray1
                     if (EtatPointers[i + 1] != null)
                         SubEtatCount[i] = (EtatPointers[i + 1].AbsoluteOffset - EtatPointers[i].AbsoluteOffset) / stateSize;
                     else
-                        s.Context.Logger?.LogWarning("An Etat Pointer was null - Number of SubEtats couldn't be determined");
+                        s.Context.SystemLog?.LogWarning("An Etat Pointer was null - Number of SubEtats couldn't be determined");
                 }
 
                 // Get the size of the last Etat
