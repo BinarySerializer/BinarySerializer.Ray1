@@ -9,8 +9,8 @@
 
         public byte LivesDigit0 { get; set; }
         public byte LivesDigit1 { get; set; }
-        public byte Byte_04 { get; set; }
-        public byte Byte_05 { get; set; }
+        public byte Byte_04 { get; set; } // TODO: 'hp - 2' if more than 2, otherwise 0.
+        public byte Byte_05 { get; set; } // TODO: 2 if hp is more than 2, otherwise hp.
 
         /// <summary>
         /// The current number of tings, 0-99
