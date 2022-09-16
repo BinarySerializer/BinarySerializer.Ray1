@@ -40,41 +40,45 @@
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            MapBlockChecksum = s.DoChecksum(new Checksum8Calculator(), () =>
-            {
-                // Serialize map size
-                Width = s.Serialize<ushort>(Width, name: nameof(Width));
-                Height = s.Serialize<ushort>(Height, name: nameof(Height));
-
-                // Create the palettes if necessary
-                if (ColorPalettes == null)
+            MapBlockChecksum = s.DoChecksum(
+                c: settings.EngineVersion is Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Fan or Ray1EngineVersion.PC_Edu 
+                    ? new Checksum8Calculator() 
+                    : null,
+                value: MapBlockChecksum,
+                placement: ChecksumPlacement.Before,
+                name: nameof(MapBlockChecksum),
+                action: () =>
                 {
-                    ColorPalettes = settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Fan ? new RGB666Color[][]
-                    {
-                        new RGB666Color[256],
-                    } : new RGB666Color[][]
-                    {
-                        new RGB666Color[256],
-                        new RGB666Color[256],
-                        new RGB666Color[256],
-                    };
-                }
+                    // Serialize map size
+                    Width = s.Serialize<ushort>(Width, name: nameof(Width));
+                    Height = s.Serialize<ushort>(Height, name: nameof(Height));
 
-                // Serialize each palette
-                for (var paletteIndex = 0; paletteIndex < ColorPalettes.Length; paletteIndex++)
-                {
-                    var palette = ColorPalettes[paletteIndex];
-                    ColorPalettes[paletteIndex] = s.SerializeObjectArray<RGB666Color>(palette, palette.Length, name: $"{nameof(ColorPalettes)}[{paletteIndex}]");
-                }
-                
-                // Serialize unknown byte
-                LastPlan1Palette = s.Serialize<byte>(LastPlan1Palette, name: nameof(LastPlan1Palette));
+                    // Create the palettes if necessary
+                    ColorPalettes ??= settings.EngineVersion is Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Fan 
+                        ? new RGB666Color[][] 
+                        {
+                            new RGB666Color[256],
+                        }
+                        : new RGB666Color[][] 
+                        {
+                            new RGB666Color[256],
+                            new RGB666Color[256],
+                            new RGB666Color[256],
+                        };
 
-                // Serialize the map cells
-                Tiles = s.SerializeObjectArray<MapTile>(Tiles, Height * Width, name: nameof(Tiles));
-            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
-                                                            settings.EngineVersion == Ray1EngineVersion.PC_Fan || 
-                                                            settings.EngineVersion == Ray1EngineVersion.PC_Edu, name: nameof(MapBlockChecksum));
+                    // Serialize each palette
+                    for (var paletteIndex = 0; paletteIndex < ColorPalettes.Length; paletteIndex++)
+                    {
+                        var palette = ColorPalettes[paletteIndex];
+                        ColorPalettes[paletteIndex] = s.SerializeObjectArray<RGB666Color>(palette, palette.Length, name: $"{nameof(ColorPalettes)}[{paletteIndex}]");
+                    }
+                    
+                    // Serialize unknown byte
+                    LastPlan1Palette = s.Serialize<byte>(LastPlan1Palette, name: nameof(LastPlan1Palette));
+
+                    // Serialize the map cells
+                    Tiles = s.SerializeObjectArray<MapTile>(Tiles, Height * Width, name: nameof(Tiles));
+                });
         }
     }
 }

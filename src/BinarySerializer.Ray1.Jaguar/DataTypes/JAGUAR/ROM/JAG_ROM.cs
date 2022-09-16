@@ -125,7 +125,7 @@ namespace BinarySerializer.Ray1.Jaguar
                 if (!s.Context.FileExists(key))
                 {
                     // Copied to 0x001f9000 in memory. All pointers to 0x001Fxxxx likely point to an entry in this table
-                    s.DoAt(s.GetPreDefinedPointer(JAG_DefinedPointer.EventDefinitions), () =>
+                    s.DoAt(s.GetRequiredPreDefinedPointer(JAG_DefinedPointer.EventDefinitions), () =>
                     {
                         byte[] eventDefsDataBytes = s.SerializeArray<byte>(null, config.EventCount * 0x28, name: nameof(eventDefsDataBytes));
                         var file = new MemoryMappedStreamFile(s.Context, key, 0x001f9000, eventDefsDataBytes, Endian.Big);
@@ -136,7 +136,7 @@ namespace BinarySerializer.Ray1.Jaguar
             }
             else
             {
-                var offset = settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto ? GetProtoDataPointer(JAG_Proto_References.MS_rayman) : s.GetPreDefinedPointer(JAG_DefinedPointer.EventDefinitions);
+                var offset = settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto ? GetProtoDataPointer(JAG_Proto_References.MS_rayman) : s.GetRequiredPreDefinedPointer(JAG_DefinedPointer.EventDefinitions);
 
                 // Pointers all point to the ROM, not RAM
                 s.DoAt(offset, () => EventDefinitions = s.SerializeObjectArray<JAG_MultiSprite>(EventDefinitions,
@@ -149,7 +149,7 @@ namespace BinarySerializer.Ray1.Jaguar
                 {
                     AdditionalEventDefinitions = config.AdditionalEventDefinitionPointers.Select(p =>
                     {
-                        return s.DoAt(new Pointer(p, s.GetPreDefinedPointer(JAG_DefinedPointer.EventDefinitions).File), () => s.SerializeObject<JAG_MultiSprite>(default, name: nameof(AdditionalEventDefinitions)));
+                        return s.DoAt(new Pointer(p, s.GetRequiredPreDefinedPointer(JAG_DefinedPointer.EventDefinitions).File), () => s.SerializeObject<JAG_MultiSprite>(default, name: nameof(AdditionalEventDefinitions)));
                     }).ToArray();
                 }
                 else
@@ -162,10 +162,10 @@ namespace BinarySerializer.Ray1.Jaguar
             if (settings.EngineVersion != Ray1EngineVersion.Jaguar_Proto)
             {
                 // Serialize allfix sprite data
-                s.DoAt(s.GetPreDefinedPointer(JAG_DefinedPointer.FixSprites), () => AllfixLoadCommands = s.SerializeObject<JAG_LevelLoadCommandCollection>(AllfixLoadCommands, name: nameof(AllfixLoadCommands)));
+                s.DoAt(s.GetRequiredPreDefinedPointer(JAG_DefinedPointer.FixSprites), () => AllfixLoadCommands = s.SerializeObject<JAG_LevelLoadCommandCollection>(AllfixLoadCommands, name: nameof(AllfixLoadCommands)));
 
                 // Serialize world sprite data
-                s.DoAt(s.GetPreDefinedPointer(JAG_DefinedPointer.WorldSprites), () =>
+                s.DoAt(s.GetRequiredPreDefinedPointer(JAG_DefinedPointer.WorldSprites), () =>
                 {
                     WorldLoadCommandPointers ??= new Pointer[6];
                     WorldLoadCommands ??= new JAG_LevelLoadCommandCollection[6];
@@ -184,7 +184,7 @@ namespace BinarySerializer.Ray1.Jaguar
                     }
                 });
 
-                s.DoAt(s.GetPreDefinedPointer(JAG_DefinedPointer.MapData), () =>
+                s.DoAt(s.GetRequiredPreDefinedPointer(JAG_DefinedPointer.MapData), () =>
                 {
                     LevelLoadCommandPointers ??= new Pointer[7][];
                     LevelLoadCommands ??= new JAG_LevelLoadCommandCollection[7][];
@@ -326,7 +326,7 @@ namespace BinarySerializer.Ray1.Jaguar
 
                 // Although this isn't an array it's easiest to parse it like this. The game however has pointers to each entry
                 // from pointer tables which appear right before this.
-                s.DoAt(s.GetPreDefinedPointer(JAG_DefinedPointer.WorldInfos), () => 
+                s.DoAt(s.GetRequiredPreDefinedPointer(JAG_DefinedPointer.WorldInfos), () => 
                     WorldInfos = s.SerializeObjectArray<JAG_WorldInfo>(WorldInfos, config.WorldInfoCount, name: nameof(WorldInfos)));
 
                 foreach (JAG_WorldInfo worldInfo in WorldInfos)

@@ -21,10 +21,10 @@
             if (settings.EngineVersion == Ray1EngineVersion.GBA)
             {
                 // Hard-code properties
-                ImageDataPointer = s.GetPreDefinedPointer(GBA_DefinedPointer.WorldMapVignetteImageData);
-                BlockIndicesPointer = s.GetPreDefinedPointer(GBA_DefinedPointer.WorldMapVignetteBlockIndices);
-                PaletteIndicesPointer = s.GetPreDefinedPointer(GBA_DefinedPointer.WorldMapVignettePaletteIndices);
-                PalettesPointer = s.GetPreDefinedPointer(GBA_DefinedPointer.WorldMapVignettePalettes);
+                ImageDataPointer = s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.WorldMapVignetteImageData);
+                BlockIndicesPointer = s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.WorldMapVignetteBlockIndices);
+                PaletteIndicesPointer = s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.WorldMapVignettePaletteIndices);
+                PalettesPointer = s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.WorldMapVignettePalettes);
 
                 // Serialize data from pointers
                 SerializeVignette(s, false);
@@ -32,7 +32,7 @@
             else if (settings.EngineVersion == Ray1EngineVersion.DSi)
             {
                 // Serialize pointers
-                s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.WorldMapVignette), () =>
+                s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.WorldMapVignette), () =>
                 {
                     PalettesPointer = s.SerializePointer(PalettesPointer, name: nameof(PalettesPointer));
                     ImageDataPointer = s.SerializePointer(ImageDataPointer, name: nameof(ImageDataPointer));

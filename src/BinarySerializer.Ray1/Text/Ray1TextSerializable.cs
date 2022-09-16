@@ -22,7 +22,7 @@ namespace BinarySerializer.Ray1
 
                 OnPreSerialize(path);
 
-                using (Ray1TextParser parser = new Ray1TextParser(context.GetSettings<Ray1Settings>(), s, encoding))
+                using (Ray1TextParser parser = new Ray1TextParser(context.GetRequiredSettings<Ray1Settings>(), s, encoding))
                     Read(parser);
 
                 OnPostSerialize(path);
@@ -37,7 +37,7 @@ namespace BinarySerializer.Ray1
                 
                 OnPreSerialize(path);
 
-                using (Ray1TextParser parser = new Ray1TextParser(context.GetSettings<Ray1Settings>(), s, encoding))
+                using (Ray1TextParser parser = new Ray1TextParser(context.GetRequiredSettings<Ray1Settings>(), s, encoding))
                     Write(parser);
 
                 OnPostSerialize(path);

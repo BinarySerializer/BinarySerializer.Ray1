@@ -32,34 +32,49 @@ namespace BinarySerializer.Ray1
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            var isEncryptedAndChecksum = settings.EngineVersion != Ray1EngineVersion.PS1_Edu;
+            bool isEncryptedAndChecksum = settings.EngineVersion != Ray1EngineVersion.PS1_Edu;
 
-            LevelDefineChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
-            {
-                s.DoXOR((byte)(isEncryptedAndChecksum ? 0x57 : 0), () =>
+            LevelDefineChecksum = s.DoChecksum(
+                c: isEncryptedAndChecksum ? new Checksum8Calculator(false) : null,
+                value: LevelDefineChecksum,
+                placement: ChecksumPlacement.Before,
+                name: nameof(LevelDefineChecksum),
+                action: () =>
                 {
-                    CDTrackAdress = s.Serialize<uint>(CDTrackAdress, name: nameof(CDTrackAdress));
-                    LevelDefine_4 = s.SerializeArray<byte>(LevelDefine_4, 2, name: nameof(LevelDefine_4));
-                    CDTrack = s.Serialize<byte>(CDTrack, name: nameof(CDTrack));
-                    CurrentFNDIndex = s.Serialize<byte>(CurrentFNDIndex, name: nameof(CurrentFNDIndex));
-                    FNDIndex = s.Serialize<byte>(FNDIndex, name: nameof(FNDIndex));
-                    ScrollDiffFNDIndex = s.Serialize<byte>(ScrollDiffFNDIndex, name: nameof(ScrollDiffFNDIndex));
-                    s.SerializePadding(1);
-                    EffectFlags = s.Serialize<LevelEffectFlags>(EffectFlags, name: nameof(EffectFlags));
-                    RayEvts = s.Serialize<RayEvts>(RayEvts, name: nameof(RayEvts));
-                    UnkByte = s.Serialize<byte>(UnkByte, name: nameof(UnkByte));
+                    s.DoXOR((byte)(isEncryptedAndChecksum ? 0x57 : 0), () =>
+                    {
+                        CDTrackAdress = s.Serialize<uint>(CDTrackAdress, name: nameof(CDTrackAdress));
+                        LevelDefine_4 = s.SerializeArray<byte>(LevelDefine_4, 2, name: nameof(LevelDefine_4));
+                        CDTrack = s.Serialize<byte>(CDTrack, name: nameof(CDTrack));
+                        CurrentFNDIndex = s.Serialize<byte>(CurrentFNDIndex, name: nameof(CurrentFNDIndex));
+                        FNDIndex = s.Serialize<byte>(FNDIndex, name: nameof(FNDIndex));
+                        ScrollDiffFNDIndex = s.Serialize<byte>(ScrollDiffFNDIndex, name: nameof(ScrollDiffFNDIndex));
+                        s.SerializePadding(1);
+                        EffectFlags = s.Serialize<LevelEffectFlags>(EffectFlags, name: nameof(EffectFlags));
+                        RayEvts = s.Serialize<RayEvts>(RayEvts, name: nameof(RayEvts));
+                        UnkByte = s.Serialize<byte>(UnkByte, name: nameof(UnkByte));
+                    });
                 });
-            }, ChecksumPlacement.Before, calculateChecksum: isEncryptedAndChecksum, name: nameof(LevelDefineChecksum));
 
-            BackgroundDefineNormalChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
-            {
-                s.DoXOR((byte)(isEncryptedAndChecksum ? 0xA5 : 0), () => BackgroundDefineNormal = s.SerializeObjectArray<BackgroundLayerPosition>(BackgroundDefineNormal, 6, name: nameof(BackgroundDefineNormal)));
-            }, ChecksumPlacement.Before, calculateChecksum: isEncryptedAndChecksum, name: nameof(BackgroundDefineNormalChecksum));
+            BackgroundDefineNormalChecksum = s.DoChecksum(
+                c: isEncryptedAndChecksum ? new Checksum8Calculator(false) : null,
+                value: BackgroundDefineNormalChecksum,
+                placement: ChecksumPlacement.Before,
+                name: nameof(BackgroundDefineNormalChecksum), 
+                action: () =>
+                {
+                    s.DoXOR((byte)(isEncryptedAndChecksum ? 0xA5 : 0), () => BackgroundDefineNormal = s.SerializeObjectArray<BackgroundLayerPosition>(BackgroundDefineNormal, 6, name: nameof(BackgroundDefineNormal)));
+                });
 
-            BackgroundDefineDiffChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
-            {
-                s.DoXOR((byte)(isEncryptedAndChecksum ? 0xA5 : 0), () => BackgroundDefineDiff = s.SerializeObjectArray<BackgroundLayerPosition>(BackgroundDefineDiff, 6, name: nameof(BackgroundDefineDiff)));
-            }, ChecksumPlacement.Before, calculateChecksum: isEncryptedAndChecksum, name: nameof(BackgroundDefineDiffChecksum));
+            BackgroundDefineDiffChecksum = s.DoChecksum(
+                c: isEncryptedAndChecksum ? new Checksum8Calculator(false) : null,
+                value: BackgroundDefineDiffChecksum,
+                placement: ChecksumPlacement.Before,
+                name: nameof(BackgroundDefineDiffChecksum), 
+                action: () =>
+                {
+                    s.DoXOR((byte)(isEncryptedAndChecksum ? 0xA5 : 0), () => BackgroundDefineDiff = s.SerializeObjectArray<BackgroundLayerPosition>(BackgroundDefineDiff, 6, name: nameof(BackgroundDefineDiff)));
+                });
         }
 
         [Flags]

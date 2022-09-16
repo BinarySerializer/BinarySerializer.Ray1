@@ -15,8 +15,8 @@ namespace BinarySerializer.Ray1
         /// <summary>
         /// Gets a new obj instance for Rayman
         /// </summary>
-        public static ObjData GetRayman(Context context, ObjData rayPos) => CreateObj(context.GetSettings<Ray1Settings>()).InitRayman(context, rayPos);
-        public static ObjData GetMapObj(Context context, short x, short y, int index) => CreateObj(context.GetSettings<Ray1Settings>()).InitMapObj(context, x, y, index);
+        public static ObjData GetRayman(Context context, ObjData rayPos) => CreateObj(context.GetRequiredSettings<Ray1Settings>()).InitRayman(context, rayPos);
+        public static ObjData GetMapObj(Context context, short x, short y, int index) => CreateObj(context.GetRequiredSettings<Ray1Settings>()).InitMapObj(context, x, y, index);
         public static ObjData CreateObj(Ray1Settings settings) => new ObjData
         {
             PS1Demo_Unk1 = new byte[40],
@@ -550,7 +550,7 @@ namespace BinarySerializer.Ray1
 
         public ObjData InitRayman(Context context, ObjData rayPos)
         {
-            var settings = context.GetSettings<Ray1Settings>();
+            var settings = context.GetRequiredSettings<Ray1Settings>();
 
             OffsetBX = 80;
             OffsetBY = (byte)(settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 || 
@@ -597,7 +597,7 @@ namespace BinarySerializer.Ray1
         // Copied from INIT_CHEMIN
         public ObjData InitMapObj(Context context, short x, short y, int index)
         {
-            var settings = context.GetSettings<Ray1Settings>();
+            var settings = context.GetRequiredSettings<Ray1Settings>();
 
             Type = ObjType.TYPE_MEDAILLON;
             Etat = 5;

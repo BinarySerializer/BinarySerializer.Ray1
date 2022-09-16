@@ -59,28 +59,38 @@
             // Serialize the length of the third unknown value
             BlocksCodeCount = s.Serialize<uint>(BlocksCodeCount, name: nameof(BlocksCodeCount));
 
-            GrosPataiBlockChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
-            {
-                s.DoXOR(0x7D, () =>
+            GrosPataiBlockChecksum = s.DoChecksum(
+                c: new Checksum8Calculator(false),
+                value: GrosPataiBlockChecksum,
+                placement: ChecksumPlacement.After,
+                name: nameof(GrosPataiBlockChecksum), 
+                action: () =>
                 {
-                    // Create the collection of rough textures if necessary
-                    GrosPataiBlock ??= new byte[GrosPataiBlockCount][];
+                    s.DoXOR(0x7D, () =>
+                    {
+                        // Create the collection of rough textures if necessary
+                        GrosPataiBlock ??= new byte[GrosPataiBlockCount][];
 
-                    // Serialize each rough texture
-                    for (int i = 0; i < GrosPataiBlockCount; i++)
-                        GrosPataiBlock[i] = s.SerializeArray<byte>(GrosPataiBlock[i], Ray1Settings.CellSize * Ray1Settings.CellSize, name:
-                            $"{nameof(GrosPataiBlock)}[{i}]");
+                        // Serialize each rough texture
+                        for (int i = 0; i < GrosPataiBlockCount; i++)
+                            GrosPataiBlock[i] = s.SerializeArray<byte>(GrosPataiBlock[i], Ray1Settings.CellSize * Ray1Settings.CellSize, name:
+                                $"{nameof(GrosPataiBlock)}[{i}]");
+                    });
                 });
-            }, ChecksumPlacement.After, name: nameof(GrosPataiBlockChecksum));
 
             // Read the offset table for the rough textures
             GrosPataiBlockOffsetTable = s.SerializeArray<uint>(GrosPataiBlockOffsetTable, 1200, name: nameof(GrosPataiBlockOffsetTable));
 
-            BlocksCodeChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
-            {
-                // Serialize the items for the third unknown value
-                s.DoXOR(0xF3, () => BlocksCode = s.SerializeArray<byte>(BlocksCode, BlocksCodeCount, name: nameof(BlocksCode)));
-            }, ChecksumPlacement.After, name: nameof(BlocksCodeChecksum));
+            BlocksCodeChecksum = s.DoChecksum(
+                c: new Checksum8Calculator(false),
+                value: BlocksCodeChecksum,
+                placement: ChecksumPlacement.After,
+                name: nameof(BlocksCodeChecksum),
+                action: () =>
+                {
+                    // Serialize the items for the third unknown value
+                    s.DoXOR(0xF3, () => BlocksCode = s.SerializeArray<byte>(BlocksCode, BlocksCodeCount, name: nameof(BlocksCode)));
+                });
 
             // Read the offset table for the third unknown value
             BlocksCodeOffsetTable = s.SerializeArray<uint>(BlocksCodeOffsetTable, 1200, name: nameof(BlocksCodeOffsetTable));

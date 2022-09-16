@@ -36,21 +36,26 @@
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetSettings<Ray1Settings>();
 
-            ObjBlockChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
-            {
-                // Set the xor key to use for the obj block
-                s.DoXOR((byte)(settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC ? 0 : 0x91), () =>
+            ObjBlockChecksum = s.DoChecksum(
+                c: settings.EngineVersion is Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Edu or Ray1EngineVersion.PC_Fan 
+                    ? new Checksum8Calculator(false) 
+                    : null,
+                value: ObjBlockChecksum,
+                placement: ChecksumPlacement.Before,
+                name: nameof(ObjBlockChecksum),
+                action: () =>
                 {
-                    ObjCount = s.Serialize<ushort>(ObjCount, name: nameof(ObjCount));
-                    ObjLinkingTable = s.SerializeArray<ushort>(ObjLinkingTable, ObjCount, name: nameof(ObjLinkingTable));
-                    Objects = s.SerializeObjectArray<ObjData>(Objects, ObjCount, name: nameof(Objects));
-                    ObjCommands = s.SerializeObjectArray<PC_CommandCollection>(ObjCommands, ObjCount, name: nameof(ObjCommands));
+                    // Set the xor key to use for the obj block
+                    s.DoXOR((byte)(settings.EngineVersion is Ray1EngineVersion.PC or Ray1EngineVersion.PocketPC ? 0 : 0x91), () =>
+                    {
+                        ObjCount = s.Serialize<ushort>(ObjCount, name: nameof(ObjCount));
+                        ObjLinkingTable = s.SerializeArray<ushort>(ObjLinkingTable, ObjCount, name: nameof(ObjLinkingTable));
+                        Objects = s.SerializeObjectArray<ObjData>(Objects, ObjCount, name: nameof(Objects));
+                        ObjCommands = s.SerializeObjectArray<PC_CommandCollection>(ObjCommands, ObjCount, name: nameof(ObjCommands));
+                    });
                 });
-            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
-                                                            settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
-                                                            settings.EngineVersion == Ray1EngineVersion.PC_Fan, name: nameof(ObjBlockChecksum));
         }
     }
 }

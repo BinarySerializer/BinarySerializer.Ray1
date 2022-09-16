@@ -124,7 +124,7 @@ namespace BinarySerializer.Ray1.GBA
                 s.DoAt(MapDataPointer, () => 
                 {
                     if ((CompressionFlags & 1) == 1)
-                        MapData = s.DoEncoded(new LZSSEncoder(), () => s.SerializeObject<MapData>(MapData, name: nameof(MapData)));
+                        s.DoEncoded(new LZSSEncoder(), () => MapData = s.SerializeObject<MapData>(MapData, name: nameof(MapData)));
                     else
                         MapData = s.SerializeObject<MapData>(MapData, name: nameof(MapData));
                 });
@@ -152,10 +152,10 @@ namespace BinarySerializer.Ray1.GBA
             }
             else if (settings.EngineVersion == Ray1EngineVersion.DSi)
             {
-                MapData = s.DoAt(MapDataPointer, () => 
-                    s.DoEncoded(new LZSSEncoder(), () => s.SerializeObject<MapData>(MapData, name: nameof(MapData))));
-                TileData = s.DoAt(TileDataPointer, () => 
-                    s.DoEncoded(new LZSSEncoder(), () => s.SerializeArray<byte>(TileData, s.CurrentLength, name: nameof(TileData))));
+                s.DoAt(MapDataPointer, () => s.DoEncoded(new LZSSEncoder(), () => 
+                    MapData = s.SerializeObject<MapData>(MapData, name: nameof(MapData))));
+                s.DoAt(TileDataPointer, () => s.DoEncoded(new LZSSEncoder(), () => 
+                    TileData = s.SerializeArray<byte>(TileData, s.CurrentLength, name: nameof(TileData))));
                 TilePalettes = s.DoAt(TilePalettePointer, () => 
                     s.SerializeObjectArray<RGBA5551Color>(TilePalettes, 256, name: nameof(TilePalettes)));
                 TileBlockIndices = s.DoAt(TileBlockIndicesPointer, () => 

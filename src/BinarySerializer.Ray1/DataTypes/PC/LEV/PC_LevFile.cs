@@ -131,14 +131,18 @@
             // Serialize alpha data (only on EDU)
             if (settings.EngineVersion == Ray1EngineVersion.PC_Edu)
             {
-                EDU_AlphaChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
-                {
-                    if (EDU_Alpha == null)
-                        EDU_Alpha = new byte[480][];
+                EDU_AlphaChecksum = s.DoChecksum(
+                    c: new Checksum8Calculator(false),
+                    value: EDU_AlphaChecksum,
+                    placement: ChecksumPlacement.Before,
+                    name: nameof(EDU_AlphaChecksum), 
+                    action: () =>
+                    {
+                        EDU_Alpha ??= new byte[480][];
 
-                    for (int i = 0; i < EDU_Alpha.Length; i++)
-                        EDU_Alpha[i] = s.SerializeArray<byte>(EDU_Alpha[i], 256, name: $"{nameof(EDU_Alpha)}[{i}]");
-                }, ChecksumPlacement.Before, name: nameof(EDU_AlphaChecksum));
+                        for (int i = 0; i < EDU_Alpha.Length; i++)
+                            EDU_Alpha[i] = s.SerializeArray<byte>(EDU_Alpha[i], 256, name: $"{nameof(EDU_Alpha)}[{i}]");
+                    });
             }
 
             // Correct pointers

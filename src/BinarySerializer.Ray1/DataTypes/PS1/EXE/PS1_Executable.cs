@@ -26,13 +26,13 @@ namespace BinarySerializer.Ray1
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.TypeZDC, required: false), () => 
+            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.TypeZDC), () => 
                 TypeZDC = s.SerializeObjectArray<ZDCEntry>(TypeZDC, 256, name: nameof(TypeZDC)));
 
-            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ZDCData, required: false), () => 
+            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ZDCData), () => 
                 ZDCData = s.SerializeObjectArray<ZDCData>(ZDCData, 200, name: nameof(ZDCData)));
 
-            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ObjTypeFlags, required: false), () => 
+            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ObjTypeFlags), () => 
             {
                 if (settings.EngineVersion == Ray1EngineVersion.Saturn)
                     ObjTypeFlags = s.SerializeArray<int>(ObjTypeFlags?.Select(x => BitHelpers.ReverseBits((int)x)).ToArray(), 256, name: nameof(ObjTypeFlags)).Select(BitHelpers.ReverseBits).Select(x => (ObjTypeFlags)x).ToArray();
@@ -40,12 +40,12 @@ namespace BinarySerializer.Ray1
                     ObjTypeFlags = s.SerializeArray<ObjTypeFlags>(ObjTypeFlags, 256, name: nameof(ObjTypeFlags));
             });
 
-            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.WorldInfo, required: false), () => 
+            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.WorldInfo), () => 
                 WorldInfo = s.SerializeObjectArray<WorldInfo>(WorldInfo, 24, name: nameof(WorldInfo)));
 
             PS1_LevelBackgroundIndexTable ??= new byte[6][];
 
-            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.PS1_LevelBackgroundIndexTable, required: false), () =>
+            s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.PS1_LevelBackgroundIndexTable), () =>
             {
                 for (int i = 0; i < PS1_LevelBackgroundIndexTable.Length; i++)
                     PS1_LevelBackgroundIndexTable[i] = s.SerializeArray<byte>(PS1_LevelBackgroundIndexTable[i], 30, name: $"{nameof(PS1_LevelBackgroundIndexTable)}[{i}]");
@@ -53,12 +53,12 @@ namespace BinarySerializer.Ray1
 
             if (settings.EngineVersion == Ray1EngineVersion.Saturn)
             {
-                s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.SAT_Palettes), () => 
+                s.DoAt(s.GetRequiredPreDefinedPointer(PS1_DefinedPointer.SAT_Palettes), () => 
                     SAT_Palettes = s.SerializeObjectArray<RGBA5551Color>(SAT_Palettes, 25 * 256 * 2, name: nameof(SAT_Palettes)));
 
                 SAT_FNDFileTable ??= new string[6][];
 
-                s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.SAT_FndFileTable), () =>
+                s.DoAt(s.GetRequiredPreDefinedPointer(PS1_DefinedPointer.SAT_FndFileTable), () =>
                 {
                     for (int i = 0; i < SAT_FNDFileTable.Length; i++)
                         SAT_FNDFileTable[i] = s.SerializeStringArray(SAT_FNDFileTable[i], 10, 12, name: $"{nameof(SAT_FNDFileTable)}[{i}]");
@@ -66,7 +66,7 @@ namespace BinarySerializer.Ray1
 
                 SAT_FNDSPFileTable ??= new string[6][];
 
-                s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.SAT_FndSPFileTable), () =>
+                s.DoAt(s.GetRequiredPreDefinedPointer(PS1_DefinedPointer.SAT_FndSPFileTable), () =>
                 {
                     for (int i = 0; i < SAT_FNDSPFileTable.Length; i++)
                         SAT_FNDSPFileTable[i] = s.SerializeStringArray(SAT_FNDSPFileTable[i], 5, 12, name: $"{nameof(SAT_FNDSPFileTable)}[{i}]");
@@ -74,7 +74,7 @@ namespace BinarySerializer.Ray1
 
                 SAT_FNDIndexTable ??= new byte[7][];
 
-                s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.SAT_FndIndexTable), () =>
+                s.DoAt(s.GetRequiredPreDefinedPointer(PS1_DefinedPointer.SAT_FndIndexTable), () =>
                 {
                     for (int i = 0; i < SAT_FNDIndexTable.Length; i++)
                         SAT_FNDIndexTable[i] = s.SerializeArray<byte>(SAT_FNDIndexTable[i], 25, name: $"{nameof(SAT_FNDIndexTable)}[{i}]");

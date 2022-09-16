@@ -61,7 +61,7 @@ namespace BinarySerializer.Ray1
 
         public void RepackArchive(Context context, Dictionary<string, Action<SerializerObject>> fileWriter)
         {
-            var settings = context.GetSettings<Ray1Settings>();
+            var settings = context.GetRequiredSettings<Ray1Settings>();
 
             if (settings.EngineVersion == Ray1EngineVersion.PC || 
                 settings.EngineVersion == Ray1EngineVersion.PocketPC)
@@ -104,7 +104,7 @@ namespace BinarySerializer.Ray1
                 entry.XORKey = 0;
 
                 // Set the checksum
-                entry.Checksum = s.EndCalculateChecksum<byte>();
+                entry.Checksum = s.EndCalculateChecksum<byte>(entry.Checksum);
 
                 // Increment the offset by the size
                 offset += entry.FileSize;
@@ -156,7 +156,7 @@ namespace BinarySerializer.Ray1
 
                 s.Context.AddFile(file);
 
-                s.DoAt(s.Context.GetFile(key).StartPointer, () => 
+                s.DoAt(s.Context.GetRequiredFile(key).StartPointer, () => 
                     Entries = s.SerializeObjectArray<PC_FileArchiveEntry>(Entries, headerLength, name: nameof(Entries)));
             }
             else

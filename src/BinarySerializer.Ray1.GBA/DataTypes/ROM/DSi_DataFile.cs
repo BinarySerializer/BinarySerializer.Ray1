@@ -91,32 +91,32 @@ namespace BinarySerializer.Ray1.GBA
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.WorldLevelOffsetTable),
+            s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.WorldLevelOffsetTable),
                 () => WorldLevelOffsetTable = s.SerializeArray<byte>(WorldLevelOffsetTable, 8, name: nameof(WorldLevelOffsetTable)));
 
             // Get the global level index
             var levelIndex = WorldLevelOffsetTable[(int)settings.World] + (settings.Level - 1);
 
-            DES_Ray = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.DES_Ray), () => s.SerializeObject<GBA_EventGraphicsData>(DES_Ray, name: nameof(DES_Ray)));
-            ETA_Ray = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.ETA_Ray, required: false), () => s.SerializeObject<GBA_ETA>(ETA_Ray, x => x.Pre_Lengths = new byte[] { 66, 12, 34, 53, 14, 14, 1, 2 }, name: nameof(ETA_Ray)));
+            DES_Ray = s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.DES_Ray), () => s.SerializeObject<GBA_EventGraphicsData>(DES_Ray, name: nameof(DES_Ray)));
+            ETA_Ray = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.ETA_Ray), () => s.SerializeObject<GBA_ETA>(ETA_Ray, x => x.Pre_Lengths = new byte[] { 66, 12, 34, 53, 14, 14, 1, 2 }, name: nameof(ETA_Ray)));
 
-            DES_RayLittle = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.DES_RayLittle), () => s.SerializeObject<GBA_EventGraphicsData>(DES_RayLittle, name: nameof(DES_RayLittle)));
+            DES_RayLittle = s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.DES_RayLittle), () => s.SerializeObject<GBA_EventGraphicsData>(DES_RayLittle, name: nameof(DES_RayLittle)));
 
-            DES_Clock = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.DES_Clock), () => s.SerializeObject<GBA_EventGraphicsData>(DES_Clock, name: nameof(DES_Clock)));
-            ETA_Clock = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.ETA_Clock, required: false), () => s.SerializeObject<GBA_ETA>(ETA_Clock, x => x.Pre_Lengths = new byte[] { 3 }, name: nameof(ETA_Clock)));
+            DES_Clock = s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.DES_Clock), () => s.SerializeObject<GBA_EventGraphicsData>(DES_Clock, name: nameof(DES_Clock)));
+            ETA_Clock = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.ETA_Clock), () => s.SerializeObject<GBA_ETA>(ETA_Clock, x => x.Pre_Lengths = new byte[] { 3 }, name: nameof(ETA_Clock)));
 
-            DES_Div = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.DES_Div), () => s.SerializeObject<GBA_EventGraphicsData>(DES_Div, name: nameof(DES_Div)));
-            ETA_Div = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.ETA_Div, required: false), () => s.SerializeObject<GBA_ETA>(ETA_Div, x => x.Pre_Lengths = new byte[] { 1, 1, 1, 1, 1, 1, 2, 2, 12, 12, 4 }, name: nameof(ETA_Div)));
+            DES_Div = s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.DES_Div), () => s.SerializeObject<GBA_EventGraphicsData>(DES_Div, name: nameof(DES_Div)));
+            ETA_Div = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.ETA_Div), () => s.SerializeObject<GBA_ETA>(ETA_Div, x => x.Pre_Lengths = new byte[] { 1, 1, 1, 1, 1, 1, 2, 2, 12, 12, 4 }, name: nameof(ETA_Div)));
 
-            DES_Map = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.DES_Map), () => s.SerializeObject<GBA_EventGraphicsData>(DES_Map, name: nameof(DES_Map)));
-            ETA_Map = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.ETA_Map, required: false), () => s.SerializeObject<GBA_ETA>(ETA_Map, x => x.Pre_Lengths = new byte[] { 64, 1, 19, 1, 1, 69, 3 }, name: nameof(ETA_Map)));
+            DES_Map = s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.DES_Map), () => s.SerializeObject<GBA_EventGraphicsData>(DES_Map, name: nameof(DES_Map)));
+            ETA_Map = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.ETA_Map), () => s.SerializeObject<GBA_ETA>(ETA_Map, x => x.Pre_Lengths = new byte[] { 64, 1, 19, 1, 1, 69, 3 }, name: nameof(ETA_Map)));
 
             // Serialize data from the ROM
             if (settings.World != World.Menu)
-                s.DoAt((settings.World == World.Jungle ? s.GetPreDefinedPointer(DSi_DefinedPointer.JungleMaps) : s.GetPreDefinedPointer(DSi_DefinedPointer.LevelMaps)) + (levelIndex * 32), 
+                s.DoAt((settings.World == World.Jungle ? s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.JungleMaps) : s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.LevelMaps)) + (levelIndex * 32), 
                     () => LevelMapData = s.SerializeObject<GBA_LevelMapData>(LevelMapData, name: nameof(LevelMapData)));
 
-            s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.BackgroundVignette),
+            s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.BackgroundVignette),
                 () => BackgroundVignettes = s.SerializeObjectArray<GBA_BackgroundVignette>(BackgroundVignettes, 48, name: nameof(BackgroundVignettes)));
 
             WorldMapVignette = s.SerializeObject<GBA_WorldMapVignette>(WorldMapVignette, name: nameof(WorldMapVignette));
@@ -125,13 +125,13 @@ namespace BinarySerializer.Ray1.GBA
             if (settings.World != World.Menu)
             {
                 LevelEventData = new GBA_LevelEventData();
-                LevelEventData.SerializeData(s, s.GetPreDefinedPointer(DSi_DefinedPointer.EventGraphicsPointers), s.GetPreDefinedPointer(DSi_DefinedPointer.EventDataPointers), s.GetPreDefinedPointer(DSi_DefinedPointer.EventGraphicsGroupCountTablePointers), s.GetPreDefinedPointer(DSi_DefinedPointer.LevelEventGraphicsGroupCounts), levelIndex);
+                LevelEventData.SerializeData(s, s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.EventGraphicsPointers), s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.EventDataPointers), s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.EventGraphicsGroupCountTablePointers), s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.LevelEventGraphicsGroupCounts), levelIndex);
             }
 
-            s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.SpecialPalettes), () => Palettes = s.SerializeObjectArray<DSi_PaletteReference>(Palettes, 10, name: nameof(Palettes)));
+            s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.SpecialPalettes), () => Palettes = s.SerializeObjectArray<DSi_PaletteReference>(Palettes, 10, name: nameof(Palettes)));
 
             // Serialize strings
-            s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.StringPointers), () =>
+            s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.StringPointers), () =>
             {
                 StringPointerTable = s.SerializePointerArray(StringPointerTable, 5 * 394, name: nameof(StringPointerTable));
                 
@@ -163,17 +163,17 @@ namespace BinarySerializer.Ray1.GBA
             });
 
             // Serialize tables
-            s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.TypeZDC), () => TypeZDC = s.SerializeObjectArray<ZDCEntry>(TypeZDC, 262, name: nameof(TypeZDC)));
-            s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.ZdcData), () => ZdcData = s.SerializeObjectArray<ZDCData>(ZdcData, 200, name: nameof(ZdcData)));
-            s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.EventFlags), () => EventFlags = s.SerializeArray<ObjTypeFlags>(EventFlags, 262, name: nameof(EventFlags)));
+            s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.TypeZDC), () => TypeZDC = s.SerializeObjectArray<ZDCEntry>(TypeZDC, 262, name: nameof(TypeZDC)));
+            s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.ZdcData), () => ZdcData = s.SerializeObjectArray<ZDCData>(ZdcData, 200, name: nameof(ZdcData)));
+            s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.EventFlags), () => EventFlags = s.SerializeArray<ObjTypeFlags>(EventFlags, 262, name: nameof(EventFlags)));
 
             if (settings.World != World.Menu)
             {
-                WorldVignetteIndicesPointers = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.WorldVignetteIndices), () => s.SerializePointerArray(WorldVignetteIndicesPointers, 7, name: nameof(WorldVignetteIndicesPointers)));
+                WorldVignetteIndicesPointers = s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.WorldVignetteIndices), () => s.SerializePointerArray(WorldVignetteIndicesPointers, 7, name: nameof(WorldVignetteIndicesPointers)));
                 WorldVignetteIndices = s.DoAt(WorldVignetteIndicesPointers[(int)settings.World], () => s.SerializeArray<byte>(WorldVignetteIndices, 8, name: nameof(WorldVignetteIndices))); // The max size is 8
 
                 // Get the background indices
-                s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.LevelMapsBGIndices) + (levelIndex * 32), () =>
+                s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.LevelMapsBGIndices) + (levelIndex * 32), () =>
                 {
                     LevelMapData.GBA_Byte_14 = s.Serialize<byte>(LevelMapData.GBA_Byte_14, name: nameof(LevelMapData.GBA_Byte_14));
                     LevelMapData.GBA_Byte_15 = s.Serialize<byte>(LevelMapData.GBA_Byte_15, name: nameof(LevelMapData.GBA_Byte_15));
@@ -182,7 +182,7 @@ namespace BinarySerializer.Ray1.GBA
                 });
             }
 
-            WorldInfos = s.DoAt(s.GetPreDefinedPointer(DSi_DefinedPointer.WorldInfo), () => s.SerializeObjectArray<WorldInfo>(WorldInfos, 24, name: nameof(WorldInfos)));
+            WorldInfos = s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.WorldInfo), () => s.SerializeObjectArray<WorldInfo>(WorldInfos, 24, name: nameof(WorldInfos)));
         }
     }
 }

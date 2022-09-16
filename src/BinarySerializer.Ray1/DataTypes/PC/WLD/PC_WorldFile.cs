@@ -71,10 +71,15 @@
                 settings.EngineVersion == Ray1EngineVersion.PC_Fan)
             {
                 // Serialize world defines
-                WorldDefineChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
-                {
-                    s.DoXOR(0x71, () => WorldDefine = s.SerializeObject<PC_WorldDefine>(WorldDefine, name: nameof(WorldDefine)));
-                }, ChecksumPlacement.Before, name: nameof(WorldDefineChecksum));
+                WorldDefineChecksum = s.DoChecksum(
+                    c: new Checksum8Calculator(false),
+                    value: WorldDefineChecksum,
+                    placement: ChecksumPlacement.Before,
+                    name: nameof(WorldDefineChecksum), 
+                    action: () =>
+                    {
+                        s.DoXOR(0x71, () => WorldDefine = s.SerializeObject<PC_WorldDefine>(WorldDefine, name: nameof(WorldDefine)));
+                    });
 
                 // Serialize file tables
                 if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Fan)

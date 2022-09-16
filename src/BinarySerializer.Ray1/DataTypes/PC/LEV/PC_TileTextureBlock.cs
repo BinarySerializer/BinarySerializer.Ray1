@@ -58,31 +58,43 @@
         {
             var settings = s.GetSettings<Ray1Settings>();
 
-            TextureBlockChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
-            {
-                s.DoXOR((byte)(settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC ? 0 : 0xFF), () =>
+            TextureBlockChecksum = s.DoChecksum(
+                c: settings.EngineVersion is Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Edu or Ray1EngineVersion.PC_Fan 
+                    ? new Checksum8Calculator(false) 
+                    : null,
+                value: TextureBlockChecksum,
+                placement: ChecksumPlacement.Before,
+                name: nameof(TextureBlockChecksum),
+                action: () =>
                 {
-                    // Read the offset table for the textures, based from the start of the tile texture arrays
-                    TexturesOffsetTable = s.SerializePointerArray(TexturesOffsetTable, 1200, anchor: s.CurrentPointer + 1200 * 4 + 3 * 4, name: nameof(TexturesOffsetTable));
+                    s.DoXOR((byte)(settings.EngineVersion is Ray1EngineVersion.PC or Ray1EngineVersion.PocketPC ? 0 : 0xFF), () =>
+                    {
+                        // Read the offset table for the textures, based from the start of the tile texture arrays
+                        TexturesOffsetTable = s.SerializePointerArray(TexturesOffsetTable, 1200, anchor: s.CurrentPointer + 1200 * 4 + 3 * 4, name: nameof(TexturesOffsetTable));
 
-                    // Read the textures count
-                    TexturesCount = s.Serialize<uint>(TexturesCount, name: nameof(TexturesCount));
-                    NonTransparentTexturesCount = s.Serialize<uint>(NonTransparentTexturesCount, name: nameof(NonTransparentTexturesCount));
-                    TexturesDataTableCount = s.Serialize<uint>(TexturesDataTableCount, name: nameof(TexturesDataTableCount));
+                        // Read the textures count
+                        TexturesCount = s.Serialize<uint>(TexturesCount, name: nameof(TexturesCount));
+                        NonTransparentTexturesCount = s.Serialize<uint>(NonTransparentTexturesCount, name: nameof(NonTransparentTexturesCount));
+                        TexturesDataTableCount = s.Serialize<uint>(TexturesDataTableCount, name: nameof(TexturesDataTableCount));
+                    });
+
+                    TexturesChecksum = s.DoChecksum(
+                        c: settings.EngineVersion is Ray1EngineVersion.PC or Ray1EngineVersion.PocketPC 
+                            ? new Checksum8Calculator() 
+                            : null,
+                        value: TexturesChecksum,
+                        placement: ChecksumPlacement.After,
+                        name: nameof(TexturesChecksum), 
+                        action: () =>
+                        {
+                            // Serialize the textures
+                            NonTransparentTextures = s.SerializeObjectArray<PC_TileTexture>(NonTransparentTextures, NonTransparentTexturesCount, name: nameof(NonTransparentTextures));
+                            TransparentTextures = s.SerializeObjectArray<PC_TransparentTileTexture>(TransparentTextures, TexturesCount - NonTransparentTexturesCount, name: nameof(TransparentTextures));
+
+                            // Serialize the fourth unknown value
+                            Unknown4 = s.SerializeArray<byte>(Unknown4, 32, name: nameof(Unknown4));
+                        });
                 });
-
-                TexturesChecksum = s.DoChecksum(new Checksum8Calculator(), () =>
-                {
-                    // Serialize the textures
-                    NonTransparentTextures = s.SerializeObjectArray<PC_TileTexture>(NonTransparentTextures, NonTransparentTexturesCount, name: nameof(NonTransparentTextures));
-                    TransparentTextures = s.SerializeObjectArray<PC_TransparentTileTexture>(TransparentTextures, TexturesCount - NonTransparentTexturesCount, name: nameof(TransparentTextures));
-
-                    // Serialize the fourth unknown value
-                    Unknown4 = s.SerializeArray<byte>(Unknown4, 32, name: nameof(Unknown4));
-                }, ChecksumPlacement.After, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC, name: nameof(TexturesChecksum));
-            }, ChecksumPlacement.Before, calculateChecksum: settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
-                                                            settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
-                                                            settings.EngineVersion == Ray1EngineVersion.PC_Fan, name: nameof(TextureBlockChecksum));
         }
     }
 }

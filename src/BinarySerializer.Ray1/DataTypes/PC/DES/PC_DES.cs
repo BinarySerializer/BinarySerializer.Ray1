@@ -125,13 +125,18 @@
                                                                   settings.EngineVersion == Ray1EngineVersion.PC_Fan);
             var hasChecksum = isChecksumBefore || Pre_FileType != Type.BigRay;
 
-            ImageDataChecksum = s.DoChecksum(new Checksum8Calculator(false), () =>
-            {
-                s.DoXOR(0x8F, () =>
+            ImageDataChecksum = s.DoChecksum(
+                c: hasChecksum ? new Checksum8Calculator(false) : null, 
+                value: ImageDataChecksum, 
+                placement: isChecksumBefore ? ChecksumPlacement.Before : ChecksumPlacement.After, 
+                name: nameof(ImageDataChecksum), 
+                action: () => 
                 {
-                    ImageData = s.SerializeArray<byte>(ImageData, ImageDataLength, name: nameof(ImageData));
+                    s.DoXOR(0x8F, () =>
+                    {
+                        ImageData = s.SerializeArray<byte>(ImageData, ImageDataLength, name: nameof(ImageData));
+                    });
                 });
-            }, isChecksumBefore ? ChecksumPlacement.Before : ChecksumPlacement.After, calculateChecksum: hasChecksum, name: nameof(ImageDataChecksum));
 
             if (Pre_FileType == Type.AllFix)
                 RaymanExeCheckSum2 = s.Serialize<uint>(RaymanExeCheckSum2, name: nameof(RaymanExeCheckSum2));

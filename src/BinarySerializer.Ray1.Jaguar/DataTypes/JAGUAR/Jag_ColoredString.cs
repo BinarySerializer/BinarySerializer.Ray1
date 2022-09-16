@@ -8,7 +8,7 @@
         public override void SerializeImpl(SerializerObject s)
         {
             Bytes_00 = s.SerializeArray<byte>(Bytes_00, 4, name: nameof(Bytes_00));
-            Text = s.Serialize<string>(Text, name: nameof(Text));
+            Text = s.SerializeString(Text, name: nameof(Text));
         }
     }
 }

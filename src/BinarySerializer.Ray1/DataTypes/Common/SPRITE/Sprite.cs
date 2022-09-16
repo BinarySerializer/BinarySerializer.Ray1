@@ -80,7 +80,7 @@ namespace BinarySerializer.Ray1
         public bool IsDummySprite()
         {
             // Get the settings
-            var settings = Context.GetSettings<Ray1Settings>();
+            var settings = Context.GetRequiredSettings<Ray1Settings>();
 
             if (settings.EngineBranch == Ray1EngineBranch.Jaguar)
                 return Height == 0 || Width == 0 || Index == 0xFF;
