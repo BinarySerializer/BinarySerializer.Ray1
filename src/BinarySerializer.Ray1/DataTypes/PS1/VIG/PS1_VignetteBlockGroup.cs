@@ -42,7 +42,7 @@
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetSettings<Ray1Settings>();
+            var settings = s.GetRequiredSettings<Ray1Settings>();
 
             // Serialize header values
             Ushort_00 = s.Serialize<ushort>(Ushort_00, name: nameof(Ushort_00));

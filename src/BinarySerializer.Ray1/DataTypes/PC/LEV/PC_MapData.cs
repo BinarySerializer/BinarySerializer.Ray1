@@ -38,7 +38,7 @@
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetSettings<Ray1Settings>();
+            var settings = s.GetRequiredSettings<Ray1Settings>();
 
             MapBlockChecksum = s.DoChecksum(
                 c: settings.EngineVersion is Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Fan or Ray1EngineVersion.PC_Edu 

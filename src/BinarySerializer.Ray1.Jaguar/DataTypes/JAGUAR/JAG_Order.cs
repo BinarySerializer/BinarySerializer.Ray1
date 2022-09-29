@@ -22,7 +22,7 @@
 
         public override void SerializeImpl(SerializerObject s)
         {
-            Ray1Settings settings = s.GetSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             PrevPointer = s.SerializePointer(PrevPointer, size: PointerSize.Pointer16, name: nameof(PrevPointer));
             Verbe = s.Serialize<ushort>(Verbe, name: nameof(Verbe));

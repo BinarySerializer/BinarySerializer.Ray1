@@ -6,7 +6,7 @@
 
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetSettings<Ray1Settings>();
+            var settings = s.GetRequiredSettings<Ray1Settings>();
 
             s.DoEncoded(new PC_LevelTimeEncoder(settings), () => Value = s.Serialize<int>(Value, name: nameof(Value)));
         }

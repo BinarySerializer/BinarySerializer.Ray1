@@ -50,7 +50,7 @@
             s.SerializePadding(3);
 
             if (ObjectsCount != ObjectLinksCount)
-                s.Context.SystemLog?.LogWarning("Object counts don't match");
+                s.Context.SystemLogger?.LogWarning("Object counts don't match");
 
             s.DoAt(ObjectsPointer, () => 
                 Objects = s.SerializeObjectArray<ObjData>(Objects, ObjectsCount, name: nameof(Objects)));

@@ -62,7 +62,7 @@
 
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetSettings<Ray1Settings>();
+            var settings = s.GetRequiredSettings<Ray1Settings>();
 
             if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ||
                 settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)

@@ -8,7 +8,7 @@
 
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetSettings<Ray1Settings>();
+            var settings = s.GetRequiredSettings<Ray1Settings>();
             bool isGBA = settings.EngineBranch == Ray1EngineBranch.GBA;
 
             ActiveObjects = s.SerializeArray<short>(ActiveObjects, isGBA ? 200 : 100, name: nameof(ActiveObjects));

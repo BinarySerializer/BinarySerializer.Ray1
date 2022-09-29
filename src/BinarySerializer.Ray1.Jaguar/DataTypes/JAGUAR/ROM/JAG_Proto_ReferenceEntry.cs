@@ -1,6 +1,6 @@
 ﻿namespace BinarySerializer.Ray1.Jaguar
 {
-    public class JAG_Proto_ReferenceEntry : BinarySerializable
+    public class JAG_Proto_ReferenceEntry : BinarySerializable, ISerializerShortLog
     {
         public Pointer Pre_StringBasePointer { get; set; }
 
@@ -11,7 +11,7 @@
 
         public string String { get; set; }
 
-        public override bool UseShortLog => true;
+        public string ShortLog => ToString();
         public override string ToString() => $"Ref_{Type}('{String}' = {DataPointer?.ToString() ?? $"0x{DataValue:X8}"})";
 
         /// <summary>

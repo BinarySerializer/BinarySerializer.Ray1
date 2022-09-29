@@ -63,7 +63,7 @@ namespace BinarySerializer.Ray1.Jaguar
 		/// <param name="s">The serializer object</param>
 		public override void SerializeImpl(SerializerObject s) 
         {
-			var settings = s.GetSettings<Ray1Settings>();
+			var settings = s.GetRequiredSettings<Ray1Settings>();
 
 			SpritesCount = s.Serialize<short>(SpritesCount, name: nameof(SpritesCount));
 			CharacterPointer = s.SerializePointer(CharacterPointer, name: nameof(CharacterPointer));

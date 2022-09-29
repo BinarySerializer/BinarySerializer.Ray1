@@ -266,7 +266,7 @@ namespace BinarySerializer.Ray1
 
         public override void SerializeImpl(SerializerObject s)
         {
-            Ray1Settings settings = s.GetSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
             bool isPCFormat = IsPCFormat(settings);
             bool isGBAFormat = settings.EngineVersion == Ray1EngineVersion.GBA ||
                                settings.EngineVersion == Ray1EngineVersion.DSi;
@@ -545,7 +545,7 @@ namespace BinarySerializer.Ray1
                 s.DoAt(ETAPointer, () => ETA = s.SerializeObject<ETA>(ETA, name: nameof(ETA)));
 
             if (ETA?.States?.ElementAtOrDefault(Etat)?.ElementAtOrDefault(SubEtat) == null)
-                s.Context.SystemLog?.LogWarning($"Matching obj state not found for obj {Type} at {XPosition}x{YPosition} with E{Etat},SE{SubEtat} for {settings.EngineVersion} in {settings.World}{settings.Level}");
+                s.Context.SystemLogger?.LogWarning($"Matching obj state not found for obj {Type} at {XPosition}x{YPosition} with E{Etat},SE{SubEtat} for {settings.EngineVersion} in {settings.World}{settings.Level}");
         }
 
         public ObjData InitRayman(Context context, ObjData rayPos)

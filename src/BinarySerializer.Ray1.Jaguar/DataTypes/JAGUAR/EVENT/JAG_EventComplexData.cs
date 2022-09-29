@@ -27,7 +27,7 @@ namespace BinarySerializer.Ray1.Jaguar
 		/// <param name="s">The serializer object</param>
 		public override void SerializeImpl(SerializerObject s)
 		{
-			var settings = s.GetSettings<Ray1Settings>();
+			var settings = s.GetRequiredSettings<Ray1Settings>();
 
 			if (settings.EngineVersion == Ray1EngineVersion.Jaguar_Proto && Pre_Verbe != 29)
 				UnkPointers = s.SerializePointerArray(UnkPointers, 64, allowInvalid: true, name: nameof(UnkPointers));

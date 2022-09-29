@@ -24,7 +24,7 @@ namespace BinarySerializer.Ray1
 
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetSettings<Ray1Settings>();
+            var settings = s.GetRequiredSettings<Ray1Settings>();
 
             s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.TypeZDC), () => 
                 TypeZDC = s.SerializeObjectArray<ZDCEntry>(TypeZDC, 256, name: nameof(TypeZDC)));

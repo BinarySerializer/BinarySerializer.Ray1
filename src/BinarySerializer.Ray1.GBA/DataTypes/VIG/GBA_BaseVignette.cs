@@ -58,7 +58,7 @@ namespace BinarySerializer.Ray1.GBA
 
         public void SerializeVignette(SerializerObject s, bool isImgDataCompressed)
         {
-            var settings = s.GetSettings<Ray1Settings>();
+            var settings = s.GetRequiredSettings<Ray1Settings>();
 
             // Serialize data from pointers
 

@@ -13,7 +13,7 @@
         
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetSettings<Ray1Settings>();
+            var settings = s.GetRequiredSettings<Ray1Settings>();
 
             XPosition = s.Serialize<short>(XPosition, name: nameof(XPosition));
             YPosition = s.Serialize<short>(YPosition, name: nameof(YPosition));

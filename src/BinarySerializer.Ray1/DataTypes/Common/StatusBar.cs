@@ -30,7 +30,7 @@
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            Ray1Settings settings = s.GetSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
             {
