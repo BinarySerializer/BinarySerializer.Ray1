@@ -13,9 +13,9 @@ namespace BinarySerializer.Ray1
         Helico = 1 << 2,
         SuperHelico = 1 << 3,
 
-        // Unused?
-        Unk_4 = 1 << 4,
-        Unk_5 = 1 << 5,
+        // Only used in vol. 6 PS1 demo
+        HandstandDash = 1 << 4, // Beat Moskito
+        Handstand = 1 << 4, // Beat Mr Sax
 
         // Powers
         Seed = 1 << 6,
