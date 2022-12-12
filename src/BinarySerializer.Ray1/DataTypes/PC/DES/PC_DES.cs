@@ -7,11 +7,11 @@
     {
         public Type Pre_FileType { get; set; }
 
-        // TODO: Is that what this property is for? It seems it's true for all DES except the parallax ones.
         /// <summary>
-        /// Indicates if the sprite has some gradation and requires clearing
+        /// Indicates if the sprite is an animated sprite, i.e. used for level objects. True for all sprites
+        /// except parallax background ones. The game can optionally ignore to load these.
         /// </summary>
-        public bool RequiresBackgroundClearing { get; set; }
+        public bool IsAnimatedSprite { get; set; }
 
         public uint WldETAIndex { get; set; }
         public uint RaymanExeSize { get; set; }
@@ -53,6 +53,15 @@
         /// The animations
         /// </summary>
         public PC_Animation[] Animations { get; set; }
+
+        // TODO: This should probably be removed or replaced. In the game there are two drawing modes for sprites. A normal one
+        //       and a 256 one. The normal one has a range of 0-0x9F and the 256 one 1-0xFF. Anything outside of the range is
+        //       treated as being transparent. For level sprites they use the normal drawing mode as the remaining colors are
+        //       reserved for the background. But what makes this more complicated is that in later games, like Designer,
+        //       object type 276 is hard-coded to use the 256 one instead! It thus also relies on background colors. The game
+        //       also has uses a third drawing mode for types 272, 267, 266 which is the "color" mode where the palette start
+        //       offset might change based on a value. This is also used for things like the font. The way it sets the byte here
+        //       is by doing "(8 * color) | imgByte". It still has the normal 0-0x9F range.
 
         /// <summary>
         /// Processes the image data
@@ -104,12 +113,13 @@
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s) 
         {
-            var settings = s.GetRequiredSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
+            // Only world files have non-animated sprites for the parallax backgrounds
             if (Pre_FileType == Type.World)
-                RequiresBackgroundClearing = s.Serialize<bool>(RequiresBackgroundClearing, name: nameof(RequiresBackgroundClearing));
+                IsAnimatedSprite = s.Serialize<bool>(IsAnimatedSprite, name: nameof(IsAnimatedSprite));
             else
-                RequiresBackgroundClearing = true;
+                IsAnimatedSprite = true;
 
             if (Pre_FileType == Type.AllFix)
             {
@@ -120,10 +130,10 @@
 
             ImageDataLength = s.Serialize<uint>(ImageDataLength, name: nameof(ImageDataLength));
 
-            var isChecksumBefore = Pre_FileType == Type.World && (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
-                                                                  settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
-                                                                  settings.EngineVersion == Ray1EngineVersion.PC_Fan);
-            var hasChecksum = isChecksumBefore || Pre_FileType != Type.BigRay;
+            bool isChecksumBefore = Pre_FileType == Type.World && (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
+                                                                   settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
+                                                                   settings.EngineVersion == Ray1EngineVersion.PC_Fan);
+            bool hasChecksum = isChecksumBefore || Pre_FileType != Type.BigRay;
 
             ImageDataChecksum = s.DoChecksum(
                 c: hasChecksum ? new Checksum8Calculator(false) : null, 
