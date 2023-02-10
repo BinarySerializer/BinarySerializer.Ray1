@@ -55,11 +55,9 @@ namespace BinarySerializer.Ray1
 
         public ushort Saturn_PaletteInfo { get; set; }
 
-        // TODO: Replace with PS1_CBA class
-        public ushort PaletteX { get; set; }
-        public ushort PaletteY { get; set; }
-
-        public PS1_TSB TexturePageInfo { get; set; }
+        // PS1 only
+        public CBA Clut { get; set; }
+        public TSB TexturePage { get; set; }
 
         public byte ImageOffsetInPageX { get; set; }
         public byte ImageOffsetInPageY { get; set; }
@@ -142,12 +140,8 @@ namespace BinarySerializer.Ray1
                         Unknown4 = s.Serialize<byte>(Unknown4, name: nameof(Unknown4));
                         ImageOffsetInPageX = s.Serialize<byte>(ImageOffsetInPageX, name: nameof(ImageOffsetInPageX));
                         ImageOffsetInPageY = s.Serialize<byte>(ImageOffsetInPageY, name: nameof(ImageOffsetInPageY));
-                        s.DoBits<ushort>(b =>
-                        {
-                            PaletteX = b.SerializeBits<ushort>(PaletteX, 6, name: nameof(PaletteX));
-                            PaletteY = b.SerializeBits<ushort>(PaletteY, 10, name: nameof(PaletteY));
-                        });
-                        TexturePageInfo = s.SerializeObject<PS1_TSB>(TexturePageInfo, name: nameof(TexturePageInfo));
+                        Clut = s.SerializeObject<CBA>(Clut, name: nameof(Clut));
+                        TexturePage = s.SerializeObject<TSB>(TexturePage, name: nameof(TexturePage));
                     }
                     else if (settings.EngineVersion == Ray1EngineVersion.PS1_JP || 
                              settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ||
@@ -195,12 +189,8 @@ namespace BinarySerializer.Ray1
                     {
                         Unknown3 = s.Serialize<byte>(Unknown3, name: nameof(Unknown3));
                         Unknown4 = s.Serialize<byte>(Unknown4, name: nameof(Unknown4));
-                        s.DoBits<ushort>(b =>
-                        {
-                            PaletteX = b.SerializeBits<ushort>(PaletteX, 6, name: nameof(PaletteX));
-                            PaletteY = b.SerializeBits<ushort>(PaletteY, 10, name: nameof(PaletteY));
-                        });
-                        TexturePageInfo = s.SerializeObject<PS1_TSB>(TexturePageInfo, name: nameof(TexturePageInfo));
+                        Clut = s.SerializeObject<CBA>(Clut, name: nameof(Clut));
+                        TexturePage = s.SerializeObject<TSB>(TexturePage, name: nameof(TexturePage));
                         ImageOffsetInPageX = s.Serialize<byte>(ImageOffsetInPageX, name: nameof(ImageOffsetInPageX));
                         ImageOffsetInPageY = s.Serialize<byte>(ImageOffsetInPageY, name: nameof(ImageOffsetInPageY));
                         Unknown6 = s.Serialize<ushort>(Unknown6, name: nameof(Unknown6));

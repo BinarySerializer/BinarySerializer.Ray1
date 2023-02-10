@@ -5,9 +5,9 @@ namespace BinarySerializer.Ray1
 {
     public static class PS1VramHelpers
     {
-        public static PS1_VRAM PS1_JPDemoVol6_FillVRAM(RGBA5551Color[] pal4, RGBA5551Color[] pal8, RGBA5551Color[] palLettre, byte[] fixGraphics, byte[] wldGraphics, byte[] lvlGraphics)
+        public static VRAM PS1_JPDemoVol6_FillVRAM(RGBA5551Color[] pal4, RGBA5551Color[] pal8, RGBA5551Color[] palLettre, byte[] fixGraphics, byte[] wldGraphics, byte[] lvlGraphics)
         {
-            PS1_VRAM vram = new PS1_VRAM();
+            VRAM vram = new VRAM();
 
             // skip loading the backgrounds for now. They take up 320 (=5*64) x 256 per background
             // 2 backgrounds are stored underneath each other vertically, so this takes up 10 pages in total
@@ -35,12 +35,12 @@ namespace BinarySerializer.Ray1
             return vram;
         }
 
-        public static PS1_VRAM PS1_FillVRAM(VRAMMode mode, PS1_AllfixFile allFix, PS1_WorldFile world, PS1_BigRayFile bigRay, PS1_LevFile lev, byte[] font, bool isUSVersion)
+        public static VRAM PS1_FillVRAM(VRAMMode mode, PS1_AllfixFile allFix, PS1_WorldFile world, PS1_BigRayFile bigRay, PS1_LevFile lev, byte[] font, bool isUSVersion)
         {
             // TODO: Support BigRay + font for US version
             // TODO: Fill background palettes
 
-            PS1_VRAM vram = new PS1_VRAM();
+            VRAM vram = new VRAM();
 
             // skip loading the backgrounds for now. They take up 320 (=5*64) x 256 per background
             // 2 backgrounds are stored underneath each other vertically, so this takes up 10 pages in total
@@ -117,9 +117,9 @@ namespace BinarySerializer.Ray1
             return vram;
         }
 
-        public static PS1_VRAM PS1_JP_FillVRAM(VRAMMode mode, PS1_AllfixFile allFix, PS1_WorldFile world, PS1_BigRayFile bigRay, PS1_LevFile lev, byte[] font, int tileColorsCount)
+        public static VRAM PS1_JP_FillVRAM(VRAMMode mode, PS1_AllfixFile allFix, PS1_WorldFile world, PS1_BigRayFile bigRay, PS1_LevFile lev, byte[] font, int tileColorsCount)
         {
-            PS1_VRAM vram = new PS1_VRAM();
+            VRAM vram = new VRAM();
 
             // skip loading the backgrounds for now. They take up 320 (=5*64) x 256 per background
             // 2 backgrounds are stored underneath each other vertically, so this takes up 10 pages in total
@@ -199,9 +199,9 @@ namespace BinarySerializer.Ray1
             return vram;
         }
 
-        public static PS1_VRAM PS1_R2_FillVRAM(byte[] fixGraphics, byte[] lvlGraphics, RGBA5551Color[] spritePalettes, RGBA5551Color[][] tilePalettes)
+        public static VRAM PS1_R2_FillVRAM(byte[] fixGraphics, byte[] lvlGraphics, RGBA5551Color[] spritePalettes, RGBA5551Color[][] tilePalettes)
         {
-            PS1_VRAM vram = new PS1_VRAM();
+            VRAM vram = new VRAM();
 
             // skip loading the backgrounds for now. They take up 320 (=5*64) x 256 per background
             // 2 backgrounds are stored underneath each other vertically, so this takes up 10 pages in total
