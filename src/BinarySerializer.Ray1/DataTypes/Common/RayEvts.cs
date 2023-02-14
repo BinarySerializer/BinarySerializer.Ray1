@@ -23,7 +23,7 @@ namespace BinarySerializer.Ray1
         Run = 1 << 8,
 
         // Temp states
-        SquishedRayman = 1 << 9,
+        DemiRay = 1 << 9, // Small Rayman or when squished
         Firefly = 1 << 10, // Darkness
         Unk_11 = 1 << 11, // Toggles ForceRun
         ForceRun = 1 << 12,
