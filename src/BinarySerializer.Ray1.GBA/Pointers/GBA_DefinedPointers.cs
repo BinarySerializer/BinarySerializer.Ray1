@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BinarySerializer.Ray1.GBA
 {
@@ -114,8 +115,8 @@ namespace BinarySerializer.Ray1.GBA
             {
                 var d = GBA_EU;
 
-                foreach (var k in d.Keys)
-                    d[k] = d[k] - 0xC;
+                foreach (var k in d.Keys.ToList())
+                    d[k] -= 0xC;
 
                 return d;
             }
