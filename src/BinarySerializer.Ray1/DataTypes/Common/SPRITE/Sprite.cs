@@ -2,6 +2,9 @@
 
 namespace BinarySerializer.Ray1
 {
+    // TODO: The "hitbox" values aren't really hitbox related, but define where in the sprite the actual
+    //       image is. This can then be used for hitbox detection by some objects.
+
     /// <summary>
     /// A sprite
     /// </summary>
@@ -61,7 +64,6 @@ namespace BinarySerializer.Ray1
 
         public byte ImageOffsetInPageX { get; set; }
         public byte ImageOffsetInPageY { get; set; }
-        public ushort Unknown6 { get; set; }
 
         public byte JAG_Byte_03 { get; set; }
         public byte JAG_Byte_04 { get; set; }
@@ -193,7 +195,7 @@ namespace BinarySerializer.Ray1
                         TexturePage = s.SerializeObject<TSB>(TexturePage, name: nameof(TexturePage));
                         ImageOffsetInPageX = s.Serialize<byte>(ImageOffsetInPageX, name: nameof(ImageOffsetInPageX));
                         ImageOffsetInPageY = s.Serialize<byte>(ImageOffsetInPageY, name: nameof(ImageOffsetInPageY));
-                        Unknown6 = s.Serialize<ushort>(Unknown6, name: nameof(Unknown6));
+                        s.SerializePadding(2, logIfNotNull: true);
                     }
                 }
                 // PC
