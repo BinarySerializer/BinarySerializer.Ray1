@@ -19,7 +19,8 @@ namespace BinarySerializer.Ray1
         /// </summary>
         public Pointer FramesPointer { get; set; }
 
-        // Unknown - usually null
+        // TODO: These are events (mostly, or always, sound events?). The events themselves are defined in the exe,
+        //       but referenced from here for specific frames. Parse this!
         public Pointer UnkAnimDataPointer { get; set; }
 
         /// <summary>

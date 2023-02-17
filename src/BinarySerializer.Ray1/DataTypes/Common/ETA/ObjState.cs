@@ -64,8 +64,11 @@ namespace BinarySerializer.Ray1
                 R2_Byte_05 = s.SerializeArray<byte>(R2_Byte_05, 5, name: nameof(R2_Byte_05));
                 LinkedEtat = s.Serialize<byte>(LinkedEtat, name: nameof(LinkedEtat));
                 LinkedSubEtat = s.Serialize<byte>(LinkedSubEtat, name: nameof(LinkedSubEtat));
+
+                // TODO: This is a ushort
                 Flags = s.Serialize<StateFlags>(Flags, name: nameof(Flags));
                 AnimationSpeed = s.Serialize<byte>(AnimationSpeed, name: nameof(AnimationSpeed));
+                
                 R2_Bytes_0E = s.SerializeArray<byte>(R2_Bytes_0E, 2, name: nameof(R2_Bytes_0E));
             }
             else
