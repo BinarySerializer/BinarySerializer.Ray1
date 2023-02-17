@@ -1,17 +1,20 @@
 ﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Background block data
+    /// A PS1 background .BGM file
     /// </summary>
-    public class PS1_BackgroundBlock : BinarySerializable
+    public class PS1_BackgroundData : BinarySerializable
     {
+        /// <summary>
+        /// The position for every background sprite
+        /// </summary>
         public BackgroundSpritePosition[] SpritePositions { get; set; }
+        
+        /// <summary>
+        /// The background sprites
+        /// </summary>
         public SpriteCollection Sprites { get; set; }
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();

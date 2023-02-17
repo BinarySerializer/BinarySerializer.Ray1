@@ -3,7 +3,7 @@
 namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Common map data
+    /// A common map .MAP file
     /// </summary>
     public class MapData : BinarySerializable
     {

@@ -35,7 +35,7 @@ namespace BinarySerializer.Ray1
             return vram;
         }
 
-        public static VRAM PS1_FillVRAM(VRAMMode mode, PS1_AllfixFile allFix, PS1_WorldFile world, PS1_BigRayFile bigRay, PS1_LevFile lev, byte[] font, bool isUSVersion)
+        public static VRAM PS1_FillVRAM(VRAMMode mode, PS1_AllfixPack allFix, PS1_WorldPack world, PS1_BigRayPack bigRay, PS1_LevelPack lev, byte[] font, bool isUSVersion)
         {
             // TODO: Support BigRay + font for US version
             // TODO: Fill background palettes
@@ -51,9 +51,9 @@ namespace BinarySerializer.Ray1
                 // Since skippedPagesX is uneven, and all other data takes up 2x2 pages, the game corrects this by
                 // storing the first bit of sprites we load as 1x2
                 byte[] cageSprites = new byte[128 * (256 * 2 - 8)];
-                Array.Copy(allFix.TextureBlock, 0, cageSprites, 0, cageSprites.Length);
-                byte[] allFixSprites = new byte[allFix.TextureBlock.Length - cageSprites.Length];
-                Array.Copy(allFix.TextureBlock, cageSprites.Length, allFixSprites, 0, allFixSprites.Length);
+                Array.Copy(allFix.ImageData, 0, cageSprites, 0, cageSprites.Length);
+                byte[] allFixSprites = new byte[allFix.ImageData.Length - cageSprites.Length];
+                Array.Copy(allFix.ImageData, cageSprites.Length, allFixSprites, 0, allFixSprites.Length);
                 byte[] unknown = new byte[128 * 8];
                 vram.AddData(unknown, 128);
                 vram.AddData(cageSprites, 128);
@@ -62,8 +62,8 @@ namespace BinarySerializer.Ray1
 
             if (mode == VRAMMode.Level)
             {
-                vram.AddData(world.TextureBlock, 256);
-                vram.AddData(lev.TextureBlock, 256);
+                vram.AddData(world.ImageData, 256);
+                vram.AddData(lev.ImageData, 256);
             }
             else if (mode == VRAMMode.Menu)
             {
@@ -74,7 +74,7 @@ namespace BinarySerializer.Ray1
             }
             else if (mode == VRAMMode.BigRay)
             {
-                vram.AddDataAt(10, 0, 0, 0, bigRay.TextureBlock, 256);
+                vram.AddDataAt(10, 0, 0, 0, bigRay.ImageData, 256);
             }
 
             // Palettes start at y = 256 + 234 (= 490), so page 1 and y=234
@@ -85,8 +85,8 @@ namespace BinarySerializer.Ray1
                 vram.AddDataAt(12, 1, 0, paletteY++, allFix.Palette4.SelectMany(c => BitConverter.GetBytes(c.Color1555)).ToArray(), 512);*/
                 if (mode == VRAMMode.Level)
                 {
-                    vram.AddPalette(world.ObjPalette1, 12, 1, 0, paletteY++);
-                    vram.AddPalette(world.ObjPalette2, 12, 1, 0, paletteY++);
+                    vram.AddPalette(world.Palette1, 12, 1, 0, paletteY++);
+                    vram.AddPalette(world.Palette2, 12, 1, 0, paletteY++);
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace BinarySerializer.Ray1
             return vram;
         }
 
-        public static VRAM PS1_JP_FillVRAM(VRAMMode mode, PS1_AllfixFile allFix, PS1_WorldFile world, PS1_BigRayFile bigRay, PS1_LevFile lev, byte[] font, int tileColorsCount)
+        public static VRAM PS1_JP_FillVRAM(VRAMMode mode, PS1_AllfixPack allFix, PS1_WorldPack world, PS1_BigRayPack bigRay, PS1_LevelPack lev, byte[] font, int tileColorsCount)
         {
             VRAM vram = new VRAM();
 
@@ -145,17 +145,17 @@ namespace BinarySerializer.Ray1
                 // Since skippedPagesX is uneven, and all other data takes up 2x2 pages, the game corrects this by
                 // storing the first bit of sprites we load as 1x2
                 byte[] cageSprites = new byte[(128 * 3) * (256 * 2)];
-                Array.Copy(allFix.TextureBlock, 0, cageSprites, 0, cageSprites.Length);
-                byte[] allFixSprites = new byte[allFix.TextureBlock.Length - cageSprites.Length];
-                Array.Copy(allFix.TextureBlock, cageSprites.Length, allFixSprites, 0, allFixSprites.Length);
+                Array.Copy(allFix.ImageData, 0, cageSprites, 0, cageSprites.Length);
+                byte[] allFixSprites = new byte[allFix.ImageData.Length - cageSprites.Length];
+                Array.Copy(allFix.ImageData, cageSprites.Length, allFixSprites, 0, allFixSprites.Length);
                 vram.AddData(cageSprites, (128 * 3));
                 vram.AddData(allFixSprites, 256);
             }
 
             if (mode == VRAMMode.Level)
             {
-                vram.AddData(world.TextureBlock, 256);
-                vram.AddData(lev.TextureBlock, 256);
+                vram.AddData(world.ImageData, 256);
+                vram.AddData(lev.ImageData, 256);
             }
             else if (mode == VRAMMode.Menu)
             {
@@ -163,7 +163,7 @@ namespace BinarySerializer.Ray1
             }
             else if (mode == VRAMMode.BigRay)
             {
-                vram.AddDataAt(10, 0, 0, 0, bigRay.TextureBlock, 256);
+                vram.AddDataAt(10, 0, 0, 0, bigRay.ImageData, 256);
             }
 
             int paletteY = 224; // 480 - 1 page height
@@ -178,8 +178,8 @@ namespace BinarySerializer.Ray1
 
                 if (mode == VRAMMode.Level)
                 {
-                    vram.AddPalette(world.ObjPalette2, 1, 1, 0, paletteY++);
-                    vram.AddPalette(world.ObjPalette1, 1, 1, 0, paletteY++);
+                    vram.AddPalette(world.Palette2, 1, 1, 0, paletteY++);
+                    vram.AddPalette(world.Palette1, 1, 1, 0, paletteY++);
                 }
                 else
                 {

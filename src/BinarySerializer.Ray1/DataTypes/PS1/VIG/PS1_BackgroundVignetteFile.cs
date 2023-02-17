@@ -3,7 +3,7 @@
     /// <summary>
     /// Background vignette file data
     /// </summary>
-    public class PS1_BackgroundVignetteFile : PS1_BaseFile
+    public class PS1_BackgroundVignetteFile : PS1_XXXPack
     {
         /// <summary>
         /// The width of an image block
@@ -13,12 +13,12 @@
         /// <summary>
         /// The pointer to the image block
         /// </summary>
-        public Pointer ImageBlockPointer => BlockPointers[0];
+        public Pointer ImageBlockPointer => FilePointers[0];
 
         /// <summary>
         /// The pointer to the palette block
         /// </summary>
-        public Pointer PaletteBlockPointer => BlockPointers[1];
+        public Pointer PaletteBlockPointer => FilePointers[1];
 
         /// <summary>
         /// The image block
@@ -50,9 +50,9 @@
             s.DoAt(PaletteBlockPointer, () => 
             {
                 // TODO: Get correct length and parse
-                UnknownPaletteHeader = s.SerializeArray<byte>(UnknownPaletteHeader, (FileSize - PaletteBlockPointer.FileOffset) % 512, name: nameof(UnknownPaletteHeader));
+                UnknownPaletteHeader = s.SerializeArray<byte>(UnknownPaletteHeader, (PackSize - PaletteBlockPointer.FileOffset) % 512, name: nameof(UnknownPaletteHeader));
 
-                var numPalettes = (FileSize - s.CurrentPointer.FileOffset) / (256 * 2);
+                var numPalettes = (PackSize - s.CurrentPointer.FileOffset) / (256 * 2);
                 ParallaxPalettes ??= new RGBA5551Color[numPalettes][];
 
                 for (int i = 0; i < ParallaxPalettes.Length; i++)
