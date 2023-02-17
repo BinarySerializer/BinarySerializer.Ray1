@@ -19,10 +19,10 @@ namespace BinarySerializer.Ray1
         public byte UnkByte { get; set; } // Padding?
 
         public byte BackgroundDefineNormalChecksum { get; set; }
-        public BackgroundLayerPosition[] BackgroundDefineNormal { get; set; }
+        public BackgroundSpritePosition[] BackgroundDefineNormal { get; set; }
 
         public byte BackgroundDefineDiffChecksum { get; set; }
-        public BackgroundLayerPosition[] BackgroundDefineDiff { get; set; }
+        public BackgroundSpritePosition[] BackgroundDefineDiff { get; set; }
 
         /// <summary>
         /// Handles the data serialization
@@ -63,7 +63,7 @@ namespace BinarySerializer.Ray1
                 name: nameof(BackgroundDefineNormalChecksum), 
                 action: () =>
                 {
-                    s.DoXOR((byte)(isEncryptedAndChecksum ? 0xA5 : 0), () => BackgroundDefineNormal = s.SerializeObjectArray<BackgroundLayerPosition>(BackgroundDefineNormal, 6, name: nameof(BackgroundDefineNormal)));
+                    s.DoXOR((byte)(isEncryptedAndChecksum ? 0xA5 : 0), () => BackgroundDefineNormal = s.SerializeObjectArray<BackgroundSpritePosition>(BackgroundDefineNormal, 6, name: nameof(BackgroundDefineNormal)));
                 });
 
             BackgroundDefineDiffChecksum = s.DoChecksum(
@@ -73,7 +73,7 @@ namespace BinarySerializer.Ray1
                 name: nameof(BackgroundDefineDiffChecksum), 
                 action: () =>
                 {
-                    s.DoXOR((byte)(isEncryptedAndChecksum ? 0xA5 : 0), () => BackgroundDefineDiff = s.SerializeObjectArray<BackgroundLayerPosition>(BackgroundDefineDiff, 6, name: nameof(BackgroundDefineDiff)));
+                    s.DoXOR((byte)(isEncryptedAndChecksum ? 0xA5 : 0), () => BackgroundDefineDiff = s.SerializeObjectArray<BackgroundSpritePosition>(BackgroundDefineDiff, 6, name: nameof(BackgroundDefineDiff)));
                 });
         }
 

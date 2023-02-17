@@ -1,24 +1,20 @@
 ﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Background layer position data
+    /// Background sprite position data
     /// </summary>
-    public class BackgroundLayerPosition : BinarySerializable
+    public class BackgroundSpritePosition : BinarySerializable
     {
         /// <summary>
-        /// The layer x position
+        /// The sprite x position
         /// </summary>
         public short XPosition { get; set; }
-        
+
         /// <summary>
-        /// The layer y position
+        /// The sprite y position
         /// </summary>
         public short YPosition { get; set; }
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
             XPosition = s.Serialize<short>(XPosition, name: nameof(XPosition));

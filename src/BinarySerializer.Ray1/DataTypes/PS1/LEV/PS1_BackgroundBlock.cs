@@ -5,18 +5,8 @@
     /// </summary>
     public class PS1_BackgroundBlock : BinarySerializable
     {
-        public BackgroundLayerPosition[] BackgroundDefineNormal { get; set; }
-        public BackgroundLayerPosition[] BackgroundDefineDiff { get; set; }
-
-        // LevelDefine_0?
-        public byte[] Unknown3 { get; set; }
-
-        /// <summary>
-        /// The background layer info items
-        /// </summary>
-        public SpriteCollection SpriteCollection { get; set; }
-
-        public byte[] Unknown4 { get; set; }
+        public BackgroundSpritePosition[] SpritePositions { get; set; }
+        public SpriteCollection Sprites { get; set; }
 
         /// <summary>
         /// Handles the data serialization
@@ -24,17 +14,12 @@
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetRequiredSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
+            int count = settings.EngineVersion == Ray1EngineVersion.PS1_JP ? 20 : 16;
 
             // Serialize the background layer information
-            BackgroundDefineNormal = s.SerializeObjectArray<BackgroundLayerPosition>(BackgroundDefineNormal, 6, name: nameof(BackgroundDefineNormal));
-            BackgroundDefineDiff = s.SerializeObjectArray<BackgroundLayerPosition>(BackgroundDefineDiff, 6, name: nameof(BackgroundDefineDiff));
-
-            Unknown3 = s.SerializeArray<byte>(Unknown3, 16, name: nameof(Unknown3));
-
-            SpriteCollection = s.SerializeObject<SpriteCollection>(SpriteCollection, x => x.Pre_SpritesCount = 12, name: nameof(SpriteCollection));
-
-            Unknown4 = s.SerializeArray<byte>(Unknown4, settings.EngineVersion == Ray1EngineVersion.PS1_JP ? 208 : 80, name: nameof(Unknown4));
+            SpritePositions = s.SerializeObjectArray<BackgroundSpritePosition>(SpritePositions, count, name: nameof(SpritePositions));
+            Sprites = s.SerializeObject<SpriteCollection>(Sprites, x => x.Pre_SpritesCount = count, name: nameof(Sprites));
         }
     }
 }
