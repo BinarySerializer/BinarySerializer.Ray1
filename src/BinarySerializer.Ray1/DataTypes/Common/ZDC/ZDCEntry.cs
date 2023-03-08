@@ -2,15 +2,15 @@
 {
     public class ZDCEntry : BinarySerializable
     {
-        public ushort ZDCIndex { get; set; }
-        public byte ZDCCount { get; set; }
+        public ushort Index { get; set; }
+        public byte Count { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
         {
             s.DoBits<ushort>(b =>
             {
-                ZDCIndex = b.SerializeBits<ushort>(ZDCIndex, 11, name: nameof(ZDCIndex));
-                ZDCCount = b.SerializeBits<byte>(ZDCCount, 5, name: nameof(ZDCCount));
+                Index = b.SerializeBits<ushort>(Index, 11, name: nameof(Index));
+                Count = b.SerializeBits<byte>(Count, 5, name: nameof(Count));
             });
         }
     }

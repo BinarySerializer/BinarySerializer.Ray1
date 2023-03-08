@@ -15,7 +15,8 @@
             Byte_04 = s.Serialize<byte>(Byte_04, name: nameof(Byte_04));
             Byte_05 = s.Serialize<byte>(Byte_05, name: nameof(Byte_05));
 
-            s.DoAt(TablePointer, () => SpriteIndexTable = s.SerializeArray<ushort>(SpriteIndexTable, Byte_05 == 1 ? 256 : Byte_04, name: nameof(SpriteIndexTable)));
+            s.DoAt(TablePointer, () => 
+                SpriteIndexTable = s.SerializeArray<ushort>(SpriteIndexTable, Byte_05 == 1 ? 256 : Byte_04, name: nameof(SpriteIndexTable)));
         }
     }
 }

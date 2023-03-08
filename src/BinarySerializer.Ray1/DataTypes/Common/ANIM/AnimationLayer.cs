@@ -1,123 +1,65 @@
-﻿using System;
-
-namespace BinarySerializer.Ray1
+﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// An animation layer
+    /// A layer in a sprite animation. This defines the sprite and its placement.
     /// </summary>
     public class AnimationLayer : BinarySerializable
     {
-        /// <summary>
-        /// Indicates if the layer is flipped horizontally
-        /// </summary>
-        public bool IsFlippedHorizontally
-        {
-            get => Flags.HasFlag(R2_AnimationLayerFlags.FlippedHorizontally);
-            set
-            {
-                if (value)
-                    Flags |= R2_AnimationLayerFlags.FlippedHorizontally;
-                else
-                    Flags &= ~R2_AnimationLayerFlags.FlippedHorizontally;
-            }
-        }
+        public bool FlipX { get; set; }
+        public bool FlipY { get; set; }
 
-        /// <summary>
-        /// Indicates if the layer is flipped vertically
-        /// </summary>
-        public bool IsFlippedVertically
-        {
-            get => Flags.HasFlag(R2_AnimationLayerFlags.FlippedVertically);
-            set
-            {
-                if (value)
-                    Flags |= R2_AnimationLayerFlags.FlippedVertically;
-                else
-                    Flags &= ~R2_AnimationLayerFlags.FlippedVertically;
-            }
-        }
-
-        /// <summary>
-        /// The animation layer flags
-        /// </summary>
-        public R2_AnimationLayerFlags Flags { get; set; }
-
-        /// <summary>
-        /// The x position
-        /// </summary>
         public byte XPosition { get; set; }
-
-        /// <summary>
-        /// The y position
-        /// </summary>
         public byte YPosition { get; set; }
 
         /// <summary>
-        /// The sprite index for the layer
+        /// The sprite index. For Rayman 2 this is invalid if 0x3fff.
         /// </summary>
         public ushort SpriteIndex { get; set; }
 
-        /// <summary>
-        /// Serializes the data
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s) 
         {
-            var settings = s.GetRequiredSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
             {
                 s.DoBits<ushort>(b =>
                 {
-                    // TODO: The game uses 14 bits here instead of 12
-                    SpriteIndex = b.SerializeBits<ushort>(SpriteIndex, 12, name: nameof(SpriteIndex));
-                    Flags = b.SerializeBits<R2_AnimationLayerFlags>(Flags, 4, name: nameof(Flags));
+                    // TODO: Serialize as nullable? Might be annoying to use the property for other games then though.
+                    SpriteIndex = b.SerializeBits<ushort>(SpriteIndex, 14, name: nameof(SpriteIndex));
+                    FlipX = b.SerializeBits<bool>(FlipX, 1, name: nameof(FlipX));
+                    FlipY = b.SerializeBits<bool>(FlipY, 1, name: nameof(FlipY));
                 });
 
                 XPosition = s.Serialize<byte>(XPosition, name: nameof(XPosition));
                 YPosition = s.Serialize<byte>(YPosition, name: nameof(YPosition));
             }
-            else if (settings.EngineBranch == Ray1EngineBranch.Jaguar ||
-                     settings.EngineBranch == Ray1EngineBranch.SNES)
+            else if (settings.EngineBranch == Ray1EngineBranch.SNES)
             {
-                if (settings.EngineBranch == Ray1EngineBranch.SNES)
+                s.DoBits<byte>(b =>
                 {
-                    s.DoBits<byte>(b =>
-                    {
-                        XPosition = b.SerializeBits<byte>(XPosition, 7, name: nameof(XPosition));
-                        IsFlippedHorizontally = b.SerializeBits<bool>(IsFlippedHorizontally, 1, name: nameof(IsFlippedHorizontally));
-                    });
-                    s.DoBits<byte>(b =>
-                    {
-                        YPosition = b.SerializeBits<byte>(YPosition, 7, name: nameof(YPosition));
-                        IsFlippedVertically = b.SerializeBits<bool>(IsFlippedVertically, 1, name: nameof(IsFlippedVertically));
-                    });
-                }
-                else
+                    XPosition = b.SerializeBits<byte>(XPosition, 7, name: nameof(XPosition));
+                    FlipX = b.SerializeBits<bool>(FlipX, 1, name: nameof(FlipX));
+                });
+                s.DoBits<byte>(b =>
                 {
-                    XPosition = s.Serialize<byte>(XPosition, name: nameof(XPosition));
-                    YPosition = s.Serialize<byte>(YPosition, name: nameof(YPosition));
-                }
-
+                    YPosition = b.SerializeBits<byte>(YPosition, 7, name: nameof(YPosition));
+                    FlipY = b.SerializeBits<bool>(FlipY, 1, name: nameof(FlipY));
+                });
                 SpriteIndex = s.Serialize<byte>((byte)SpriteIndex, name: nameof(SpriteIndex));
             }
-            else
+            else if (settings.EngineBranch == Ray1EngineBranch.Jaguar)
             {
-                IsFlippedHorizontally = s.Serialize<bool>(IsFlippedHorizontally, name: nameof(IsFlippedHorizontally));
                 XPosition = s.Serialize<byte>(XPosition, name: nameof(XPosition));
                 YPosition = s.Serialize<byte>(YPosition, name: nameof(YPosition));
                 SpriteIndex = s.Serialize<byte>((byte)SpriteIndex, name: nameof(SpriteIndex));
             }
-        }
-
-        [Flags]
-        public enum R2_AnimationLayerFlags
-        {
-            None = 0,
-            Flag_0 = 1 << 0,
-            Flag_1 = 1 << 1,
-            FlippedHorizontally = 1 << 2,
-            FlippedVertically = 1 << 3,
+            else
+            {
+                FlipX = s.Serialize<bool>(FlipX, name: nameof(FlipX));
+                XPosition = s.Serialize<byte>(XPosition, name: nameof(XPosition));
+                YPosition = s.Serialize<byte>(YPosition, name: nameof(YPosition));
+                SpriteIndex = s.Serialize<byte>((byte)SpriteIndex, name: nameof(SpriteIndex));
+            }
         }
     }
 }

@@ -113,7 +113,7 @@ namespace BinarySerializer.Ray1.GBA
                     // Get max linked etat if we've already serialized ETA
                     if (hasSerialized)
                     {
-                        var maxLinked = ETA.SelectMany(x => x).Where(x => x != null).Max(x => x.LinkedEtat) + 1;
+                        var maxLinked = ETA.SelectMany(x => x).Where(x => x != null).Max(x => x.NextMainEtat) + 1;
 
                         if (etatCount < maxLinked)
                             etatCount = maxLinked;
@@ -150,8 +150,8 @@ namespace BinarySerializer.Ray1.GBA
                             count = prevETA[j].Length;
 
                             // Get max linked subetat
-                            var validLinks = prevETA.SelectMany(x => x).Where(x => x?.LinkedEtat == j).ToArray();
-                            var maxLinked = validLinks.Any() ? validLinks.Max(x => x.LinkedSubEtat) + 1 : -1;
+                            var validLinks = prevETA.SelectMany(x => x).Where(x => x?.NextMainEtat == j).ToArray();
+                            var maxLinked = validLinks.Any() ? validLinks.Max(x => x.NextSubEtat) + 1 : -1;
 
                             if (count < maxLinked)
                                 count = maxLinked;
@@ -162,7 +162,7 @@ namespace BinarySerializer.Ray1.GBA
 
                         ETA[j] ??= new ObjState[count];
                     }
-                } while (!ETA.SelectMany(x => x).Where(x => x != null).All(eta => ETA.Length > eta.LinkedEtat && ETA[eta.LinkedEtat].Length > eta.LinkedSubEtat));
+                } while (!ETA.SelectMany(x => x).Where(x => x != null).All(eta => ETA.Length > eta.NextMainEtat && ETA[eta.NextMainEtat].Length > eta.NextSubEtat));
             }
 
             if (CommandsPointer != null)

@@ -67,7 +67,7 @@ namespace BinarySerializer.Ray1
 
                 if (item is Mapper_EventCMDItem med)
                 {
-                    med.DisplayPrio = parser.ReadByteValue();
+                    med.InitFlag = parser.ReadByteValue();
                     med.LinkID = parser.ReadShortValue();
                 }
 

@@ -87,8 +87,8 @@ namespace BinarySerializer.Ray1
                 if (EtatPointers[EtatCount.Value - 1] != null)
                 {
                     // TODO: Find better way to parse this
-                    
-                    s.DoAt(EtatPointers.Last(), () => 
+
+                    s.DoAt(EtatPointers.Last(), () =>
                     {
                         uint count = 0;
                         const int maxCount = 69;
@@ -107,11 +107,11 @@ namespace BinarySerializer.Ray1
                             ObjState state = s.SerializeObject<ObjState>(null, name: $"Dummy state {count}");
 
                             // Additional check to make sure only valid state data gets read
-                            if (state.LinkedEtat >= EtatPointers.Length && 
+                            if (state.NextMainEtat >= EtatPointers.Length &&
                                 // The vol 3 demo has some states with garbage data before valid ones, so don't include this
                                 settings.EngineVersion != Ray1EngineVersion.PS1_JPDemoVol3 &&
                                 // Rayman 2 uses 0xFF for the last state in a link-chain for when always objects should be deleted
-                                !(state.LinkedEtat == 0xFF && settings.EngineVersion == Ray1EngineVersion.R2_PS1))
+                                !(state.NextMainEtat == 0xFF && settings.EngineVersion == Ray1EngineVersion.R2_PS1))
                                 break;
 
                             // Make sure we haven't reached the max

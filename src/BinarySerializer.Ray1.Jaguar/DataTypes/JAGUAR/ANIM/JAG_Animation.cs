@@ -3,17 +3,17 @@
     /// <summary>
     /// Animation for the Jaguar version
     /// </summary>
-    public class JAG_Animation : BinarySerializable, IAnimation
+    public class JAG_Animation : BinarySerializable
     {
         /// <summary>
         /// The number of layers to use per frame
         /// </summary>
-        public byte LayersPerFrame { get; set; }
+        public byte LayersCount { get; set; }
 
         /// <summary>
         /// The number of frames in the animation
         /// </summary>
-        public byte FrameCount { get; set; }
+        public byte FramesCount { get; set; }
 
         /// <summary>
         /// The animation layers
@@ -27,13 +27,13 @@
         public override void SerializeImpl(SerializerObject s) 
         {
             // Serialize data
-            FrameCount = s.Serialize<byte>(FrameCount, name: nameof(FrameCount));
+            FramesCount = s.Serialize<byte>(FramesCount, name: nameof(FramesCount));
             s.SerializePadding(1);
-            LayersPerFrame = s.Serialize<byte>(LayersPerFrame, name: nameof(LayersPerFrame));
+            LayersCount = s.Serialize<byte>(LayersCount, name: nameof(LayersCount));
             s.SerializePadding(1);
 
             // Serialize data from pointers
-            Layers = s.SerializeObjectArray(Layers, LayersPerFrame * FrameCount, name: nameof(Layers));
+            Layers = s.SerializeObjectArray(Layers, LayersCount * FramesCount, name: nameof(Layers));
         }
     }
 }

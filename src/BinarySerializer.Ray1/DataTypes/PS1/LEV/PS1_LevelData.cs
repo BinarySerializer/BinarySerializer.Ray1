@@ -23,7 +23,8 @@
         public byte ObjectLinksCount { get; set; }
 
         public ObjData[] Objects { get; set; }
-        public PS1_JPDemoVol3_UnknownObjTableItem[] UnknownObjTable { get; set; }
+        // Used like another link table in unused functions and sometimes has garbage data
+        public short[] UnknownObjTable { get; set; }
         public byte[] ObjectLinkingTable { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
@@ -52,12 +53,20 @@
                 s.Context.SystemLogger?.LogWarning("Object counts don't match");
 
             // Serialize data from pointers
-            s.DoAt(ObjectsPointer, () =>
-                Objects = s.SerializeObjectArray<ObjData>(Objects, ObjectsCount, name: nameof(Objects)));
+            s.DoWithDefaults(new SerializerDefaults()
+            {
+                // Runtime data contains leftover garbage data here
+                DisableFormattingWarnings = settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ||
+                                            settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6
+            }, () =>
+            {
+                s.DoAt(ObjectsPointer, () =>
+                    Objects = s.SerializeObjectArray<ObjData>(Objects, ObjectsCount, name: nameof(Objects)));
+            });
 
             if (UnknownObjTablePointer != null)
                 s.DoAt(UnknownObjTablePointer, () =>
-                    UnknownObjTable = s.SerializeObjectArray<PS1_JPDemoVol3_UnknownObjTableItem>(UnknownObjTable, ObjectsCount, name: nameof(UnknownObjTable)));
+                    UnknownObjTable = s.SerializeArray<short>(UnknownObjTable, ObjectsCount, name: nameof(UnknownObjTable)));
 
             s.DoAt(ObjectLinksPointer, () =>
                 ObjectLinkingTable = s.SerializeArray<byte>(ObjectLinkingTable, ObjectLinksCount, name: nameof(ObjectLinkingTable)));

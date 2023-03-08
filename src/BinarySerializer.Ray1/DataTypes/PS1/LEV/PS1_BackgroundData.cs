@@ -13,7 +13,7 @@
         /// <summary>
         /// The background sprites
         /// </summary>
-        public SpriteCollection Sprites { get; set; }
+        public Sprite[] Sprites { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
         {
@@ -22,7 +22,7 @@
 
             // Serialize the background layer information
             SpritePositions = s.SerializeObjectArray<BackgroundSpritePosition>(SpritePositions, count, name: nameof(SpritePositions));
-            Sprites = s.SerializeObject<SpriteCollection>(Sprites, x => x.Pre_SpritesCount = count, name: nameof(Sprites));
+            Sprites = s.SerializeObjectArray<Sprite>(Sprites, count, name: nameof(Sprites));
         }
     }
 }

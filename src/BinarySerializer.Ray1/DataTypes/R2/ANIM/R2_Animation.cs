@@ -1,11 +1,9 @@
-﻿using System.Linq;
-
-namespace BinarySerializer.Ray1
+﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
     /// Animation data
     /// </summary>
-    public class R2_Animation : BinarySerializable, IAnimation
+    public class R2_Animation : BinarySerializable
     {
         #region Animation Data
 
@@ -31,7 +29,7 @@ namespace BinarySerializer.Ray1
         /// <summary>
         /// The amount of frames in the animation
         /// </summary>
-        public byte FrameCount { get; set; }
+        public ushort FramesCount { get; set; }
 
         public byte UnkAnimDataCount { get; set; }
 
@@ -58,20 +56,6 @@ namespace BinarySerializer.Ray1
 
         #endregion
 
-        #region Interface Members
-
-        /// <summary>
-        /// The number of layers to use per frame
-        /// </summary>
-        byte IAnimation.LayersPerFrame => (byte)LayersPerFrame;
-
-        /// <summary>
-        /// The animation layers
-        /// </summary>
-        AnimationLayer[] IAnimation.Layers => Layers.SelectMany(x => x).ToArray();
-
-        #endregion
-
         /// <summary>
         /// Handles the data serialization
         /// </summary>
@@ -85,16 +69,16 @@ namespace BinarySerializer.Ray1
 
             // Serialize values
             LayersPerFrame = s.Serialize<ushort>(LayersPerFrame, name: nameof(LayersPerFrame));
-            FrameCount = s.Serialize<byte>(FrameCount, name: nameof(FrameCount));
+            FramesCount = s.Serialize<byte>((byte)FramesCount, name: nameof(FramesCount));
             UnkAnimDataCount = s.Serialize<byte>(UnkAnimDataCount, name: nameof(UnkAnimDataCount));
 
             // Serialize layers
             s.DoAt(LayersPointer, () =>
             {
                 // Serialize the layer pointers
-                LayerPointers = s.SerializePointerArray(LayerPointers, FrameCount, name: nameof(LayerPointers));
+                LayerPointers = s.SerializePointerArray(LayerPointers, FramesCount, name: nameof(LayerPointers));
 
-                Layers ??= new AnimationLayer[FrameCount][];
+                Layers ??= new AnimationLayer[FramesCount][];
 
                 // Serialize the layers for each frame
                 for (int i = 0; i < Layers.Length; i++)
@@ -102,7 +86,7 @@ namespace BinarySerializer.Ray1
             });
 
             // Serialize frames
-            s.DoAt(FramesPointer, () => Frames = s.SerializeObjectArray<AnimationFrame>(Frames, FrameCount, name: nameof(Frames)));
+            s.DoAt(FramesPointer, () => Frames = s.SerializeObjectArray<AnimationFrame>(Frames, FramesCount, name: nameof(Frames)));
 
             // Serialize unknown animation data
             s.DoAt(UnkAnimDataPointer, () => 

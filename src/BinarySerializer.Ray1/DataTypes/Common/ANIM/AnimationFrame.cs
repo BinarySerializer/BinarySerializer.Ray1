@@ -1,34 +1,17 @@
 ﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// An animation frame
+    /// A frame for sprite animations. This defines the rectangle area used for the
+    /// sprites in each frame of an animation. It's not required for playing the
+    /// animation itself, but rather used to provide additional data on it.
     /// </summary>
     public class AnimationFrame : BinarySerializable
     {
-        /// <summary>
-        /// The frame x position
-        /// </summary>i
         public byte XPosition { get; set; }
-
-        /// <summary>
-        /// The frame y position
-        /// </summary>
         public byte YPosition { get; set; }
-
-        /// <summary>
-        /// The frame width
-        /// </summary>
         public byte Width { get; set; }
-
-        /// <summary>
-        /// The frame height
-        /// </summary>
         public byte Height { get; set; }
 
-        /// <summary>
-        /// Serializes the data
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
             XPosition = s.Serialize<byte>(XPosition, name: nameof(XPosition));

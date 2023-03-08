@@ -1,6 +1,7 @@
 ﻿namespace BinarySerializer.Ray1
 {
-    // All names starting with "TYPE_" come from the GBA version. All names starting with "MS_" come from Designer. The rest are manually added.
+    // All names starting with "TYPE_" come from the GBA version. All names starting with "MS_" come from Designer.
+    // The rest are manually added.
 
     /// <summary>
     /// The available object types

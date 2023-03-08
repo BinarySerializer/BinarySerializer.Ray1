@@ -30,7 +30,7 @@
         /// <summary>
         /// The tiles for the map
         /// </summary>
-        public MapTile[] Tiles { get; set; }
+        public Block[] Tiles { get; set; }
 
         /// <summary>
         /// Handles the data serialization
@@ -77,7 +77,7 @@
                     LastPlan1Palette = s.Serialize<byte>(LastPlan1Palette, name: nameof(LastPlan1Palette));
 
                     // Serialize the map cells
-                    Tiles = s.SerializeObjectArray<MapTile>(Tiles, Height * Width, name: nameof(Tiles));
+                    Tiles = s.SerializeObjectArray<Block>(Tiles, Height * Width, name: nameof(Tiles));
                 });
         }
     }

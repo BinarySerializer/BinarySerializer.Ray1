@@ -1,31 +1,37 @@
-﻿using System.Linq;
-
-namespace BinarySerializer.Ray1
+﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
     /// A common map .MAP file
     /// </summary>
     public class MapData : BinarySerializable
     {
+        public MapData() { }
+
+        public MapData(int width, int height)
+        {
+            Width = (ushort)width;
+            Height = (ushort)height;
+            Blocks = new Block[width * height];
+
+            for (int i = 0; i < Blocks.Length; i++)
+                Blocks[i] = new Block();
+        }
+
         /// <summary>
-        /// The width of the map, in cells
+        /// The width of the map
         /// </summary>
         public ushort Width { get; set; }
 
         /// <summary>
-        /// The height of the map, in cells
+        /// The height of the map
         /// </summary>
         public ushort Height { get; set; }
 
         /// <summary>
-        /// The tiles for the map
+        /// The map blocks (tiles). Each block is 16x16 pixels.
         /// </summary>
-        public MapTile[] Tiles { get; set; }
+        public Block[] Blocks { get; set; }
 
-        /// <summary>
-        /// Serializes the data
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s) 
         {
             // Serialize map size
@@ -33,14 +39,7 @@ namespace BinarySerializer.Ray1
             Height = s.Serialize<ushort>(Height, name: nameof(Height));
 
             // Serialize tiles
-            Tiles = s.SerializeObjectArray<MapTile>(Tiles, Width * Height, name: nameof(Tiles));
+            Blocks = s.SerializeObjectArray<Block>(Blocks, Width * Height, name: nameof(Blocks));
         }
-
-        public static MapData GetEmptyMapData(int width, int height) => new MapData()
-        {
-            Width = (ushort)width,
-            Height = (ushort)height,
-            Tiles = Enumerable.Repeat(new MapTile(), width * height).ToArray()
-        };
     }
 }

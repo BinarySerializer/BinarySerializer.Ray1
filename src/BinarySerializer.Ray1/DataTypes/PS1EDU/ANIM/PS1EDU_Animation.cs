@@ -3,7 +3,7 @@
     /// <summary>
     /// Animation data for EDU on PS1
     /// </summary>
-    public class PS1EDU_Animation : BinarySerializable, IAnimation
+    public class PS1EDU_Animation : BinarySerializable
     {
         #region Animation Properties
 
@@ -22,10 +22,6 @@
         public byte[] LayersData { get; set; }
         public AnimationFrame[] Frames { get; set; }
         public AnimationLayer[] Layers { get; set; }
-
-        // Interface members
-        byte IAnimation.LayersPerFrame => (byte)LayersPerFrame;
-        byte IAnimation.FrameCount => (byte)FrameCount;
 
         #endregion
 

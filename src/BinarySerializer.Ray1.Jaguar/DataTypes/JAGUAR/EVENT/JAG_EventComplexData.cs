@@ -94,6 +94,7 @@ namespace BinarySerializer.Ray1.Jaguar
 			{
 				s.DoAt(SpritesPointer, () => 
 				{
+                    // TODO: We can determine this better now that we have multiple width values etc.
 					if (States != null && States.Length > 0)
 					{
 						int maxImageIndex = States
@@ -111,7 +112,7 @@ namespace BinarySerializer.Ray1.Jaguar
 						{
 							var i = s.SerializeObject<Sprite>(default, name: $"{nameof(Sprites)}[{index}]");
 
-							if (temp.Any() && i.Index != 0xFF && i.ImageBufferOffset < temp.Last().ImageBufferOffset)
+							if (temp.Any() && i.Id != null && i.ImageBufferOffset < temp.Last().ImageBufferOffset)
 								break;
 
 							temp.Add(i);

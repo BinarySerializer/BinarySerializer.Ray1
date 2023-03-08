@@ -1,6 +1,6 @@
 ﻿namespace BinarySerializer.Ray1
 {
-    public class MapTile : BinarySerializable
+    public class Block : BinarySerializable
     {
         public bool Pre_SNES_Is8PxTile { get; set; } // True for normal 8x8 tiles, otherwise a 16x16 tile which consists of 4 8x8 tiles
 
@@ -9,8 +9,8 @@
         public ushort BlockType { get; set; }
 
         // Flip flags
-        public bool HorizontalFlip { get; set; }
-        public bool VerticalFlip { get; set; }
+        public bool FlipX { get; set; }
+        public bool FlipY { get; set; }
 
         public byte PC_Byte_03 { get; set; }
         public PC_TransparencyMode PC_RuntimeTransparencyMode { get; set; }
@@ -45,11 +45,20 @@
             else if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 || 
                      settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
             {
-                s.DoBits<int>(b =>
+                s.DoBits<ushort>(b =>
                 {
                     TileMapX = b.SerializeBits<ushort>(TileMapX, 10, name: nameof(TileMapX));
                     TileMapY = b.SerializeBits<ushort>(TileMapY, 6, name: nameof(TileMapY));
-                    BlockType = b.SerializeBits<ushort>(BlockType, 8, name: nameof(BlockType));
+                });
+
+                BlockType = s.Serialize<byte>((byte)BlockType, name: nameof(BlockType));
+
+                // Unused
+                s.DoBits<byte>(b =>
+                {
+                    FlipX = b.SerializeBits<bool>(FlipX, 1, name: nameof(FlipX));
+                    FlipY = b.SerializeBits<bool>(FlipY, 1, name: nameof(FlipY));
+                    b.SerializePadding(6, logIfNotNull: true);
                 });
             }
             else if (settings.EngineVersion == Ray1EngineVersion.Saturn)
@@ -80,8 +89,8 @@
                     s.DoBits<ushort>(b =>
                     {
                         TileMapY = b.SerializeBits<ushort>(TileMapY, 10, name: nameof(TileMapY));
-                        HorizontalFlip = b.SerializeBits<bool>(HorizontalFlip, 1, name: nameof(HorizontalFlip));
-                        VerticalFlip = b.SerializeBits<bool>(VerticalFlip, 1, name: nameof(VerticalFlip));
+                        FlipX = b.SerializeBits<bool>(FlipX, 1, name: nameof(FlipX));
+                        FlipY = b.SerializeBits<bool>(FlipY, 1, name: nameof(FlipY));
                         BlockType = b.SerializeBits<ushort>(BlockType, 4, name: nameof(BlockType));
                     });
                 }
@@ -92,8 +101,8 @@
                         TileMapY = b.SerializeBits<ushort>(TileMapY, 10, name: nameof(TileMapY));
                         PaletteIndex = b.SerializeBits<byte>(PaletteIndex, 3, name: nameof(PaletteIndex));
                         Priority = b.SerializeBits<bool>(Priority, 1, name: nameof(Priority));
-                        HorizontalFlip = b.SerializeBits<bool>(HorizontalFlip, 1, name: nameof(HorizontalFlip));
-                        VerticalFlip = b.SerializeBits<bool>(VerticalFlip, 1, name: nameof(VerticalFlip));
+                        FlipX = b.SerializeBits<bool>(FlipX, 1, name: nameof(FlipX));
+                        FlipY = b.SerializeBits<bool>(FlipY, 1, name: nameof(FlipY));
                     });
                 }
 

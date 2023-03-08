@@ -55,7 +55,7 @@ namespace BinarySerializer.Ray1
         public ushort[] ObjNumLabelOffsets { get; set; }
         public byte[] TileTextures { get; set; }
         public uint MapBlockSize { get; set; }
-        public MapTile[] MapTiles { get; set; }
+        public Block[] MapTiles { get; set; }
 
         #endregion
 
@@ -113,7 +113,7 @@ namespace BinarySerializer.Ray1
 
             // Serialize the map tiles
             MapBlockSize = s.Serialize<uint>(MapBlockSize, name: nameof(MapBlockSize));
-            MapTiles = s.SerializeObjectArray<MapTile>(MapTiles, MapBlockSize / 6, name: nameof(MapTiles));
+            MapTiles = s.SerializeObjectArray<Block>(MapTiles, MapBlockSize / 6, name: nameof(MapTiles));
 
             // Finally, read the objects
             s.DoAt(ObjBlockPointer, () => {

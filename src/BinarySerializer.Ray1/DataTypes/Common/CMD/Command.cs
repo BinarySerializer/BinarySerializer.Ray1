@@ -23,13 +23,9 @@ namespace BinarySerializer.Ray1
         /// </summary>
         public int Length => Arguments.Length + 1;
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetRequiredSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             CommandType = s.Serialize<CommandType>(CommandType, name: nameof(CommandType));
 
@@ -77,10 +73,10 @@ namespace BinarySerializer.Ray1
                     case CommandType.GO_TEST:
                         var tempList = new List<byte>();
 
-                        tempList.Add(s.Serialize<byte>((byte)0, name: nameof(Arguments)  + "[0]"));
+                        tempList.Add(s.Serialize<byte>((byte)0, name: $"{nameof(Arguments)}[0]"));
 
                         if (tempList[0] <= 4)
-                            tempList.Add(s.Serialize<byte>((byte)0, name: nameof(Arguments) + "[1]"));
+                            tempList.Add(s.Serialize<byte>((byte)0, name: $"{nameof(Arguments)}[1]"));
 
                         Arguments = tempList.ToArray();
 
@@ -113,7 +109,7 @@ namespace BinarySerializer.Ray1
 
             if (RequiresTestTrue() || RequiresTestFalse())
             {
-                if (prevCmd?.CommandType == CommandType.GO_TEST || prevCmd?.CommandType == CommandType.GO_SETTEST)
+                if (prevCmd?.CommandType is CommandType.GO_TEST or CommandType.GO_SETTEST)
                     prepend = $"{prepend}\t";
                 else
                     prepend += $"IF ({(RequiresTestFalse() ? "!" : "")}TEST) ";
@@ -135,8 +131,8 @@ namespace BinarySerializer.Ray1
                 case CommandType.RESERVED_GO_SKIPF:
                 case CommandType.RESERVED_GO_SKIPT:
                     cmd = cmd.Replace("RESERVED_GO_", "");
-                    if(cmd == "SKIPT" || cmd == "SKIPF") cmd = "SKIP";
-
+                    if (cmd is "SKIPT" or "SKIPF") 
+                        cmd = "SKIP";
                     return $"{prepend}{cmd} TO LINE {labelOffsetsLineNumbers[Arguments[0]]};";
 
                 case CommandType.GO_LABEL:
@@ -166,7 +162,7 @@ namespace BinarySerializer.Ray1
                     if (nextCmd?.RequiresTestFalse() == true || nextCmd?.RequiresTestTrue() == true)
                     {
                         prepend = $"{prepend}IF (";
-                        append = $")";
+                        append = ")";
                     }
                     else
                     {
@@ -179,11 +175,11 @@ namespace BinarySerializer.Ray1
                         switch (Arguments[0])
                         {
                             case 0:
-                                return $"{prepend}{(Arguments[1] == 1 ? "": "!")}ISFLIPPED{append}";
+                                return $"{prepend}{(Arguments[1] == 1 ? "": "!")}FLIPX{append}";
                             case 1:
                                 return $"{prepend}RANDOM({Arguments[1]}){append}"; // myRand. RandArray[RandomIndex] % (Argument1 + 1);
                             case 2:
-                                return $"{prepend}RAYMAN.X {((Arguments[1] == 1) ? ">" : "<=")} X{append}";
+                                return $"{prepend}RAYMAN.X {(Arguments[1] == 1 ? ">" : "<=")} X{append}";
                             case 3:
                                 return $"{prepend}STATE == {Arguments[1]}{append}";
                             case 4:
@@ -204,20 +200,23 @@ namespace BinarySerializer.Ray1
             }
         }
 
-        public bool RequiresTestTrue() => CommandType == CommandType.RESERVED_GO_SKIPT ||
-                                          CommandType == CommandType.RESERVED_GO_GOTOT ||
-                                          CommandType == CommandType.GO_BRANCHTRUE ||
-                                          CommandType == CommandType.GO_SKIPTRUE;
-        public bool RequiresTestFalse() => CommandType == CommandType.RESERVED_GO_SKIPF ||
-                                           CommandType == CommandType.RESERVED_GO_GOTOF ||
-                                           CommandType == CommandType.GO_BRANCHFALSE ||
-                                           CommandType == CommandType.GO_SKIPFALSE;
+        public bool RequiresTestTrue() => CommandType is 
+            CommandType.RESERVED_GO_SKIPT or 
+            CommandType.RESERVED_GO_GOTOT or 
+            CommandType.GO_BRANCHTRUE or 
+            CommandType.GO_SKIPTRUE;
+        public bool RequiresTestFalse() => CommandType is 
+            CommandType.RESERVED_GO_SKIPF or 
+            CommandType.RESERVED_GO_GOTOF or 
+            CommandType.GO_BRANCHFALSE or 
+            CommandType.GO_SKIPFALSE;
 
         public bool UsesLabelOffsets 
         {
             get 
             {
-                switch (CommandType) {
+                switch (CommandType) 
+                {
                     case CommandType.RESERVED_GO_GOTO:
                     case CommandType.RESERVED_GO_GOTOF:
                     case CommandType.RESERVED_GO_GOTOT:

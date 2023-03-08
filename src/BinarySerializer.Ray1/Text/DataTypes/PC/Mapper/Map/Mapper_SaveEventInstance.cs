@@ -8,7 +8,7 @@
         public short OffsetY { get; set; }
         public string EventDefinitionKey { get; set; }
         public short HitPoints { get; set; }
-        public byte DisplayPrio { get; set; }
+        public byte InitFlag { get; set; }
         public short LinkID { get; set; }
     }
 }

@@ -9,9 +9,9 @@
         public byte[] TileSet_8000 { get; set; } // 2bpp, for background map
 
         public MapData BG1_Map { get; set; }
-        public MapTile[] BG1_Tiles { get; set; }
-        public MapTile[] BG2_Tiles { get; set; } // Foreground
-        public MapTile[] BG3_Tiles { get; set; } // Background
+        public Block[] BG1_Tiles { get; set; }
+        public Block[] BG2_Tiles { get; set; } // Foreground
+        public Block[] BG3_Tiles { get; set; } // Background
 
         public SNES_ObjData Rayman { get; set; }
         public byte[] SpriteTileSet { get; set; }
@@ -46,9 +46,9 @@
 
             // Serialize maps
             BG1_Map = s.DoAt(s.CurrentPointer + 0x28000, () => s.SerializeObject<MapData>(BG1_Map, name: nameof(BG1_Map)));
-            BG1_Tiles = s.DoAt(s.CurrentPointer + 0x1AAF8, () => s.SerializeObjectArray<MapTile>(BG1_Tiles, 1024 * 4, onPreSerialize: x => x.Pre_SNES_Is8PxTile = true, name: nameof(BG1_Tiles)));
-            BG2_Tiles = s.DoAt(s.CurrentPointer + 0x29dc4, () => s.SerializeObjectArray<MapTile>(BG2_Tiles, 32 * 32, onPreSerialize: x => x.Pre_SNES_Is8PxTile = true, name: nameof(BG2_Tiles)));
-            BG3_Tiles = s.DoAt(s.CurrentPointer + 0x2A5C4, () => s.SerializeObjectArray<MapTile>(BG3_Tiles, 32 * 32, onPreSerialize: x => x.Pre_SNES_Is8PxTile = true, name: nameof(BG3_Tiles)));
+            BG1_Tiles = s.DoAt(s.CurrentPointer + 0x1AAF8, () => s.SerializeObjectArray<Block>(BG1_Tiles, 1024 * 4, onPreSerialize: x => x.Pre_SNES_Is8PxTile = true, name: nameof(BG1_Tiles)));
+            BG2_Tiles = s.DoAt(s.CurrentPointer + 0x29dc4, () => s.SerializeObjectArray<Block>(BG2_Tiles, 32 * 32, onPreSerialize: x => x.Pre_SNES_Is8PxTile = true, name: nameof(BG2_Tiles)));
+            BG3_Tiles = s.DoAt(s.CurrentPointer + 0x2A5C4, () => s.SerializeObjectArray<Block>(BG3_Tiles, 32 * 32, onPreSerialize: x => x.Pre_SNES_Is8PxTile = true, name: nameof(BG3_Tiles)));
 
             // Serialize object data
             Rayman = s.DoAt(s.CurrentPointer + 0x10016, () => s.SerializeObject<SNES_ObjData>(Rayman, name: nameof(Rayman)));

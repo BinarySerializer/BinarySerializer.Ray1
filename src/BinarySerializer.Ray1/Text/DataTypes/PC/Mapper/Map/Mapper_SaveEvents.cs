@@ -30,7 +30,7 @@ namespace BinarySerializer.Ray1
                     item.OffsetY = parser.ReadShortValue();
                     item.EventDefinitionKey = parser.ReadValue();
                     item.HitPoints = parser.ReadShortValue();
-                    item.DisplayPrio = parser.ReadByteValue();
+                    item.InitFlag = parser.ReadByteValue();
                     item.LinkID = parser.ReadShortValue();
                     tempGroupList.Add(item);
                 }

@@ -72,7 +72,7 @@ namespace BinarySerializer.Ray1
                 }
 
                 item.DESFile = nextValue;
-                item.DisplayPrio = parser.ReadByteValue();
+                item.InitFlag = parser.ReadByteValue();
                 item.ETAFile = parser.ReadValue();
 
                 var cmdBuffer = new List<short>();
@@ -136,7 +136,7 @@ namespace BinarySerializer.Ray1
 
                 // Write header values
                 parser.WriteString(ms.DESFile);
-                parser.WriteString(ms.DisplayPrio);
+                parser.WriteString(ms.InitFlag);
 
                 parser.WriteNewLine();
 

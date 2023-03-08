@@ -14,7 +14,7 @@
 
         public Pointer EventDefinitionPointer { get; set; }
 
-        // Always 0x05?
+        // Always 0x05? Probably the same as InitFlag in multi-platform versions, but what is that?
         public ushort Unk_0A { get; set; }
 
         public ushort EventIndex { get; set; }
@@ -22,10 +22,6 @@
         // Parsed
         public JAG_MultiSprite MultiSprite { get; set; }
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
             Ushort_00 = s.Serialize<ushort>(Ushort_00, name: nameof(Ushort_00));

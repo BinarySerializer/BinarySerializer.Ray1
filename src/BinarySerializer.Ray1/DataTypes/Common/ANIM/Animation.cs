@@ -1,33 +1,21 @@
 ﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// An animation
+    /// A sprite animation
     /// </summary>
-    public class Animation : BinarySerializable, IAnimation
+    public class Animation : BinarySerializable
     {
         public Pointer LayersPointer { get; set; }
         public Pointer FramesPointer { get; set; }
 
-        public ushort LayersPerFrameSerialized { get; set; }
-        public byte LayersPerFrame => (byte)(LayersPerFrameSerialized & 0xFF);
+        public ushort LayersCount { get; set; }
+        public byte SpeedXValue { get; set; } // Value used for setting horizontal obj speed
+        public ushort FramesCount { get; set; }
 
-        public ushort FrameCountSerialized { get; set; }
-        public byte FrameCount => (byte)(FrameCountSerialized & 0xFF);
-
-        /// <summary>
-        /// The animation layers
-        /// </summary>
+        // Serialized from pointers
         public AnimationLayer[] Layers { get; set; }
-
-        /// <summary>
-        /// The animation frames
-        /// </summary>
         public AnimationFrame[] Frames { get; set; }
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s) 
         {
             // Serialize pointers
@@ -35,12 +23,16 @@
             FramesPointer = s.SerializePointer(FramesPointer, name: nameof(FramesPointer));
             
             // Serialize data
-            LayersPerFrameSerialized = s.Serialize<ushort>(LayersPerFrameSerialized, name: nameof(LayersPerFrameSerialized));
-            FrameCountSerialized = s.Serialize<ushort>(FrameCountSerialized, name: nameof(FrameCountSerialized));
+            s.DoBits<ushort>(b =>
+            {
+                LayersCount = b.SerializeBits<ushort>(LayersCount, 14, name: nameof(LayersCount));
+                SpeedXValue = b.SerializeBits<byte>(SpeedXValue, 2, name: nameof(SpeedXValue));
+            });
+            FramesCount = s.Serialize<ushort>(FramesCount, name: nameof(FramesCount));
 
             // Serialize data from pointers
-            s.DoAt(LayersPointer, () => Layers = s.SerializeObjectArray(Layers, LayersPerFrame * FrameCount, name: nameof(Layers)));
-            s.DoAt(FramesPointer, () => Frames = s.SerializeObjectArray(Frames, FrameCount, name: nameof(Frames)));
+            s.DoAt(LayersPointer, () => Layers = s.SerializeObjectArray(Layers, LayersCount * FramesCount, name: nameof(Layers)));
+            s.DoAt(FramesPointer, () => Frames = s.SerializeObjectArray(Frames, FramesCount, name: nameof(Frames)));
         }
     }
 }

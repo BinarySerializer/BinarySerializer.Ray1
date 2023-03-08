@@ -9,7 +9,7 @@
         public Pointer ImageBufferPointer { get; set; }
         public byte SpritesCount { get; set; }
 
-        public SpriteCollection Sprites { get; set; }
+        public Sprite[] Sprites { get; set; }
         public byte[] ImageBuffer { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
@@ -22,33 +22,12 @@
             s.SerializePadding(3);
 
             s.DoAt(SpritesPointer, () => 
-                Sprites = s.SerializeObject<SpriteCollection>(Sprites, x => x.Pre_SpritesCount = SpritesCount, name: nameof(Sprites)));
+                Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites)));
 
             if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
             {
-                if (ImageBuffer == null && ImageBufferPointer != null && Sprites != null)
-                {
-                    // Determine length of image buffer
-                    uint length = 0;
-                    foreach (Sprite img in Sprites.Sprites)
-                    {
-                        if (img.ImageType != 2 && img.ImageType != 3)
-                            continue;
-
-                        uint curLength = img.ImageBufferOffset;
-
-                        if (img.ImageType == 2)
-                            curLength += (uint)(img.Width / 2) * img.Height;
-                        else if (img.ImageType == 3)
-                            curLength += (uint)img.Width * img.Height;
-
-                        if (curLength > length)
-                            length = curLength;
-                    }
-                    ImageBuffer = new byte[length];
-                }
                 s.DoAt(ImageBufferPointer, () => 
-                    ImageBuffer = s.SerializeArray<byte>(ImageBuffer, ImageBuffer.Length, name: nameof(ImageBuffer)));
+                    ImageBuffer = s.SerializeArray<byte>(ImageBuffer, InternalHelpers.GetImageBufferLength(Sprites, settings), name: nameof(ImageBuffer)));
             }
         }
     }

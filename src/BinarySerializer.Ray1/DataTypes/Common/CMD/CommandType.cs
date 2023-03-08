@@ -1,6 +1,8 @@
 ﻿namespace BinarySerializer.Ray1
 {
-    // Since Mapper levels are raw non-compiled levels it doesn't use label offsets. Any command utilizing these is replaced by its counterpart which doesn't. Then when the level is compiled it is "optimized" by having the label offsets be calculated and used instead.
+    // Since Mapper levels are raw non-compiled levels it doesn't use label offsets. Any command utilizing these is replaced by
+    // its counterpart which doesn't. Then when the level is compiled it is "optimized" by having the label offsets be calculated
+    // and used instead.
 
     /// <summary>
     /// The object command types

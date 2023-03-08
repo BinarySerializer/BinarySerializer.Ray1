@@ -24,10 +24,7 @@ namespace BinarySerializer.Ray1
         {
             // Make sure there are bytes
             if (!bytes.Any())
-                return new CommandCollection()
-                {
-                    Commands = new Command[0]
-                };
+                return new CommandCollection() { Commands = Array.Empty<Command>() };
 
             // Create a new context
             using var context = contextFunc();
@@ -74,22 +71,19 @@ namespace BinarySerializer.Ray1
             return memStream.ToArray();
         }
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
             Commands = s.SerializeObjectArrayUntil<Command>(Commands, 
-                x => x.CommandType == CommandType.INVALID_CMD || 
-                     x.CommandType == CommandType.INVALID_CMD_DEMO, name: nameof(Commands));
+                x => x.CommandType is CommandType.INVALID_CMD or CommandType.INVALID_CMD_DEMO, name: nameof(Commands));
         }
 
         public string[] ToTranslatedStrings(ushort[] labelOffsets, int lineStartIndex = 0) 
         {
             int[] lineNumbers;
+            
             if (Commands == null || Commands.Length == 0) 
                 return null;
+
             if (labelOffsets != null && labelOffsets.Length > 0) 
             {
                 int[] commandOffsets = new int[Commands.Length + 1];
@@ -105,9 +99,14 @@ namespace BinarySerializer.Ray1
             } 
             else 
             {
-                lineNumbers = new int[0];
+                lineNumbers = Array.Empty<int>();
             }
-            return Commands.Select((c, i) => c.ToTranslatedString(lineNumbers, Commands.ElementAtOrDefault(i - 1), Commands.ElementAtOrDefault(i + 1))).ToArray();
+
+            return Commands.Select((c, i) => 
+                c.ToTranslatedString(
+                    labelOffsetsLineNumbers: lineNumbers, 
+                    prevCmd: Commands.ElementAtOrDefault(i - 1), 
+                    nextCmd: Commands.ElementAtOrDefault(i + 1))).ToArray();
         }
     }
 }

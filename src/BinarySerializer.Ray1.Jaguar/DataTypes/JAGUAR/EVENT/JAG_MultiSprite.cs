@@ -277,7 +277,7 @@ namespace BinarySerializer.Ray1.Jaguar
                         {
                             var i = s.SerializeObject<Sprite>(default, name: $"{nameof(Sprites)}[{index}]");
 
-                            if (temp.Any() && i.Index != 0xFF && i.ImageBufferOffset < temp.Last().ImageBufferOffset)
+                            if (temp.Any() && i.Id != null && i.ImageBufferOffset < temp.Last().ImageBufferOffset)
                                 break;
 
                             temp.Add(i);
