@@ -14,8 +14,7 @@ namespace BinarySerializer.Ray1.GBA
         public short XPosition { get; set; }
         public short YPosition { get; set; }
 
-        public ushort DisplayPrio { get; set; }
-
+        public byte InitFlag { get; set; }
         public ushort LinkGroup { get; set; }
 
         public byte Etat { get; set; }
@@ -25,7 +24,6 @@ namespace BinarySerializer.Ray1.GBA
         public byte OffsetHY { get; set; }
 
         public bool FollowEnabled { get; set; }
-
         public byte FollowSprite { get; set; }
         public byte HitPoints { get; set; }
 
@@ -33,26 +31,20 @@ namespace BinarySerializer.Ray1.GBA
 
         public byte HitSprite { get; set; }
 
+        // Serialized from pointers
         public ObjState[][] ETA { get; set; }
-
-        /// <summary>
-        /// The event commands
-        /// </summary>
         public CommandCollection Commands { get; set; }
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetRequiredSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             ETAPointer = s.SerializePointer(ETAPointer, name: nameof(ETAPointer));
             CommandsPointer = s.SerializePointer(CommandsPointer, name: nameof(CommandsPointer));
             XPosition = s.Serialize<short>(XPosition, name: nameof(XPosition));
             YPosition = s.Serialize<short>(YPosition, name: nameof(YPosition));
-            DisplayPrio = s.Serialize<ushort>(DisplayPrio, name: nameof(DisplayPrio));
+            InitFlag = s.Serialize<byte>(InitFlag, name: nameof(InitFlag));
+            s.SerializePadding(1, logIfNotNull: true);
             LinkGroup = s.Serialize<ushort>(LinkGroup, name: nameof(LinkGroup));
             Etat = s.Serialize<byte>(Etat, name: nameof(Etat));
             SubEtat = s.Serialize<byte>(SubEtat, name: nameof(SubEtat));
