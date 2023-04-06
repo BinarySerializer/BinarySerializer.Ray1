@@ -1,9 +1,9 @@
 ﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
-    /// Level save data
+    /// The save data for a <see cref="WorldInfo"/> entry
     /// </summary>
-    public class PC_SaveDataLevel : BinarySerializable
+    public class WorldInfoSave : BinarySerializable
     {
         /// <summary>
         /// Indicates if the level has been unlocked on the world map
@@ -20,10 +20,6 @@
         /// </summary>
         public byte Cages { get; set; }
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
             s.DoBits<byte>(b =>
