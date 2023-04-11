@@ -5,11 +5,7 @@
     /// </summary>
     public class SaveSlot : BinarySerializable
     {
-        // GBA-specific save verification data
-        public byte GBA_RandomValue1 { get; set; }
-        public byte GBA_RandomValue2 { get; set; }
-        public byte GBA_RandomValueVerify1 { get; set; }
-        public byte GBA_RandomValueVerify2 { get; set; }
+        public bool GBA_IsValid { get; set; }
 
         /// <summary>
         /// The save file name (maximum of 3 characters with the fourth one always being a null terminator)
@@ -55,11 +51,14 @@
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
+            // The game sets these to random values, but we can set it to constant values (0x20 and 0x40) for simplicity
+            byte gbaRandomValue1 = (byte)(GBA_IsValid ? 0x20 : 0xFF);
+            byte gbaRandomValue2 = (byte)(GBA_IsValid ? 0x40 : 0xFF);
+
             if (settings.EngineVersion == Ray1EngineVersion.GBA)
             {
-                // These values are randomly set when the game writes a save
-                GBA_RandomValue1 = s.Serialize<byte>(GBA_RandomValue1, name: nameof(GBA_RandomValue1));
-                GBA_RandomValue2 = s.Serialize<byte>(GBA_RandomValue2, name: nameof(GBA_RandomValue2));
+                gbaRandomValue1 = s.Serialize<byte>(gbaRandomValue1, name: nameof(gbaRandomValue1));
+                gbaRandomValue2 = s.Serialize<byte>(gbaRandomValue2, name: nameof(gbaRandomValue2));
             }
 
             SaveName = s.SerializeString(SaveName, 4, name: nameof(SaveName));
@@ -95,14 +94,16 @@
 
             if (settings.EngineVersion == Ray1EngineVersion.GBA)
             {
-                GBA_RandomValueVerify1 = s.Serialize<byte>(GBA_RandomValueVerify1, name: nameof(GBA_RandomValueVerify1));
-                GBA_RandomValueVerify2 = s.Serialize<byte>(GBA_RandomValueVerify2, name: nameof(GBA_RandomValueVerify2));
+                byte gbaRandomValueVerify1 = (byte)(GBA_IsValid ? 0xA5 - gbaRandomValue1 : 0xFF);
+                byte gbaRandomValueVerify2 = (byte)(GBA_IsValid ? 0x5A - gbaRandomValue2 : 0xFF);
 
-                bool valid = (byte)(GBA_RandomValue1 + GBA_RandomValueVerify1) == 0xA5 && 
-                             (byte)(GBA_RandomValue2 + GBA_RandomValueVerify2) == 0x5A;
+                gbaRandomValueVerify1 = s.Serialize<byte>(gbaRandomValueVerify1, name: nameof(gbaRandomValueVerify1));
+                gbaRandomValueVerify2 = s.Serialize<byte>(gbaRandomValueVerify2, name: nameof(gbaRandomValueVerify2));
 
-                if (!valid)
-                    throw new BinarySerializableException(this, "GBA save verification failed");
+                GBA_IsValid = (byte)(gbaRandomValue1 + gbaRandomValueVerify1) == 0xA5 && 
+                              (byte)(gbaRandomValue2 + gbaRandomValueVerify2) == 0x5A;
+
+                s.Log("{0}: {1}", nameof(GBA_IsValid), GBA_IsValid);
 
                 // Padding (0xFF). Each slot is 170 bytes. The slots in total then use
                 // 170 * 3 = 510 bytes out of 512 available bytes for the EEPROM save.
