@@ -31,6 +31,6 @@ namespace BinarySerializer.Ray1
 
         // Unused?
         Unk_14 = 1 << 14,
-        Unk_15 = 1 << 15,
+        Unk_15 = 1 << 15, // Unused death on PS1
     }
 }
