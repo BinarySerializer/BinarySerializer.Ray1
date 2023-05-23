@@ -21,11 +21,6 @@
         public byte[][] GrosPataiBlock { get; set; }
 
         /// <summary>
-        /// The checksum for the <see cref="GrosPataiBlock"/>
-        /// </summary>
-        public byte GrosPataiBlockChecksum { get; set; }
-
-        /// <summary>
         /// The index table for the <see cref="GrosPataiBlock"/>
         /// </summary>
         public uint[] GrosPataiBlockOffsetTable { get; set; }
@@ -34,11 +29,6 @@
         /// Unknown array of bytes
         /// </summary>
         public byte[] BlocksCode { get; set; }
-
-        /// <summary>
-        /// The checksum for <see cref="BlocksCode"/>
-        /// </summary>
-        public byte BlocksCodeChecksum { get; set; }
 
         /// <summary>
         /// Offset table for <see cref="BlocksCode"/>
@@ -59,38 +49,35 @@
             // Serialize the length of the third unknown value
             BlocksCodeCount = s.Serialize<uint>(BlocksCodeCount, name: nameof(BlocksCodeCount));
 
-            GrosPataiBlockChecksum = s.DoChecksum(
-                c: new Checksum8Calculator(false),
-                value: GrosPataiBlockChecksum,
-                placement: ChecksumPlacement.After,
-                name: nameof(GrosPataiBlockChecksum), 
-                action: () =>
+            s.DoProcessed(new Checksum8Processor(), p =>
+            {
+                s.DoProcessed(new Xor8Processor(0x7D), () =>
                 {
-                    s.DoXOR(0x7D, () =>
-                    {
-                        // Create the collection of rough textures if necessary
-                        GrosPataiBlock ??= new byte[GrosPataiBlockCount][];
+                    // Create the collection of rough textures if necessary
+                    GrosPataiBlock ??= new byte[GrosPataiBlockCount][];
 
-                        // Serialize each rough texture
-                        for (int i = 0; i < GrosPataiBlockCount; i++)
-                            GrosPataiBlock[i] = s.SerializeArray<byte>(GrosPataiBlock[i], Ray1Settings.CellSize * Ray1Settings.CellSize, name:
-                                $"{nameof(GrosPataiBlock)}[{i}]");
-                    });
+                    // Serialize each rough texture
+                    for (int i = 0; i < GrosPataiBlockCount; i++)
+                        GrosPataiBlock[i] = s.SerializeArray<byte>(GrosPataiBlock[i], Ray1Settings.CellSize * Ray1Settings.CellSize, name:
+                            $"{nameof(GrosPataiBlock)}[{i}]");
                 });
+
+                p.Serialize<byte>(s, "GrosPataiBlockChecksum");
+            });
 
             // Read the offset table for the rough textures
             GrosPataiBlockOffsetTable = s.SerializeArray<uint>(GrosPataiBlockOffsetTable, 1200, name: nameof(GrosPataiBlockOffsetTable));
 
-            BlocksCodeChecksum = s.DoChecksum(
-                c: new Checksum8Calculator(false),
-                value: BlocksCodeChecksum,
-                placement: ChecksumPlacement.After,
-                name: nameof(BlocksCodeChecksum),
-                action: () =>
+            s.DoProcessed(new Checksum8Processor(), p =>
+            {
+                // Serialize the items for the third unknown value
+                s.DoProcessed(new Xor8Processor(0xF3), () =>
                 {
-                    // Serialize the items for the third unknown value
-                    s.DoXOR(0xF3, () => BlocksCode = s.SerializeArray<byte>(BlocksCode, BlocksCodeCount, name: nameof(BlocksCode)));
+                    BlocksCode = s.SerializeArray<byte>(BlocksCode, BlocksCodeCount, name: nameof(BlocksCode));
                 });
+
+                p.Serialize<byte>(s, "BlocksCodeChecksum");
+            });
 
             // Read the offset table for the third unknown value
             BlocksCodeOffsetTable = s.SerializeArray<uint>(BlocksCodeOffsetTable, 1200, name: nameof(BlocksCodeOffsetTable));

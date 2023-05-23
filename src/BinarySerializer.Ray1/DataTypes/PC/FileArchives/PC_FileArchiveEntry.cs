@@ -54,7 +54,7 @@
                 FileOffset = s.Serialize<uint>(FileOffset, name: nameof(FileOffset));
                 FileSize = s.Serialize<uint>(FileSize, name: nameof(FileSize));
 
-                s.DoXOR(XORKey, () => FileName = s.SerializeString(FileName, 9, name: nameof(FileName)));
+                s.DoProcessed(new Xor8Processor(XORKey), () => FileName = s.SerializeString(FileName, 9, name: nameof(FileName)));
             }
         }
     }

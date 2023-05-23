@@ -26,12 +26,7 @@
         /// The image data
         /// </summary>
         public byte[] ImageData { get; set; }
-
-        /// <summary>
-        /// The checksum for <see cref="ImageData"/>
-        /// </summary>
-        public byte ImageDataChecksum { get; set; }
-
+        
         public uint RaymanExeCheckSum2 { get; set; }
 
         /// <summary>
@@ -135,18 +130,19 @@
                                                                    settings.EngineVersion == Ray1EngineVersion.PC_Fan);
             bool hasChecksum = isChecksumBefore || Pre_FileType != Type.BigRay;
 
-            ImageDataChecksum = s.DoChecksum(
-                c: hasChecksum ? new Checksum8Calculator(false) : null, 
-                value: ImageDataChecksum, 
-                placement: isChecksumBefore ? ChecksumPlacement.Before : ChecksumPlacement.After, 
-                name: nameof(ImageDataChecksum), 
-                action: () => 
+            s.DoProcessed(hasChecksum ? new Checksum8Processor() : null, p =>
+            {
+                if (isChecksumBefore)
+                    p?.Serialize<byte>(s, "ImageDataChecksum");
+
+                s.DoProcessed(new Xor8Processor(0x8F), () =>
                 {
-                    s.DoXOR(0x8F, () =>
-                    {
-                        ImageData = s.SerializeArray<byte>(ImageData, ImageDataLength, name: nameof(ImageData));
-                    });
+                    ImageData = s.SerializeArray<byte>(ImageData, ImageDataLength, name: nameof(ImageData));
                 });
+
+                if (!isChecksumBefore)
+                    p?.Serialize<byte>(s, "ImageDataChecksum");
+            });
 
             if (Pre_FileType == Type.AllFix)
                 RaymanExeCheckSum2 = s.Serialize<uint>(RaymanExeCheckSum2, name: nameof(RaymanExeCheckSum2));

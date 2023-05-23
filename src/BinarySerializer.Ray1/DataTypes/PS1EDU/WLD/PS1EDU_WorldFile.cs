@@ -78,7 +78,7 @@ namespace BinarySerializer.Ray1
                 BG1 = s.Serialize<ushort>(BG1, name: nameof(BG1));
                 BG2 = s.Serialize<ushort>(BG2, name: nameof(BG2));
                 Plan0NumPcxCount = s.Serialize<byte>(Plan0NumPcxCount, name: nameof(Plan0NumPcxCount));
-                s.DoXOR(0x19, () => Plan0NumPcxFiles = s.SerializeStringArray(Plan0NumPcxFiles, Plan0NumPcxCount, 8, name: nameof(Plan0NumPcxFiles)));
+                s.DoProcessed(new Xor8Processor(0x19), () => Plan0NumPcxFiles = s.SerializeStringArray(Plan0NumPcxFiles, Plan0NumPcxCount, 8, name: nameof(Plan0NumPcxFiles)));
 
                 // Serialize counts
                 DESCount = s.Serialize<ushort>(DESCount, name: nameof(DESCount));

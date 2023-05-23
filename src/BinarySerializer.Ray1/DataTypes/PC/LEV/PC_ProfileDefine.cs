@@ -35,27 +35,24 @@
         /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            ProfileDefineChecksum = s.DoChecksum(
-                c: new Checksum8Calculator(false),
-                value: ProfileDefineChecksum,
-                placement: ChecksumPlacement.Before,
-                name: nameof(ProfileDefineChecksum), 
-                action: () =>
-                {
-                    s.DoXOR(0x96, () =>
-                    {
-                        LevelName = s.SerializeString(LevelName, 25, name: nameof(LevelName));
-                        LevelAuthor = s.SerializeString(LevelAuthor, 25, name: nameof(LevelAuthor));
-                        LevelDescription = s.SerializeString(LevelDescription, 240, name: nameof(LevelDescription));
+            s.DoProcessed(new Checksum8Processor(), p =>
+            {
+                p.Serialize<byte>(s, "ProfileDefineChecksum");
 
-                        Power_Fist = s.Serialize<bool>(Power_Fist, name: nameof(Power_Fist));
-                        Power_Hang = s.Serialize<bool>(Power_Hang, name: nameof(Power_Hang));
-                        Power_Run = s.Serialize<bool>(Power_Run, name: nameof(Power_Run));
-                        Power_Seed = s.Serialize<bool>(Power_Seed, name: nameof(Power_Seed));
-                        Power_Helico = s.Serialize<bool>(Power_Helico, name: nameof(Power_Helico));
-                        Power_SuperHelico = s.Serialize<bool>(Power_SuperHelico, name: nameof(Power_SuperHelico));
-                    });
+                s.DoProcessed(new Xor8Processor(0x96), () =>
+                {
+                    LevelName = s.SerializeString(LevelName, 25, name: nameof(LevelName));
+                    LevelAuthor = s.SerializeString(LevelAuthor, 25, name: nameof(LevelAuthor));
+                    LevelDescription = s.SerializeString(LevelDescription, 240, name: nameof(LevelDescription));
+
+                    Power_Fist = s.Serialize<bool>(Power_Fist, name: nameof(Power_Fist));
+                    Power_Hang = s.Serialize<bool>(Power_Hang, name: nameof(Power_Hang));
+                    Power_Run = s.Serialize<bool>(Power_Run, name: nameof(Power_Run));
+                    Power_Seed = s.Serialize<bool>(Power_Seed, name: nameof(Power_Seed));
+                    Power_Helico = s.Serialize<bool>(Power_Helico, name: nameof(Power_Helico));
+                    Power_SuperHelico = s.Serialize<bool>(Power_SuperHelico, name: nameof(Power_SuperHelico));
                 });
+            });
         }
     }
 }

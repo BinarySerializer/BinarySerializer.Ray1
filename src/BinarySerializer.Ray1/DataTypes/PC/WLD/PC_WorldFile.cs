@@ -25,8 +25,6 @@
         /// </summary>
         public string[] Plan0NumPcxFiles { get; set; }
 
-        public byte WorldDefineChecksum { get; set; }
-
         public PC_WorldDefine WorldDefine { get; set; }
 
         public string[] DESFileNames { get; set; }
@@ -52,9 +50,9 @@
             BiosCheckSum = s.Serialize<byte>(BiosCheckSum, name: nameof(BiosCheckSum));
 
             if (settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC)
-                s.DoXOR(0x15, () => Plan0NumPcx = s.SerializeArray<byte>(Plan0NumPcx, Plan0NumPcxCount, name: nameof(Plan0NumPcx)));
+                s.DoProcessed(new Xor8Processor(0x15), () => Plan0NumPcx = s.SerializeArray<byte>(Plan0NumPcx, Plan0NumPcxCount, name: nameof(Plan0NumPcx)));
             else
-                s.DoXOR(0x19, () => Plan0NumPcxFiles = s.SerializeStringArray(Plan0NumPcxFiles, Plan0NumPcxCount, 8, name: nameof(Plan0NumPcxFiles)));
+                s.DoProcessed(new Xor8Processor(0x19), () => Plan0NumPcxFiles = s.SerializeStringArray(Plan0NumPcxFiles, Plan0NumPcxCount, 8, name: nameof(Plan0NumPcxFiles)));
 
             // Serialize the DES
             DesItemCount = s.Serialize<ushort>(DesItemCount, name: nameof(DesItemCount));
@@ -70,16 +68,15 @@
                 settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
                 settings.EngineVersion == Ray1EngineVersion.PC_Fan)
             {
-                // Serialize world defines
-                WorldDefineChecksum = s.DoChecksum(
-                    c: new Checksum8Calculator(false),
-                    value: WorldDefineChecksum,
-                    placement: ChecksumPlacement.Before,
-                    name: nameof(WorldDefineChecksum), 
-                    action: () =>
+                s.DoProcessed(new Checksum8Processor(), p =>
+                {
+                    p.Serialize<byte>(s, "WorldDefineChecksum");
+
+                    s.DoProcessed(new Xor8Processor(0x71), () =>
                     {
-                        s.DoXOR(0x71, () => WorldDefine = s.SerializeObject<PC_WorldDefine>(WorldDefine, name: nameof(WorldDefine)));
+                        WorldDefine = s.SerializeObject<PC_WorldDefine>(WorldDefine, name: nameof(WorldDefine));
                     });
+                });
 
                 // Serialize file tables
                 if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || settings.EngineVersion == Ray1EngineVersion.PC_Fan)

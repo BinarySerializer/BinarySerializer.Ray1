@@ -37,7 +37,8 @@ namespace BinarySerializer.Ray1
             uint decompressedSize = reader.ReadUInt32();
             byte windowUpdateBitArray = 0;
 
-            reader.BeginCalculateChecksum(new Checksum8Calculator());
+            Checksum8Processor checksumProcessor = new();
+            reader.AddBinaryProcessor(checksumProcessor);
 
             bool isFinished = false;
             while (!isFinished) 
@@ -100,7 +101,8 @@ namespace BinarySerializer.Ray1
                 }
             }
 
-            byte endChecksum = reader.EndCalculateChecksum<byte>();
+            reader.RemoveBinaryProcessor(checksumProcessor);
+            byte endChecksum = (byte)checksumProcessor.CalculatedValue;
 
             if (endChecksum != checksum)
                 throw new Exception($"Checksum failed! {checksum} - {endChecksum}");
@@ -134,7 +136,9 @@ namespace BinarySerializer.Ray1
             writer.Write((uint)0); // size
 
             uint startPos = (uint)reader.BaseStream.Position;
-            writer.BeginCalculateChecksum(new Checksum8Calculator());
+
+            Checksum8Processor checksumProcessor = new();
+            writer.AddBinaryProcessor(checksumProcessor);
 
             bool isFinished = false;
             while (!isFinished) 
@@ -212,7 +216,8 @@ namespace BinarySerializer.Ray1
                 }
             }
 
-            byte checksum = writer.EndCalculateChecksum<byte>();
+            writer.RemoveBinaryProcessor(checksumProcessor);
+            byte checksum = (byte)checksumProcessor.CalculatedValue;
             uint decompressedSize = (uint)reader.BaseStream.Position - startPos;
             writer.BaseStream.Position = 0;
             writer.Write((byte)checksum);

@@ -32,7 +32,7 @@ namespace BinarySerializer.Ray1
             // Deserialize the file
             s.DoAt(Offset + entry.FileOffset, () =>
             {
-                s.DoXOR(entry.XORKey, () => output = s.SerializeObject<T>(default, onPreSerialize, name: entry.FileName ?? index.ToString()));
+                s.DoProcessed(new Xor8Processor(entry.XORKey), () => output = s.SerializeObject<T>(default, onPreSerialize, name: entry.FileName ?? index.ToString()));
             });
 
             return output;
@@ -53,7 +53,7 @@ namespace BinarySerializer.Ray1
             // Deserialize the file
             s.DoAt(Offset + entry.FileOffset, () =>
             {
-                s.DoXOR(entry.XORKey, () => output = s.SerializeArray<byte>(default, entry.FileSize, name: entry.FileName ?? index.ToString()));
+                s.DoProcessed(new Xor8Processor(entry.XORKey), () => output = s.SerializeArray<byte>(default, entry.FileSize, name: entry.FileName ?? index.ToString()));
             });
 
             return output;
@@ -92,10 +92,10 @@ namespace BinarySerializer.Ray1
                 s.Goto(fileOffset);
 
                 // Calculate the checksum
-                s.BeginCalculateChecksum(new Checksum8Calculator(false));
+                Checksum8Processor checksumProcessor = new();
 
                 // Serialize file
-                fileWriter[entry.FileName](s);
+                s.DoProcessed(checksumProcessor, () => fileWriter[entry.FileName](s));
 
                 // Set the file size
                 entry.FileSize = (uint)(s.CurrentPointer - fileOffset);
@@ -104,7 +104,7 @@ namespace BinarySerializer.Ray1
                 entry.XORKey = 0;
 
                 // Set the checksum
-                entry.Checksum = s.EndCalculateChecksum<byte>(entry.Checksum);
+                entry.Checksum = (byte)checksumProcessor.CalculatedValue;
 
                 // Increment the offset by the size
                 offset += entry.FileSize;
