@@ -3,7 +3,7 @@
     /// <summary>
     /// A layer in a sprite animation. This defines the sprite and its placement.
     /// </summary>
-    public class AnimationLayer : BinarySerializable
+    public class AnimationLayer : BinarySerializable, ISerializerShortLog
     {
         public bool FlipX { get; set; }
         public bool FlipY { get; set; }
@@ -61,5 +61,8 @@
                 SpriteIndex = s.Serialize<byte>((byte)SpriteIndex, name: nameof(SpriteIndex));
             }
         }
+
+        public string ShortLog => ToString();
+        public override string ToString() => $"AnimationLayer(Pos: {XPosition}x{YPosition}, Sprite: {SpriteIndex}, FlipX: {FlipX}, FlipY: {FlipY})";
     }
 }

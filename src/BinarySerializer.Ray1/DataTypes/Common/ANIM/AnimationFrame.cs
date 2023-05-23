@@ -5,7 +5,7 @@
     /// sprites in each frame of an animation. It's not required for playing the
     /// animation itself, but rather used to provide additional data on it.
     /// </summary>
-    public class AnimationFrame : BinarySerializable
+    public class AnimationFrame : BinarySerializable, ISerializerShortLog
     {
         public byte XPosition { get; set; }
         public byte YPosition { get; set; }
@@ -19,5 +19,8 @@
             Width = s.Serialize<byte>(Width, name: nameof(Width));
             Height = s.Serialize<byte>(Height, name: nameof(Height));
         }
+
+        public string ShortLog => ToString();
+        public override string ToString() => $"AnimationFrame(Pos: {XPosition}x{YPosition}, Size: {Width}x{Height})";
     }
 }
