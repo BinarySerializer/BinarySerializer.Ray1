@@ -2,11 +2,11 @@
 {
     public class PC_WorldFile : PC_BaseWorldFile
     {
-        // Unknown values related to backgrounds (most likely parallax scrolling)
-        public ushort BG1 { get; set; }
-        public ushort BG2 { get; set; }
+        // Used to allocate the buffer
+        public ushort MaxBackgroundWidth { get; set; }
+        public ushort MaxBackgroundHeight { get; set; }
 
-        // Some DOS related values?
+        // DRM for older versions
         public byte BiosCheckSum { get; set; }
         public byte VideoBiosCheckSum { get; set; }
 
@@ -43,8 +43,8 @@
             base.SerializeImpl(s);
 
             // Serialize world data
-            BG1 = s.Serialize<ushort>(BG1, name: nameof(BG1));
-            BG2 = s.Serialize<ushort>(BG2, name: nameof(BG2));
+            MaxBackgroundWidth = s.Serialize<ushort>(MaxBackgroundWidth, name: nameof(MaxBackgroundWidth));
+            MaxBackgroundHeight = s.Serialize<ushort>(MaxBackgroundHeight, name: nameof(MaxBackgroundHeight));
             Plan0NumPcxCount = s.Serialize<byte>(Plan0NumPcxCount, name: nameof(Plan0NumPcxCount));
             VideoBiosCheckSum = s.Serialize<byte>(VideoBiosCheckSum, name: nameof(VideoBiosCheckSum));
             BiosCheckSum = s.Serialize<byte>(BiosCheckSum, name: nameof(BiosCheckSum));

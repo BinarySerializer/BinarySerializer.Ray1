@@ -10,8 +10,8 @@
         Direction_Down = 4,
 
         Direction_UpLeft = 5,
-        Direction_UpRight = 6, // Verify this
-        Direction_DownLeft = 7, // Verify this
+        Direction_UpRight = 6,
+        Direction_DownLeft = 7,
         Direction_DownRight = 8,
 
         Unknown_11 = 11,
@@ -31,7 +31,7 @@
         Hill_Slight_Right_1 = 29,
         Hill_Steep_Right = 30,
 
-        ReactionaryEnemy = 47, // Used for enemy movements
+        Direction_Reverse = 47,
 
         ReactionaryUnk = 49, // Appears to change the direction of a moving platform after a certain amount of hits
 

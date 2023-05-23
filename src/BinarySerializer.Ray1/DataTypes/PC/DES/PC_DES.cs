@@ -13,7 +13,7 @@
         /// </summary>
         public bool IsAnimatedSprite { get; set; }
 
-        public uint WldETAIndex { get; set; }
+        public int WldETAIndex { get; set; }
         public uint RaymanExeSize { get; set; }
         public uint RaymanExeCheckSum1 { get; set; }
 
@@ -118,7 +118,7 @@
 
             if (Pre_FileType == Type.AllFix)
             {
-                WldETAIndex = s.Serialize<uint>(WldETAIndex, name: nameof(WldETAIndex));
+                WldETAIndex = s.Serialize<int>(WldETAIndex, name: nameof(WldETAIndex));
                 RaymanExeSize = s.Serialize<uint>(RaymanExeSize, name: nameof(RaymanExeSize));
                 RaymanExeCheckSum1 = s.Serialize<uint>(RaymanExeCheckSum1, name: nameof(RaymanExeCheckSum1));
             }

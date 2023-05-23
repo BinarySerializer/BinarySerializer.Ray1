@@ -58,10 +58,9 @@
         public override void SerializeImpl(SerializerObject s)
         {
             // Get the settings
-            var settings = s.GetRequiredSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.PC ||
-                settings.EngineVersion == Ray1EngineVersion.PocketPC)
+            if (settings.EngineVersion is Ray1EngineVersion.PC or Ray1EngineVersion.PocketPC)
                 Language = s.Serialize<PC_Language>(Language, name: nameof(Language));
 
             Port = s.Serialize<uint>(Port, name: nameof(Port));
@@ -80,9 +79,7 @@
 
             IsStero = s.Serialize<ushort>(IsStero, name: nameof(IsStero));
 
-            if (settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
-                settings.EngineVersion == Ray1EngineVersion.PC_Kit ||
-                settings.EngineVersion == Ray1EngineVersion.PC_Fan)
+            if (settings.EngineVersion is Ray1EngineVersion.PC_Edu or Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Fan)
                 EDU_VoiceSound = s.Serialize<ushort>(EDU_VoiceSound, name: nameof(EDU_VoiceSound));
 
             Mode_Pad = s.Serialize<bool>(Mode_Pad, name: nameof(Mode_Pad));
