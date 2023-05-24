@@ -17,7 +17,9 @@
         /// </summary>
         public Pointer TextureBlockPointer { get; set; }
 
-        public PC_LevelDefines LevelDefines { get; set; }
+        public PC_LevelDefine LevelDefine { get; set; }
+        public PC_BackgroundDefine BackgroundDefineNormal { get; set; }
+        public PC_BackgroundDefine BackgroundDefineDiff { get; set; }
 
         /// <summary>
         /// The map data
@@ -89,7 +91,11 @@
             if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
                 settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
                 settings.EngineVersion == Ray1EngineVersion.PC_Fan)
-                LevelDefines = s.SerializeObject<PC_LevelDefines>(LevelDefines, name: nameof(LevelDefines));
+            {
+                LevelDefine = s.SerializeObject<PC_LevelDefine>(LevelDefine, name: nameof(LevelDefine));
+                BackgroundDefineNormal = s.SerializeObject<PC_BackgroundDefine>(BackgroundDefineNormal, name: nameof(BackgroundDefineNormal));
+                BackgroundDefineDiff = s.SerializeObject<PC_BackgroundDefine>(BackgroundDefineDiff, name: nameof(BackgroundDefineDiff));
+            }
 
             // Serialize the map data
             MapData = s.SerializeObject<PC_MapData>(MapData, name: nameof(MapData));

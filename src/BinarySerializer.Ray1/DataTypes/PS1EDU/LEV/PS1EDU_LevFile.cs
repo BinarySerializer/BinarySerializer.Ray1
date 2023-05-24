@@ -9,7 +9,9 @@ namespace BinarySerializer.Ray1
     {
         #region Public Properties
 
-        public PC_LevelDefines LevelDefines { get; set; }
+        public PC_LevelDefine LevelDefine { get; set; }
+        public PC_BackgroundDefine BackgroundDefineNormal { get; set; }
+        public PC_BackgroundDefine BackgroundDefineDiff { get; set; }
 
         /// <summary>
         /// The width of the map, in cells
@@ -61,13 +63,12 @@ namespace BinarySerializer.Ray1
 
         #region Public Methods
 
-        /// <summary>
-        /// Serializes the data
-        /// </summary>
-        /// <param name="s">The serializer object</param>
-        public override void SerializeImpl(SerializerObject s) {
+        public override void SerializeImpl(SerializerObject s) 
+        {
             // HEADER BLOCK
-            LevelDefines = s.SerializeObject<PC_LevelDefines>(LevelDefines, name: nameof(LevelDefines));
+            LevelDefine = s.SerializeObject<PC_LevelDefine>(LevelDefine, name: nameof(LevelDefine));
+            BackgroundDefineNormal = s.SerializeObject<PC_BackgroundDefine>(BackgroundDefineNormal, name: nameof(BackgroundDefineNormal));
+            BackgroundDefineDiff = s.SerializeObject<PC_BackgroundDefine>(BackgroundDefineDiff, name: nameof(BackgroundDefineDiff));
 
             // Serialize map size
             Width = s.Serialize<ushort>(Width, name: nameof(Width));
