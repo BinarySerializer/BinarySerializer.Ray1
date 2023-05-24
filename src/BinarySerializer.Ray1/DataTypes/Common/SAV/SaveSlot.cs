@@ -64,7 +64,7 @@
             SaveName = s.SerializeString(SaveName, 4, name: nameof(SaveName));
             ContinuesCount = s.Serialize<byte>(ContinuesCount, name: nameof(ContinuesCount));
             WorldInfoSaveZone = s.SerializeObjectArray<WorldInfoSave>(WorldInfoSaveZone, 24, name: nameof(WorldInfoSaveZone));
-            RayEvts = s.Serialize<RayEvts>(RayEvts, name: nameof(RayEvts));
+            RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
             Poing = s.SerializeObject<Poing>(Poing, name: nameof(Poing));
             StatusBar = s.SerializeObject<StatusBar>(StatusBar, name: nameof(StatusBar));
 

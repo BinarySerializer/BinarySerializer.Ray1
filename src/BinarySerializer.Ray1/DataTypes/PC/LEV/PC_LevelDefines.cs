@@ -15,7 +15,6 @@ namespace BinarySerializer.Ray1
         public LevelEffectFlags EffectFlags { get; set; }
         
         public RayEvts RayEvts { get; set; }
-        public byte UnkByte { get; set; } // Padding?
 
         public BackgroundSpritePosition[] BackgroundDefineNormal { get; set; }
         public BackgroundSpritePosition[] BackgroundDefineDiff { get; set; }
@@ -44,8 +43,7 @@ namespace BinarySerializer.Ray1
                     ScrollDiffFNDIndex = s.Serialize<byte>(ScrollDiffFNDIndex, name: nameof(ScrollDiffFNDIndex));
                     s.SerializePadding(1);
                     EffectFlags = s.Serialize<LevelEffectFlags>(EffectFlags, name: nameof(EffectFlags));
-                    RayEvts = s.Serialize<RayEvts>(RayEvts, name: nameof(RayEvts));
-                    UnkByte = s.Serialize<byte>(UnkByte, name: nameof(UnkByte));
+                    RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
                 });
             });
 
