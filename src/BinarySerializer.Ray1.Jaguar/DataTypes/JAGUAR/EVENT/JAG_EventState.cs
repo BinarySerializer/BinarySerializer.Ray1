@@ -16,7 +16,7 @@
         public byte Byte_0B { get; set; }
 
         // Parsed
-        public JAG_Animation Animation { get; set; }
+        public Animation Animation { get; set; }
         public JAG_EventState LinkedState { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
@@ -33,7 +33,7 @@
             Byte_0A = s.Serialize<byte>(Byte_0A, name: nameof(Byte_0A));
             Byte_0B = s.Serialize<byte>(Byte_0B, name: nameof(Byte_0B));
 
-            Animation = s.DoAt(AnimationPointer, () => s.SerializeObject<JAG_Animation>(Animation, name: nameof(Animation)));
+            Animation = s.DoAt(AnimationPointer, () => s.SerializeObject<Animation>(Animation, name: nameof(Animation)));
             LinkedState = s.DoAt(LinkedStatePointer, () => s.SerializeObject<JAG_EventState>(LinkedState, name: nameof(LinkedState)));
         }
     }

@@ -30,7 +30,7 @@ namespace BinarySerializer.Ray1
             Bytes_65 = new byte[3],
             Unk5 = new byte[2],
             CollisionData = data.RaymanCollisionData,
-            AnimData = data.RaymanAnimData
+            AnimSet = data.RaymanAnimSet
         };
 
         #endregion
@@ -168,7 +168,7 @@ namespace BinarySerializer.Ray1
         #region Pointer Data
 
         public R2_ObjCollision CollisionData { get; set; }
-        public R2_AnimationData AnimData { get; set; }
+        public R2_AnimationSet AnimSet { get; set; }
 
         public byte[] ParamsGeneric { get; set; }
         public R2_ObjParams_Gendoor ParamsGendoor { get; set; }
@@ -291,7 +291,7 @@ namespace BinarySerializer.Ray1
 
             // Serialize the animation group data
             if (AnimDataPointer != null)
-                s.DoAt(AnimDataPointer, () => AnimData = s.SerializeObject<R2_AnimationData>(AnimData, name: nameof(AnimData)));
+                s.DoAt(AnimDataPointer, () => AnimSet = s.SerializeObject<R2_AnimationSet>(AnimSet, name: nameof(AnimSet)));
         }
 
         #endregion

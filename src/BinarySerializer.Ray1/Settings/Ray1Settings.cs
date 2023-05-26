@@ -52,6 +52,8 @@ namespace BinarySerializer.Ray1
                 default:
                     throw new ArgumentOutOfRangeException(nameof(engineVersion), engineVersion, null);
             }
+
+            IsLoadingPackedPCData = EngineBranch == Ray1EngineBranch.PC;
         }
 
         public Ray1EngineVersion EngineVersion { get; }
@@ -61,6 +63,12 @@ namespace BinarySerializer.Ray1
         public World World { get; set; }
         public int Level { get; set; }
         public string Volume { get; set; }
+
+        /// <summary>
+        /// This determines how the data is to be serialized. For most platforms the data is already unpacked, such
+        /// as PS1 and Saturn. However on PC the data is packed in the files and then unpacked into memory.
+        /// </summary>
+        public bool IsLoadingPackedPCData { get; set; }
 
         public static int CellSize = 16;
         public static Encoding DefaultEncoding => Encoding.GetEncoding(437);

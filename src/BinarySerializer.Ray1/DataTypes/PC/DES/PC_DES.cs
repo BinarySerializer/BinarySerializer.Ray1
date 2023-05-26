@@ -47,7 +47,7 @@
         /// <summary>
         /// The animations
         /// </summary>
-        public PC_Animation[] Animations { get; set; }
+        public Animation[] Animations { get; set; }
 
         // TODO: This should probably be removed or replaced. In the game there are two drawing modes for sprites. A normal one
         //       and a 256 one. The normal one has a range of 0-0x9F and the 256 one 1-0xFF. Anything outside of the range is
@@ -150,7 +150,7 @@
             SpritesCount = s.Serialize<ushort>(SpritesCount, name: nameof(SpritesCount));
             Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites));
             AnimationsCount = s.Serialize<byte>(AnimationsCount, name: nameof(AnimationsCount));
-            Animations = s.SerializeObjectArray<PC_Animation>(Animations, AnimationsCount, name: nameof(Animations));
+            Animations = s.SerializeObjectArray<Animation>(Animations, AnimationsCount, name: nameof(Animations));
         }
 
         public enum Type

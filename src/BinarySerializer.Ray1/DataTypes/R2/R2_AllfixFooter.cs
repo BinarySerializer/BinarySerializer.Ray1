@@ -34,7 +34,7 @@
         public R2_RecordedDemo[] Demos { get; set; }
         public R2_ObjCollision RaymanCollisionData { get; set; }
         public byte[] RaymanObjParams { get; set; }
-        public R2_AnimationData RaymanAnimData { get; set; }
+        public R2_AnimationSet RaymanAnimSet { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
         {
@@ -65,7 +65,7 @@
             s.DoAt(DemosPointer, () => 
                 Demos = s.SerializeObjectArray<R2_RecordedDemo>(Demos, DemosCount, name: nameof(Demos)));
             s.DoAt(RaymanAnimDataPointer, () => 
-                RaymanAnimData = s.SerializeObject<R2_AnimationData>(RaymanAnimData, name: nameof(RaymanAnimData)));
+                RaymanAnimSet = s.SerializeObject<R2_AnimationSet>(RaymanAnimSet, name: nameof(RaymanAnimSet)));
             s.DoAt(RaymanObjParamsPointer, () =>
                 RaymanObjParams = s.SerializeArray<byte>(RaymanObjParams, 0x18, name: nameof(RaymanObjParams)));
             s.DoAt(RaymanCollisionDataPointer, () => 

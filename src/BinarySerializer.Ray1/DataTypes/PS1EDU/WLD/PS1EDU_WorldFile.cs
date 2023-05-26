@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace BinarySerializer.Ray1
@@ -38,7 +37,7 @@ namespace BinarySerializer.Ray1
 
         public Sprite[][] SpriteCollections { get; set; }
 
-        public PS1EDU_Animation[][] Animations { get; set; }
+        public Animation[][] Animations { get; set; }
 
         /// <summary>
         /// The obj states for every ETA
@@ -146,7 +145,7 @@ namespace BinarySerializer.Ray1
                 void SerializeDES()
                 {
                     SpriteCollections ??= new Sprite[DESCount][];
-                    Animations ??= new PS1EDU_Animation[DESCount][];
+                    Animations ??= new Animation[DESCount][];
 
                     int curAnimDesc = 0;
 
@@ -160,21 +159,21 @@ namespace BinarySerializer.Ray1
                             SpriteCollections[i] = Array.Empty<Sprite>();
 
                         // Serialize animations
-                        Animations[i] = s.SerializeObjectArray<PS1EDU_Animation>(Animations[i], DESData[i].AnimationsCount, name: $"{nameof(Animations)}[{i}]");
+                        Animations[i] = s.SerializeObjectArray<Animation>(Animations[i], DESData[i].AnimationsCount, name: $"{nameof(Animations)}[{i}]");
 
                         // Serialize animation data
                         for (int j = 0; j < Animations[i].Length; j++)
                         {
                             var anim = Animations[i][j];
 
-                            if (anim.FrameCount <= 0)
+                            if (anim.FramesCount <= 0)
                             {
                                 curAnimDesc++;
                                 continue;
                             }
 
                             // Serialize layer data
-                            anim.LayersData = s.SerializeArray<byte>(anim.LayersData, AnimationLayersBlockSizeTable[curAnimDesc], name: nameof(anim.LayersData));
+                            anim.PS1EDU_CompressedLayers = s.SerializeArray<byte>(anim.PS1EDU_CompressedLayers, AnimationLayersBlockSizeTable[curAnimDesc], name: nameof(anim.PS1EDU_CompressedLayers));
 
                             // Padding...
                             if (AnimationLayersBlockSizeTable[curAnimDesc] % 4 != 0)
@@ -185,38 +184,12 @@ namespace BinarySerializer.Ray1
                             }
 
                             // Serialize frames
-                            if (anim.AnimFramesPointer != 0xFFFFFFFF)
-                                anim.Frames = s.SerializeObjectArray<AnimationFrame>(anim.Frames, anim.FrameCount, name: nameof(anim.Frames));
+                            if (anim.PCPacked_FramesPointer != 0xFFFFFFFF)
+                                anim.Frames = s.SerializeObjectArray<AnimationFrame>(anim.Frames, anim.FramesCount, name: nameof(anim.Frames));
 
                             // Parse layers
                             if (anim.Layers == null)
-                            {
-                                var layers = new List<AnimationLayer>();
-                                var offset = 0;
-
-                                while (offset < anim.LayersData.Length)
-                                {
-                                    if (anim.LayersData[offset] < 2)
-                                    {
-                                        layers.Add(new AnimationLayer()
-                                        {
-                                            FlipX = anim.LayersData[offset + 0] == 1,
-                                            XPosition = anim.LayersData[offset + 1],
-                                            YPosition = anim.LayersData[offset + 2],
-                                            SpriteIndex = anim.LayersData[offset + 3],
-                                        });
-
-                                        offset += 4;
-                                    }
-                                    else
-                                    {
-                                        layers.Add(AnimationLayers[anim.LayersData[offset] - 2]);
-                                        offset++;
-                                    }
-                                }
-
-                                anim.Layers = layers.ToArray();
-                            }
+                                anim.PS1EDU_UncompressLayers(AnimationLayers);
 
                             curAnimDesc++;
                         }

@@ -18,7 +18,7 @@ namespace BinarySerializer.Ray1.Jaguar
         public byte Byte_0E { get; set; }
         public byte Byte_0F { get; set; } // Always 0
 
-        public JAG_Animation Animation { get; set; }
+        public Animation Animation { get; set; }
         public int VRAMConfigIndex => Math.Max(0, (VRAMConfigurationID / 2) - 1);
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace BinarySerializer.Ray1.Jaguar
             Byte_0F = s.Serialize<byte>(Byte_0F, name: nameof(Byte_0F));
 
             // AnimationPointer points to first layer. So, go back 4 bytes to get header
-            Animation = s.DoAt(AnimPointer.GetPointer() - 4, () => s.SerializeObject<JAG_Animation>(Animation, name: nameof(Animation)));
+            Animation = s.DoAt(AnimPointer.GetPointer() - 4, () => s.SerializeObject<Animation>(Animation, name: nameof(Animation)));
         }
 
         [Flags]
