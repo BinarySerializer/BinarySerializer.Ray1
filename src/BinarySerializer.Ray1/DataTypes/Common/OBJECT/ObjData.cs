@@ -7,23 +7,17 @@ namespace BinarySerializer.Ray1
     /// </summary>
     public class ObjData : BinarySerializable
     {
-        #region Pre-Serialize
-
-        public bool Pre_IsSerializingFromMemory { get; set; }
-
-        #endregion
-
         #region Object data
 
         // These are indexes in the files and get replaced with pointers during runtime
-        public uint PC_SpritesIndex { get; set; }
-        public uint PC_AnimationsIndex { get; set; }
-        public uint PC_ImageBufferIndex { get; set; }
-        public uint PC_ETAIndex { get; set; }
+        public uint PCPacked_SpritesIndex { get; set; }
+        public uint PCPacked_AnimationsIndex { get; set; }
+        public uint PCPacked_ImageBufferIndex { get; set; }
+        public uint PCPacked_ETAIndex { get; set; }
 
         // Keep separate values for these to avoid invalid pointers when reading from the files
-        public uint PC_RuntimeCommandsPointer { get; set; }
-        public uint PC_RuntimeLabelOffsetsPointer { get; set; }
+        public uint PCPacked_CommandsPointer { get; set; }
+        public uint PCPacked_LabelOffsetsPointer { get; set; }
 
         public Pointer SpritesPointer { get; set; }
         public Pointer AnimationsPointer { get; set; }
@@ -206,10 +200,10 @@ namespace BinarySerializer.Ray1
             DisplayPrio = 7;
             HitSprite = 0;
 
-            PC_SpritesIndex = 1;
-            PC_AnimationsIndex = 1;
-            PC_ImageBufferIndex = 1;
-            PC_ETAIndex = 0;
+            PCPacked_SpritesIndex = 1;
+            PCPacked_AnimationsIndex = 1;
+            PCPacked_ImageBufferIndex = 1;
+            PCPacked_ETAIndex = 0;
 
             CommandContexts = new[] { new CommandContext() };
             BlockTypes = new BlockType[5];
@@ -277,10 +271,10 @@ namespace BinarySerializer.Ray1
                     SubEtat = 39;
             }
 
-            PC_SpritesIndex = 4;
-            PC_AnimationsIndex = 4;
-            PC_ImageBufferIndex = 4;
-            PC_ETAIndex = 2;
+            PCPacked_SpritesIndex = 4;
+            PCPacked_AnimationsIndex = 4;
+            PCPacked_ImageBufferIndex = 4;
+            PCPacked_ETAIndex = 2;
 
             CommandContexts = new[] { new CommandContext() };
             BlockTypes = new BlockType[5];
@@ -346,15 +340,15 @@ namespace BinarySerializer.Ray1
 
             if (settings.EngineBranch is Ray1EngineBranch.PC or Ray1EngineBranch.GBA)
             {
-                if (settings.EngineBranch == Ray1EngineBranch.PC && !Pre_IsSerializingFromMemory)
+                if (settings.IsLoadingPackedPCData)
                 {
-                    PC_SpritesIndex = s.Serialize<uint>(PC_SpritesIndex, name: nameof(PC_SpritesIndex));
-                    PC_AnimationsIndex = s.Serialize<uint>(PC_AnimationsIndex, name: nameof(PC_AnimationsIndex));
-                    PC_ImageBufferIndex = s.Serialize<uint>(PC_ImageBufferIndex, name: nameof(PC_ImageBufferIndex));
-                    PC_ETAIndex = s.Serialize<uint>(PC_ETAIndex, name: nameof(PC_ETAIndex));
+                    PCPacked_SpritesIndex = s.Serialize<uint>(PCPacked_SpritesIndex, name: nameof(PCPacked_SpritesIndex));
+                    PCPacked_AnimationsIndex = s.Serialize<uint>(PCPacked_AnimationsIndex, name: nameof(PCPacked_AnimationsIndex));
+                    PCPacked_ImageBufferIndex = s.Serialize<uint>(PCPacked_ImageBufferIndex, name: nameof(PCPacked_ImageBufferIndex));
+                    PCPacked_ETAIndex = s.Serialize<uint>(PCPacked_ETAIndex, name: nameof(PCPacked_ETAIndex));
 
-                    PC_RuntimeCommandsPointer = s.Serialize<uint>(PC_RuntimeCommandsPointer, name: nameof(PC_RuntimeCommandsPointer));
-                    PC_RuntimeLabelOffsetsPointer = s.Serialize<uint>(PC_RuntimeLabelOffsetsPointer, name: nameof(PC_RuntimeLabelOffsetsPointer));
+                    PCPacked_CommandsPointer = s.Serialize<uint>(PCPacked_CommandsPointer, name: nameof(PCPacked_CommandsPointer));
+                    PCPacked_LabelOffsetsPointer = s.Serialize<uint>(PCPacked_LabelOffsetsPointer, name: nameof(PCPacked_LabelOffsetsPointer));
                 }
                 else
                 {
@@ -686,7 +680,7 @@ namespace BinarySerializer.Ray1
                     UnknownBytes = s.SerializeArray<byte>(UnknownBytes, 1, name: nameof(UnknownBytes));
                 }
 
-                if (!Pre_IsSerializingFromMemory && s.FullSerialize)
+                if (!settings.IsLoadingPackedPCData && s.FullSerialize)
                     SerialierFromPointers(s);
             }
             else
