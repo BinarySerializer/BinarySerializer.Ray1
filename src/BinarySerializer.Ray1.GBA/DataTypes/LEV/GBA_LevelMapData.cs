@@ -159,7 +159,7 @@ namespace BinarySerializer.Ray1.GBA
                 TilePalettes = s.DoAt(TilePalettePointer, () => 
                     s.SerializeObjectArray<RGBA5551Color>(TilePalettes, 256, name: nameof(TilePalettes)));
                 TileBlockIndices = s.DoAt(TileBlockIndicesPointer, () => 
-                    s.SerializeArray<ushort>(TileBlockIndices, (MapData.Blocks.Max(t => t.TileMapY) + 1) * 4, name: nameof(TileBlockIndices)));
+                    s.SerializeArray<ushort>(TileBlockIndices, (MapData.Blocks.Max(t => t.TileIndex) + 1) * 4, name: nameof(TileBlockIndices)));
             }
         }
 

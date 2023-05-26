@@ -24,10 +24,6 @@ namespace BinarySerializer.Ray1
         /// </summary>
         public ObjState[][] States { get; set; }
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
             var settings = s.GetRequiredSettings<Ray1Settings>();
