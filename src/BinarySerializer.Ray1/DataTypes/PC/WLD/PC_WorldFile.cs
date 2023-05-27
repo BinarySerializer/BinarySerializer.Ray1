@@ -40,7 +40,8 @@
             var settings = s.GetRequiredSettings<Ray1Settings>();
 
             // Serialize PC Header
-            base.SerializeImpl(s);
+            if (settings.IsVersioned)
+                GameVersion = s.SerializeObject<PC_GameVersion>(GameVersion, name: nameof(GameVersion));
 
             // Serialize world data
             MaxBackgroundWidth = s.Serialize<ushort>(MaxBackgroundWidth, name: nameof(MaxBackgroundWidth));

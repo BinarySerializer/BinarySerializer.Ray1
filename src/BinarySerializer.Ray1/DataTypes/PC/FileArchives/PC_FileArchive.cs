@@ -8,11 +8,9 @@ namespace BinarySerializer.Ray1
     /// <summary>
     /// Encrypted file archive data for PC
     /// </summary>
-    public class PC_FileArchive : PC_BaseFile
+    public class PC_FileArchive : BinarySerializable
     {
-        /// <summary>
-        /// The file entries
-        /// </summary>
+        public PC_GameVersion GameVersion { get; set; }
         public PC_FileArchiveEntry[] Entries { get; set; }
 
         public T ReadFile<T>(Context context, string fileName, Action<T> onPreSerialize = null)
@@ -114,7 +112,8 @@ namespace BinarySerializer.Ray1
             s.DoAt(Offset, () =>
             {
                 // Write PC header
-                base.SerializeImpl(s);
+                if (settings.IsVersioned)
+                    GameVersion = s.SerializeObject<PC_GameVersion>(GameVersion, name: nameof(GameVersion));
 
                 // Write file entries
                 s.SerializeObjectArray<PC_FileArchiveEntry>(Entries, Entries.Length, name: nameof(Entries));
@@ -136,7 +135,8 @@ namespace BinarySerializer.Ray1
             var settings = s.GetRequiredSettings<Ray1Settings>();
 
             // Read the header
-            base.SerializeImpl(s);
+            if (settings.IsVersioned)
+                GameVersion = s.SerializeObject<PC_GameVersion>(GameVersion, name: nameof(GameVersion));
 
             // For Rayman 1 the header is hard-coded in the game executable
             if (settings.EngineVersion == Ray1EngineVersion.PC || 

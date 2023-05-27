@@ -3,9 +3,11 @@
     /// <summary>
     /// Level data for PC
     /// </summary>
-    public class PC_LevFile : PC_BaseFile
+    public class PC_LevFile : BinarySerializable
     {
         #region Public Properties
+
+        public PC_GameVersion GameVersion { get; set; }
 
         /// <summary>
         /// The pointer to the object block. The game uses this to skip the texture block if the game should use the rough textures.
@@ -76,7 +78,8 @@
             var settings = s.GetRequiredSettings<Ray1Settings>();
 
             // Serialize the header
-            base.SerializeImpl(s);
+            if (settings.IsVersioned)
+                GameVersion = s.SerializeObject<PC_GameVersion>(GameVersion, name: nameof(GameVersion));
 
             var pointersOffset = s.CurrentPointer;
 

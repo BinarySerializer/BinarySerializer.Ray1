@@ -53,12 +53,18 @@ namespace BinarySerializer.Ray1
                     throw new ArgumentOutOfRangeException(nameof(engineVersion), engineVersion, null);
             }
 
+            IsVersioned = EngineVersion == Ray1EngineVersion.PC_Kit ||
+                          EngineVersion == Ray1EngineVersion.PC_Edu ||
+                          EngineVersion == Ray1EngineVersion.PS1_Edu ||
+                          EngineVersion == Ray1EngineVersion.PC_Fan;
             IsLoadingPackedPCData = EngineBranch == Ray1EngineBranch.PC;
         }
 
         public Ray1EngineVersion EngineVersion { get; }
         public Ray1EngineBranch EngineBranch { get; }
         public Ray1PCVersion PCVersion { get; }
+
+        public bool IsVersioned { get; }
 
         public World World { get; set; }
         public int Level { get; set; }

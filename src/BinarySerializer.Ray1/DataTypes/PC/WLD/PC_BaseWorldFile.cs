@@ -3,8 +3,10 @@
     /// <summary>
     /// Base world data for PC
     /// </summary>
-    public abstract class PC_BaseWorldFile : PC_BaseFile
+    public abstract class PC_BaseWorldFile : BinarySerializable
     {
+        public PC_GameVersion GameVersion { get; set; }
+
         /// <summary>
         /// The amount of DES items
         /// </summary>

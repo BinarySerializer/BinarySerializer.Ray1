@@ -3,8 +3,10 @@
     /// <summary>
     /// Event localization data for Rayman Mapper (PC)
     /// </summary>
-    public class Mapper_EventLocFile : PC_BaseFile
+    public class Mapper_EventLocFile : BinarySerializable
     {
+        public PC_GameVersion GameVersion { get; set; }
+
         /// <summary>
         /// The amount of localization items
         /// </summary>
@@ -24,10 +26,13 @@
         /// Serializes the data
         /// </summary>
         /// <param name="s">The serializer object</param>
-        public override void SerializeImpl(SerializerObject s) 
+        public override void SerializeImpl(SerializerObject s)
         {
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
+
             // Serialize header
-            base.SerializeImpl(s);
+            if (settings.IsVersioned)
+                GameVersion = s.SerializeObject<PC_GameVersion>(GameVersion, name: nameof(GameVersion));
 
             // Serialize the count
             LocCount = s.Serialize<uint>(LocCount, name: nameof(LocCount));

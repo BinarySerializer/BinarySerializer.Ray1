@@ -2,14 +2,13 @@
 {
     public class PC_BigRayFile : PC_BaseWorldFile
     {
-        /// <summary>
-        /// Serializes the data
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
+
             // Serialize PC Header
-            base.SerializeImpl(s);
+            if (settings.IsVersioned)
+                GameVersion = s.SerializeObject<PC_GameVersion>(GameVersion, name: nameof(GameVersion));
 
             // Hard-code to 1 item
             DesItemCount = 1;
