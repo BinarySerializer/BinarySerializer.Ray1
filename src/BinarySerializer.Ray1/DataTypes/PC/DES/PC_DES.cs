@@ -5,48 +5,23 @@
     /// </summary>
     public class PC_DES : BinarySerializable 
     {
-        public Type Pre_FileType { get; set; }
+        public Type Pre_Type { get; set; }
 
         /// <summary>
         /// Indicates if the sprite is an animated sprite, i.e. used for level objects. True for all sprites
         /// except parallax background ones. The game can optionally ignore to load these.
         /// </summary>
         public bool IsAnimatedSprite { get; set; }
-
         public int WldETAIndex { get; set; }
+
+        // DRM
         public uint RaymanExeSize { get; set; }
         public uint RaymanExeCheckSum1 { get; set; }
-
-        /// <summary>
-        /// The length of the image data
-        /// </summary>
-        public uint ImageDataLength { get; set; }
-
-        /// <summary>
-        /// The image data
-        /// </summary>
-        public byte[] ImageData { get; set; }
-        
         public uint RaymanExeCheckSum2 { get; set; }
 
-        /// <summary>
-        /// The amount of sprites
-        /// </summary>
-        public ushort SpritesCount { get; set; }
-
-        /// <summary>
-        /// The sprites
-        /// </summary>
+        // Data
+        public byte[] ImageData { get; set; }
         public Sprite[] Sprites { get; set; }
-
-        /// <summary>
-        /// The amount of animations
-        /// </summary>
-        public byte AnimationsCount { get; set; }
-
-        /// <summary>
-        /// The animations
-        /// </summary>
         public Animation[] Animations { get; set; }
 
         // TODO: This should probably be removed or replaced. In the game there are two drawing modes for sprites. A normal one
@@ -102,33 +77,29 @@
             return processedData;
         }
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s) 
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             // Only world files have non-animated sprites for the parallax backgrounds
-            if (Pre_FileType == Type.World)
+            if (Pre_Type == Type.World)
                 IsAnimatedSprite = s.Serialize<bool>(IsAnimatedSprite, name: nameof(IsAnimatedSprite));
             else
                 IsAnimatedSprite = true;
 
-            if (Pre_FileType == Type.AllFix)
+            if (Pre_Type == Type.AllFix)
             {
                 WldETAIndex = s.Serialize<int>(WldETAIndex, name: nameof(WldETAIndex));
                 RaymanExeSize = s.Serialize<uint>(RaymanExeSize, name: nameof(RaymanExeSize));
                 RaymanExeCheckSum1 = s.Serialize<uint>(RaymanExeCheckSum1, name: nameof(RaymanExeCheckSum1));
             }
 
-            ImageDataLength = s.Serialize<uint>(ImageDataLength, name: nameof(ImageDataLength));
+            ImageData = s.SerializeArraySize<byte, uint>(ImageData, name: nameof(ImageData));
 
-            bool isChecksumBefore = Pre_FileType == Type.World && (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
+            bool isChecksumBefore = Pre_Type == Type.World && (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
                                                                    settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
                                                                    settings.EngineVersion == Ray1EngineVersion.PC_Fan);
-            bool hasChecksum = isChecksumBefore || Pre_FileType != Type.BigRay;
+            bool hasChecksum = isChecksumBefore || Pre_Type != Type.BigRay;
 
             s.DoProcessed(hasChecksum ? new Checksum8Processor() : null, p =>
             {
@@ -137,20 +108,21 @@
 
                 s.DoProcessed(new Xor8Processor(0x8F), () =>
                 {
-                    ImageData = s.SerializeArray<byte>(ImageData, ImageDataLength, name: nameof(ImageData));
+                    ImageData = s.SerializeArray<byte>(ImageData, ImageData.Length, name: nameof(ImageData));
                 });
 
                 if (!isChecksumBefore)
                     p?.Serialize<byte>(s, "ImageDataChecksum");
             });
 
-            if (Pre_FileType == Type.AllFix)
+            if (Pre_Type == Type.AllFix)
                 RaymanExeCheckSum2 = s.Serialize<uint>(RaymanExeCheckSum2, name: nameof(RaymanExeCheckSum2));
 
-            SpritesCount = s.Serialize<ushort>(SpritesCount, name: nameof(SpritesCount));
-            Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites));
-            AnimationsCount = s.Serialize<byte>(AnimationsCount, name: nameof(AnimationsCount));
-            Animations = s.SerializeObjectArray<Animation>(Animations, AnimationsCount, name: nameof(Animations));
+            Sprites = s.SerializeArraySize<Sprite, ushort>(Sprites, name: nameof(Sprites));
+            Sprites = s.SerializeObjectArray<Sprite>(Sprites, Sprites.Length, name: nameof(Sprites));
+
+            Animations = s.SerializeArraySize<Animation, byte>(Animations, name: nameof(Animations));
+            Animations = s.SerializeObjectArray<Animation>(Animations, Animations.Length, name: nameof(Animations));
         }
 
         public enum Type

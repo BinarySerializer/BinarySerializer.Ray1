@@ -33,7 +33,7 @@
             DesItemCount = s.Serialize<ushort>(DesItemCount, name: nameof(DesItemCount));
 
             // We need to read one less DES as DES 0 is not in this file
-            DesItems = s.SerializeObjectArray<PC_DES>(DesItems, DesItemCount - 1, onPreSerialize: data => data.Pre_FileType = PC_DES.Type.AllFix, name: nameof(DesItems));
+            DesItems = s.SerializeObjectArray<PC_DES>(DesItems, DesItemCount - 1, onPreSerialize: data => data.Pre_Type = PC_DES.Type.AllFix, name: nameof(DesItems));
 
             RaymanExeCheckSum3 = s.Serialize(RaymanExeCheckSum3, name: nameof(RaymanExeCheckSum3));
 

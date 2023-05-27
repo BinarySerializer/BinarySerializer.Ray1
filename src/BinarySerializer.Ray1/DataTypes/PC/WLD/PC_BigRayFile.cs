@@ -15,7 +15,7 @@
             DesItemCount = 1;
 
             // Serialize the DES
-            DesItems = s.SerializeObjectArray<PC_DES>(DesItems, DesItemCount, onPreSerialize: data => data.Pre_FileType = PC_DES.Type.BigRay, name: nameof(DesItems));
+            DesItems = s.SerializeObjectArray<PC_DES>(DesItems, DesItemCount, onPreSerialize: data => data.Pre_Type = PC_DES.Type.BigRay, name: nameof(DesItems));
 
             // Serialize the ETA
             Eta = s.SerializeArraySize<PC_ETA, byte>(Eta, name: nameof(Eta));
