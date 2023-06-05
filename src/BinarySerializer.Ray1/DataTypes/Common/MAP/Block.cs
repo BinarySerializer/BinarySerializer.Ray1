@@ -19,6 +19,7 @@
         public bool FlipY { get; set; }
 
         public BlockType BlockType { get; set; }
+        public R2_BlockType R2_BlockType { get; set; }
         public BlockRenderMode RenderMode { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
@@ -92,7 +93,11 @@
                 {
                     TileX = b.SerializeBits<ushort>(TileX, 4, name: nameof(TileX));
                     TileY = b.SerializeBits<ushort>(TileY, 6, name: nameof(TileY));
-                    BlockType = b.SerializeBits<BlockType>(BlockType, 6, name: nameof(BlockType));
+
+                    if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
+                        R2_BlockType = b.SerializeBits<R2_BlockType>(R2_BlockType, 6, name: nameof(R2_BlockType));
+                    else
+                        BlockType = b.SerializeBits<BlockType>(BlockType, 6, name: nameof(BlockType));
                 });
             }
             else if (settings.EngineVersion == Ray1EngineVersion.PS1_JP)
@@ -125,9 +130,13 @@
                 {
                     return $"Tile(Index: {TileX}x{TileY}, Type: {BlockType}, FlipX: {FlipX}, FlipY: {FlipY})";
                 }
-                else if (settings.EngineVersion is Ray1EngineVersion.Saturn or Ray1EngineVersion.PS1 or Ray1EngineVersion.PS1_EUDemo or Ray1EngineVersion.R2_PS1)
+                else if (settings.EngineVersion is Ray1EngineVersion.Saturn or Ray1EngineVersion.PS1 or Ray1EngineVersion.PS1_EUDemo)
                 {
                     return $"Tile(Index: {TileX}x{TileY}, Type: {BlockType})";
+                }
+                else if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
+                {
+                    return $"Tile(Index: {TileX}x{TileY}, Type: {R2_BlockType})";
                 }
                 else if (settings.EngineBranch == Ray1EngineBranch.SNES)
                 {
@@ -135,7 +144,7 @@
                 }
             }
 
-            return $"Tile(Index: {TileX}x{TileY}, Type: {BlockType}, FlipX: {FlipX}, FlipY: {FlipY}, RenderMode: {RenderMode})";
+            return $"Tile(Index: {TileX}x{TileY}, Type: {BlockType}, R2_Type: {R2_BlockType}, FlipX: {FlipX}, FlipY: {FlipY}, RenderMode: {RenderMode})";
         }
 
         // NOTE: 0 and 1 are flipped in the files, but that data isn't read by the game

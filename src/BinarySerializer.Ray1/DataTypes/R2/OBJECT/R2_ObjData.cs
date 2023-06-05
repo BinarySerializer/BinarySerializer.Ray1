@@ -140,7 +140,7 @@ namespace BinarySerializer.Ray1
 
         // 90 (0x5A)
 
-        public R2_TileCollisionType RuntimeCurrentCollisionType { get; set; }
+        public R2_BlockType RuntimeCurrentCollisionType { get; set; }
 
         public byte[] Bytes_5B { get; set; }
 
@@ -248,7 +248,7 @@ namespace BinarySerializer.Ray1
 
             DisplayPrio = s.Serialize<byte>(DisplayPrio, name: nameof(DisplayPrio));
 
-            RuntimeCurrentCollisionType = s.Serialize<R2_TileCollisionType>(RuntimeCurrentCollisionType, name: nameof(RuntimeCurrentCollisionType));
+            RuntimeCurrentCollisionType = s.Serialize<R2_BlockType>(RuntimeCurrentCollisionType, name: nameof(RuntimeCurrentCollisionType));
 
             Bytes_5B = s.SerializeArray(Bytes_5B, 9, name: nameof(Bytes_5B));
 
