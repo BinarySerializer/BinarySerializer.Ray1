@@ -1,6 +1,6 @@
 ﻿namespace BinarySerializer.Ray1
 {
-    public class R2_ObjParams_Trigger : BinarySerializable
+    public class R2_UserData_Trigger : BinarySerializable
     {
         public Pointer LinkedObjectsPointer { get; set; }
         public ushort LinkedObjectsCount { get; set; }

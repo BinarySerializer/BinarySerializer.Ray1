@@ -2,7 +2,7 @@
 
 namespace BinarySerializer.Ray1
 {
-    public class R2_ObjParams_Gendoor : BinarySerializable
+    public class R2_UserData_Gendoor : BinarySerializable
     {
         public Pointer LinkedObjectsPointer { get; set; }
         public Pointer TriggerObjectsPointer { get; set; } // Objects that can trigger the gendoor when in range. We don't show these in the editor right now since they're unused in the prototype, even though the engine supports them.

@@ -15,7 +15,7 @@ namespace BinarySerializer.Ray1
         public static R2_ObjData GetRayman(R2_ObjData rayPos, R2_AllfixFooter data) => new R2_ObjData()
         {
             // Gets loaded at 0x80178DF0 during runtime
-            ObjParamsPointer = data.RaymanObjParamsPointer,
+            UserDataPointer = data.RaymanUserDataPointer,
             CollisionDataPointer = data.RaymanCollisionDataPointer,
             AnimDataPointer = data.RaymanAnimDataPointer,
             XPosition = (short)(rayPos != null ? (rayPos.XPosition + rayPos.CollisionData.OffsetBX - data.RaymanCollisionData.OffsetBX) : 100),
@@ -52,7 +52,7 @@ namespace BinarySerializer.Ray1
         
         // 12 (0xC)
         
-        public Pointer ObjParamsPointer { get; set; } // The data struct here depends on the object type and acts as additional parameters. Several of these are edited during runtime. The max size is 44 bytes, which all empty always slot objects use.
+        public Pointer UserDataPointer { get; set; } // The data struct here depends on the object type and acts as additional parameters. Several of these are edited during runtime. The max size is 44 bytes, which all empty always slot objects use.
 
         // Leads to 16-byte long structures for collision data
         public Pointer CollisionDataPointer { get; set; }
@@ -170,9 +170,9 @@ namespace BinarySerializer.Ray1
         public R2_ObjCollision CollisionData { get; set; }
         public R2_AnimationSet AnimSet { get; set; }
 
-        public byte[] ParamsGeneric { get; set; }
-        public R2_ObjParams_Gendoor ParamsGendoor { get; set; }
-        public R2_ObjParams_Trigger ParamsTrigger { get; set; }
+        public byte[] UserDataBuffer { get; set; }
+        public R2_UserData_Gendoor UserData_Gendoor { get; set; }
+        public R2_UserData_Trigger UserData_Trigger { get; set; }
 
         #endregion
 
@@ -193,7 +193,7 @@ namespace BinarySerializer.Ray1
             UShort_0A = s.Serialize<ushort>(UShort_0A, name: nameof(UShort_0A));
 
             // Serialize pointers
-            ObjParamsPointer = s.SerializePointer(ObjParamsPointer, name: nameof(ObjParamsPointer));
+            UserDataPointer = s.SerializePointer(UserDataPointer, name: nameof(UserDataPointer));
             CollisionDataPointer = s.SerializePointer(CollisionDataPointer, name: nameof(CollisionDataPointer));
             AnimDataPointer = s.SerializePointer(AnimDataPointer, name: nameof(AnimDataPointer));
             RuntimeHandlersPointer = s.Serialize<uint>(RuntimeHandlersPointer, name: nameof(RuntimeHandlersPointer));
@@ -275,15 +275,15 @@ namespace BinarySerializer.Ray1
             if (CollisionDataPointer != null)
                 s.DoAt(CollisionDataPointer, () => CollisionData = s.SerializeObject<R2_ObjCollision>(CollisionData, name: nameof(CollisionData)));
 
-            // Serialize object params
-            s.DoAt(ObjParamsPointer, () =>
+            // Serialize object user data
+            s.DoAt(UserDataPointer, () =>
             {
                 if (ObjType == R2_ObjType.Gendoor || ObjType == R2_ObjType.Killdoor)
-                    ParamsGendoor = s.SerializeObject<R2_ObjParams_Gendoor>(ParamsGendoor, name: nameof(ParamsGendoor));
+                    UserData_Gendoor = s.SerializeObject<R2_UserData_Gendoor>(UserData_Gendoor, name: nameof(UserData_Gendoor));
                 else if (ObjType == R2_ObjType.Trigger)
-                    ParamsTrigger = s.SerializeObject<R2_ObjParams_Trigger>(ParamsTrigger, name: nameof(ParamsTrigger));
+                    UserData_Trigger = s.SerializeObject<R2_UserData_Trigger>(UserData_Trigger, name: nameof(UserData_Trigger));
                 else
-                    ParamsGeneric = s.SerializeArray<byte>(ParamsGeneric, 44, name: nameof(ParamsGeneric)); // 44 bytes is the max length for object params
+                    UserDataBuffer = s.SerializeArray<byte>(UserDataBuffer, 44, name: nameof(UserDataBuffer)); // 44 bytes is the max length for object user data
             });
 
             if (!s.FullSerialize || Pre_IsSerializingFromMemory)
