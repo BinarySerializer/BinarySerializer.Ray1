@@ -16,10 +16,10 @@
 
         Unknown_11 = 11,
         Unknown_14 = 14,
-
+        Spikes = 15,
         Cliff = 18,
         Water = 19,
-
+        Damage = 20,
         Bounce = 21,
         Solid = 22,
         Passthrough = 23,
@@ -40,6 +40,11 @@
         Slippery_Left1_30 = 34,
         Slippery_Left2_30 = 35,
         Slippery_Left_45 = 36,
+        
+        MoveLeft = 37,
+        MoveRight = 38,
+
+        Hook = 42, // Can place hook here by punching
 
         Climb = 44,
 
