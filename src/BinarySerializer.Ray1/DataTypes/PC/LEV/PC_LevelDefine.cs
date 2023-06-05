@@ -9,7 +9,7 @@
         public byte Fnd { get; set; }
         public byte ScrollDiffFnd { get; set; }
         public byte WorldInfoIcon { get; set; } // ?
-        public LevelEffect Effects { get; set; }
+        public LevelEffects Effects { get; set; }
         public RayEvts RayEvts { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
@@ -31,7 +31,7 @@
                     Fnd = s.Serialize<byte>(Fnd, name: nameof(Fnd));
                     ScrollDiffFnd = s.Serialize<byte>(ScrollDiffFnd, name: nameof(ScrollDiffFnd));
                     WorldInfoIcon = s.Serialize<byte>(WorldInfoIcon, name: nameof(WorldInfoIcon));
-                    Effects = s.Serialize<LevelEffect>(Effects, name: nameof(Effects));
+                    Effects = s.Serialize<LevelEffects>(Effects, name: nameof(Effects));
                     RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
                 });
             });

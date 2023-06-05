@@ -14,14 +14,14 @@
         public uint Uint_0C { get; set; }               // 80145a18 - unused
         public uint Uint_10 { get; set; }               // 80145980 - unused
         public uint Uint_14 { get; set; }               // 80145aa0 - some index
-        public R2_FontTable[] FontTables { get; set; }  // 8017af60 - font tables
+        public FontTable[] FontTables { get; set; }  // 8017af60 - font tables
         public Pointer Pointer_36 { get; set; }         // 80145cb4 - sound bank related, includes a .vab file
         public byte SaveZoneWorldsCount { get; set; }   // 80145b78 - the amount of worlds to store in the save zone
         public byte[] SaveZoneLevelCounts { get; set; } // 80145b79 - the amount of levels in each world for the save zone
         public byte Byte_3F { get; set; }               // 80145b7d - unused
         public byte Byte_40 { get; set; }               // 80145b7e - unused
         public byte Byte_41 { get; set; }               // 80145b7f - unused
-        public R2_RayEvts RayEvts { get; set; }         // 80178e60 - used to store the ray evts - why is this defined here?
+        public RayEvts RayEvts { get; set; }            // 80178e60 - used to store the ray evts - why is this defined here?
         public Pointer DemosPointer { get; set; }       // 80178e64 - the recorded demos
         public int Int_4A { get; set; }                 // 80178e68 - demo related, used when not finished playing
         public int Int_4E { get; set; }                 // 80178e6c - demo related, used when finished playing
@@ -46,14 +46,14 @@
             Uint_0C = s.Serialize<uint>(Uint_0C, name: nameof(Uint_0C));
             Uint_10 = s.Serialize<uint>(Uint_10, name: nameof(Uint_10));
             Uint_14 = s.Serialize<uint>(Uint_14, name: nameof(Uint_14));
-            FontTables = s.SerializeObjectArray<R2_FontTable>(FontTables, 5, name: nameof(FontTables));
+            FontTables = s.SerializeObjectArray<FontTable>(FontTables, 5, name: nameof(FontTables));
             Pointer_36 = s.SerializePointer(Pointer_36, name: nameof(Pointer_36));
             SaveZoneWorldsCount = s.Serialize<byte>(SaveZoneWorldsCount, name: nameof(SaveZoneWorldsCount));
             SaveZoneLevelCounts = s.SerializeArray<byte>(SaveZoneLevelCounts, 4, name: nameof(SaveZoneLevelCounts));
             Byte_3F = s.Serialize<byte>(Byte_3F, name: nameof(Byte_3F));
             Byte_40 = s.Serialize<byte>(Byte_40, name: nameof(Byte_40));
             Byte_41 = s.Serialize<byte>(Byte_41, name: nameof(Byte_41));
-            RayEvts = s.Serialize<R2_RayEvts>(RayEvts, name: nameof(RayEvts));
+            RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
             DemosPointer = s.SerializePointer(DemosPointer, name: nameof(DemosPointer));
             Int_4A = s.Serialize<int>(Int_4A, name: nameof(Int_4A));
             Int_4E = s.Serialize<int>(Int_4E, name: nameof(Int_4E));

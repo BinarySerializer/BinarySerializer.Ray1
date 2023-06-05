@@ -2,7 +2,7 @@
 {
     public class R2_RecordedDemo : BinarySerializable
     {
-        public R2_RayEvts RayEvts { get; set; }
+        public RayEvts RayEvts { get; set; }
         public Pointer InputsPointer { get; set; }
         public int InputsCount { get; set; }
         public short XPos { get; set; }
@@ -15,7 +15,7 @@
 
         public override void SerializeImpl(SerializerObject s)
         {
-            RayEvts = s.Serialize<R2_RayEvts>(RayEvts, name: nameof(RayEvts));
+            RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
             InputsPointer = s.SerializePointer(InputsPointer, name: nameof(InputsPointer));
             InputsCount = s.Serialize<int>(InputsCount, name: nameof(InputsCount));
             XPos = s.Serialize<short>(XPos, name: nameof(XPos));

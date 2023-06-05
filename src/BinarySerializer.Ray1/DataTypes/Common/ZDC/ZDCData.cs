@@ -10,12 +10,12 @@
         public byte LayerIndex { get; set; }
 
         // Rayman 2
+        public byte Type { get; set; }
         public byte R2_Flags { get; set; }
-        public byte R2_ZDC_Flags { get; set; }
         
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetRequiredSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             XPosition = s.Serialize<short>(XPosition, name: nameof(XPosition));
             YPosition = s.Serialize<short>(YPosition, name: nameof(YPosition));
@@ -27,8 +27,8 @@
                 s.DoBits<ushort>(b =>
                 {
                     LayerIndex = b.SerializeBits<byte>(LayerIndex, 5, name: nameof(LayerIndex));
-                    R2_Flags = b.SerializeBits<byte>(R2_Flags, 5, name: nameof(R2_Flags));
-                    R2_ZDC_Flags = b.SerializeBits<byte>(R2_ZDC_Flags, 6, name: nameof(R2_ZDC_Flags));
+                    Type = b.SerializeBits<byte>(Type, 5, name: nameof(Type));
+                    R2_Flags = b.SerializeBits<byte>(R2_Flags, 6, name: nameof(R2_Flags));
                 });
             }
             else

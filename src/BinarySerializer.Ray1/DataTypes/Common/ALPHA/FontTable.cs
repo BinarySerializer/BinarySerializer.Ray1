@@ -1,6 +1,6 @@
 ﻿namespace BinarySerializer.Ray1
 {
-    public class R2_FontTable : BinarySerializable
+    public class FontTable : BinarySerializable
     {
         public Pointer TablePointer { get; set; }
         public byte Byte_04 { get; set; } // The HUD sprites count, 0 for font

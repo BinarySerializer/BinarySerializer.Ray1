@@ -3,7 +3,7 @@
 namespace BinarySerializer.Ray1
 {
     [Flags]
-    public enum LevelEffect : ushort
+    public enum LevelEffects : ushort
     {
         // Invalid combos:
         // Storm + firefly

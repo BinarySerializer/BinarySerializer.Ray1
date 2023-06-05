@@ -7,127 +7,41 @@ namespace BinarySerializer.Ray1
     /// </summary>
     public class R2_LevDataFile : BinarySerializable
     {
-        #region Level Data
-
-        public int Uint_00 { get; set; }
-        public int Uint_04 { get; set; }
-
-        /// <summary>
-        /// Pointer to the objects
-        /// </summary>
-        public Pointer LoadedObjectsPointer { get; set; }
-
-        /// <summary>
-        /// Pointer to the always objects
-        /// </summary>
-        public Pointer AlwaysObjectsPointer { get; set; }
-
-        /// <summary>
-        /// Pointer to the allfix sprites
-        /// </summary>
-        public Pointer FixSpritesPointer { get; set; }
-        
-        public byte[] Bytes_14 { get; set; }
-
-        public ushort LoadedObjectsCount { get; set; } // NormalObjectsCount + AlwaysObjectSlotsCount
-        public ushort AlwaysObjectsCount { get; set; } // These are not in the normal obj array
-        public ushort NormalObjectsCount { get; set; } // Normal objects
-        public ushort AlwaysObjectSlotsCount { get; set; } // Dummy slots for always objects during runtime
-
-        public ushort UShort_3A { get; set; }
-
-        /// <summary>
-        /// The number of allfix sprites
-        /// </summary>
-        public ushort FixSpritesCount { get; set; }
-
-        public ushort UShort_3E { get; set; }
-        public ushort UShort_40 { get; set; }
-        public ushort UShort_42 { get; set; }
-        public ushort UShort_44 { get; set; }
-        public ushort UShort_46 { get; set; }
-        public uint DevPointer_48 { get; set; } // Dev pointer
-
+        public RayEvts RayEvts { get; set; }
+        public RayEvts RayEvtsToChange { get; set; } // The values to use from the previous field
+        public Level Level { get; set; }
         public Pointer ZDCDataPointer { get; set; }
         public Pointer ZDCArray1Pointer { get; set; } // Indexed using ZDCEntry.ZDCIndex
         public Pointer ZDCArray2Pointer { get; set; } // Indexed using ZDCEntry.ZDCIndex and additional value
         public Pointer ZDCArray3Pointer { get; set; } // Indexed using UnkPointer5 values
+        public short[] ObjectLinkTable { get; set; }
+        public short[] ActivatedObjects { get; set; }
+        public RayDistData[] RayDistData { get; set; }
 
-        /// <summary>
-        /// The object link table for all loaded objects
-        /// </summary>
-        public ushort[] ObjectLinkTable { get; set; }
-
-        #endregion
-
-        #region Parsed Data
-
-        /// <summary>
-        /// The objects
-        /// </summary>
-        public R2_ObjData[] Objects { get; set; }
-
-        /// <summary>
-        /// The always objects. These do not have map positions.
-        /// </summary>
-        public R2_ObjData[] AlwaysObjects { get; set; }
-
-        public Sprite[] FixSprites { get; set; }
-
+        // Serialized from pointers
         public ZDCData[] ZDC { get; set; }
         public ZDC_TriggerFlags[] ZDCTriggerFlags { get; set; }
         public ushort[] ZDCArray2 { get; set; }
         public R2_ZDCUnkData[] ZDCArray3 { get; set; }
 
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            Uint_00 = s.Serialize<int>(Uint_00, name: nameof(Uint_00));
-            Uint_04 = s.Serialize<int>(Uint_04, name: nameof(Uint_04));
-
-            LoadedObjectsPointer = s.SerializePointer(LoadedObjectsPointer, name: nameof(LoadedObjectsPointer));
-
-            AlwaysObjectsPointer = s.SerializePointer(AlwaysObjectsPointer, name: nameof(AlwaysObjectsPointer));
-            FixSpritesPointer = s.SerializePointer(FixSpritesPointer, name: nameof(FixSpritesPointer));
-
-            Bytes_14 = s.SerializeArray<byte>(Bytes_14, 30, name: nameof(Bytes_14));
-
-            LoadedObjectsCount = s.Serialize<ushort>(LoadedObjectsCount, name: nameof(LoadedObjectsCount));
-
-            AlwaysObjectsCount = s.Serialize<ushort>(AlwaysObjectsCount, name: nameof(AlwaysObjectsCount));
-            NormalObjectsCount = s.Serialize<ushort>(NormalObjectsCount, name: nameof(NormalObjectsCount));
-            AlwaysObjectSlotsCount = s.Serialize<ushort>(AlwaysObjectSlotsCount, name: nameof(AlwaysObjectSlotsCount));
-            UShort_3A = s.Serialize<ushort>(UShort_3A, name: nameof(UShort_3A));
-            FixSpritesCount = s.Serialize<ushort>(FixSpritesCount, name: nameof(FixSpritesCount));
-            UShort_3E = s.Serialize<ushort>(UShort_3E, name: nameof(UShort_3E));
-            UShort_40 = s.Serialize<ushort>(UShort_40, name: nameof(UShort_40));
-            UShort_42 = s.Serialize<ushort>(UShort_42, name: nameof(UShort_42));
-            UShort_44 = s.Serialize<ushort>(UShort_44, name: nameof(UShort_44));
-            UShort_46 = s.Serialize<ushort>(UShort_46, name: nameof(UShort_46));
-            DevPointer_48 = s.Serialize<uint>(DevPointer_48, name: nameof(DevPointer_48));
+            RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
+            RayEvtsToChange = s.SerializeObject<RayEvts>(RayEvtsToChange, name: nameof(RayEvtsToChange));
+            Level = s.SerializeObject<Level>(Level, name: nameof(Level));
             
             ZDCDataPointer = s.SerializePointer(ZDCDataPointer, name: nameof(ZDCDataPointer));
             ZDCArray1Pointer = s.SerializePointer(ZDCArray1Pointer, name: nameof(ZDCArray1Pointer));
             ZDCArray2Pointer = s.SerializePointer(ZDCArray2Pointer, name: nameof(ZDCArray2Pointer));
             ZDCArray3Pointer = s.SerializePointer(ZDCArray3Pointer, name: nameof(ZDCArray3Pointer));
 
-            ObjectLinkTable = s.SerializeArray<ushort>(ObjectLinkTable, LoadedObjectsCount, name: nameof(ObjectLinkTable));
+            ObjectLinkTable = s.SerializeArray<short>(ObjectLinkTable, Level.ObjectsCount, name: nameof(ObjectLinkTable));
+            s.Align(logIfNotNull: true);
+            ActivatedObjects = s.SerializeArray<short>(ActivatedObjects, Level.ObjectsCount, name: nameof(ActivatedObjects));
+            s.Align(logIfNotNull: true);
+            RayDistData = s.SerializeObjectArray<RayDistData>(RayDistData, 5, name: nameof(RayDistData));
 
-            s.DoAt(FixSpritesPointer, () => 
-                FixSprites = s.SerializeObjectArray<Sprite>(FixSprites, FixSpritesCount, name: nameof(FixSprites)));
-
-            s.DoAt(LoadedObjectsPointer, () => 
-                Objects = s.SerializeObjectArray<R2_ObjData>(Objects, LoadedObjectsCount, name: nameof(Objects)));
-            s.DoAt(AlwaysObjectsPointer, () => 
-                AlwaysObjects = s.SerializeObjectArray<R2_ObjData>(AlwaysObjects, AlwaysObjectsCount, name: nameof(AlwaysObjects)));
-
+            // Serialize data from pointers
             s.DoAt(ZDCDataPointer, () => 
                 ZDC = s.SerializeObjectArray<ZDCData>(ZDC, 237, name: nameof(ZDC)));
             s.DoAt(ZDCArray1Pointer, () => 
@@ -137,8 +51,6 @@ namespace BinarySerializer.Ray1
             s.DoAt(ZDCArray3Pointer, () => 
                 ZDCArray3 = s.SerializeObjectArray<R2_ZDCUnkData>(ZDCArray3, 16, name: nameof(ZDCArray3)));
         }
-
-        #endregion
 
         [Flags]
         public enum ZDC_TriggerFlags : byte
