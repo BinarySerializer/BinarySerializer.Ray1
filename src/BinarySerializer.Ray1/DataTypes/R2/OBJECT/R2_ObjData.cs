@@ -24,7 +24,7 @@ namespace BinarySerializer.Ray1
             SubEtat = 19,
             InitialMapLayer = ObjMapLayer.Front,
             Unk2 = new byte[17],
-            ObjType = R2_ObjType.Rayman,
+            ObjType = R2_ObjType.TYPE_RAYMAN,
             DisplayPrio = 7,
             Bytes_5B = new byte[10],
             Bytes_65 = new byte[3],
@@ -278,9 +278,9 @@ namespace BinarySerializer.Ray1
             // Serialize object user data
             s.DoAt(UserDataPointer, () =>
             {
-                if (ObjType == R2_ObjType.Gendoor || ObjType == R2_ObjType.Killdoor)
+                if (ObjType == R2_ObjType.TYPE_GENERATING_DOOR || ObjType == R2_ObjType.TYPE_DESTROYING_DOOR)
                     UserData_Gendoor = s.SerializeObject<R2_UserData_Gendoor>(UserData_Gendoor, name: nameof(UserData_Gendoor));
-                else if (ObjType == R2_ObjType.Trigger)
+                else if (ObjType == R2_ObjType.TYPE_TRIGGER)
                     UserData_Trigger = s.SerializeObject<R2_UserData_Trigger>(UserData_Trigger, name: nameof(UserData_Trigger));
                 else
                     UserDataBuffer = s.SerializeArray<byte>(UserDataBuffer, 44, name: nameof(UserDataBuffer)); // 44 bytes is the max length for object user data
