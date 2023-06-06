@@ -283,7 +283,7 @@ namespace BinarySerializer.Ray1
                 else if (ObjType == R2_ObjType.TYPE_TRIGGER)
                     UserData_Trigger = s.SerializeObject<R2_UserData_Trigger>(UserData_Trigger, name: nameof(UserData_Trigger));
                 else
-                    UserDataBuffer = s.SerializeArray<byte>(UserDataBuffer, 44, name: nameof(UserDataBuffer)); // 44 bytes is the max length for object user data
+                    UserDataBuffer = s.SerializeArray<byte>(UserDataBuffer, ObjType.GetUserDataLength(), name: nameof(UserDataBuffer));
             });
 
             if (!s.FullSerialize || Pre_IsSerializingFromMemory)

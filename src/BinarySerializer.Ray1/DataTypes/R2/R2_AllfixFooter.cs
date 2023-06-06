@@ -67,7 +67,7 @@
             s.DoAt(RaymanAnimDataPointer, () => 
                 RaymanAnimSet = s.SerializeObject<R2_AnimationSet>(RaymanAnimSet, name: nameof(RaymanAnimSet)));
             s.DoAt(RaymanUserDataPointer, () =>
-                RaymanUserData = s.SerializeArray<byte>(RaymanUserData, 0x18, name: nameof(RaymanUserData)));
+                RaymanUserData = s.SerializeArray<byte>(RaymanUserData, R2_ObjType.TYPE_RAYMAN.GetUserDataLength(), name: nameof(RaymanUserData)));
             s.DoAt(RaymanCollisionDataPointer, () => 
                 RaymanCollisionData = s.SerializeObject<R2_ObjCollision>(RaymanCollisionData, name: nameof(RaymanCollisionData)));
         }
