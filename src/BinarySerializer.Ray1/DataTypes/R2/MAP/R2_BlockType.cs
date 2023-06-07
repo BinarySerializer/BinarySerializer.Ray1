@@ -50,7 +50,7 @@
 
         ChangeDirection_Reverse = 47,
 
-        ChangeDirection_Unknown = 49, // Appears to change the direction of a moving platform after a certain amount of hits
+        ChangeDirection_Counter = 49, // Appears to change the direction of a moving platform after a certain amount of hits
 
         Canon_ValidTarget = 50,
         Canon_InvalidTarget = 51,

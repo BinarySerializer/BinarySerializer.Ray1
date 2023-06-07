@@ -8,9 +8,9 @@
         // All the data here gets copied to different memory locations on load. Most of the data is similar
         // to what was in Rayman 1, but there it was all hard-coded in the exe.
 
-        public Pointer RaymanCollisionDataPointer { get; set; }
+        public Pointer RaymanCharacterPointer { get; set; }
         public Pointer RaymanUserDataPointer { get; set; }
-        public Pointer RaymanAnimDataPointer { get; set; }
+        public Pointer RaymanAnimSetPointer { get; set; }
         public uint Uint_0C { get; set; }               // 80145a18 - unused
         public uint Uint_10 { get; set; }               // 80145980 - unused
         public uint Uint_14 { get; set; }               // 80145aa0 - some index
@@ -32,16 +32,16 @@
 
         // Serialized from pointers
         public R2_RecordedDemo[] Demos { get; set; }
-        public R2_ObjCollision RaymanCollisionData { get; set; }
+        public R2_Character RaymanCollisionData { get; set; }
         public byte[] RaymanUserData { get; set; }
         public R2_AnimationSet RaymanAnimSet { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
         {
             // Serialize pointers
-            RaymanCollisionDataPointer = s.SerializePointer(RaymanCollisionDataPointer, name: nameof(RaymanCollisionDataPointer));
+            RaymanCharacterPointer = s.SerializePointer(RaymanCharacterPointer, name: nameof(RaymanCharacterPointer));
             RaymanUserDataPointer = s.SerializePointer(RaymanUserDataPointer, name: nameof(RaymanUserDataPointer));
-            RaymanAnimDataPointer = s.SerializePointer(RaymanAnimDataPointer, name: nameof(RaymanAnimDataPointer));
+            RaymanAnimSetPointer = s.SerializePointer(RaymanAnimSetPointer, name: nameof(RaymanAnimSetPointer));
 
             Uint_0C = s.Serialize<uint>(Uint_0C, name: nameof(Uint_0C));
             Uint_10 = s.Serialize<uint>(Uint_10, name: nameof(Uint_10));
@@ -64,12 +64,12 @@
 
             s.DoAt(DemosPointer, () => 
                 Demos = s.SerializeObjectArray<R2_RecordedDemo>(Demos, DemosCount, name: nameof(Demos)));
-            s.DoAt(RaymanAnimDataPointer, () => 
+            s.DoAt(RaymanAnimSetPointer, () => 
                 RaymanAnimSet = s.SerializeObject<R2_AnimationSet>(RaymanAnimSet, name: nameof(RaymanAnimSet)));
             s.DoAt(RaymanUserDataPointer, () =>
                 RaymanUserData = s.SerializeArray<byte>(RaymanUserData, R2_ObjType.TYPE_RAYMAN.GetUserDataLength(), name: nameof(RaymanUserData)));
-            s.DoAt(RaymanCollisionDataPointer, () => 
-                RaymanCollisionData = s.SerializeObject<R2_ObjCollision>(RaymanCollisionData, name: nameof(RaymanCollisionData)));
+            s.DoAt(RaymanCharacterPointer, () => 
+                RaymanCollisionData = s.SerializeObject<R2_Character>(RaymanCollisionData, name: nameof(RaymanCollisionData)));
         }
     }
 }

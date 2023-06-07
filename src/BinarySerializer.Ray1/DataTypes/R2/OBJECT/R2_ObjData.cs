@@ -1,173 +1,101 @@
-﻿using System;
-
-namespace BinarySerializer.Ray1
+﻿namespace BinarySerializer.Ray1
 {
     /// <summary>
     /// Object data
     /// </summary>
     public class R2_ObjData : BinarySerializable 
     {
-        #region Static Methods
+        #region Object data
 
-        /// <summary>
-        /// Gets a new object instance for Rayman
-        /// </summary>
-        public static R2_ObjData GetRayman(R2_ObjData rayPos, R2_AllfixFooter data) => new R2_ObjData()
-        {
-            // Gets loaded at 0x80178DF0 during runtime
-            UserDataPointer = data.RaymanUserDataPointer,
-            CollisionDataPointer = data.RaymanCollisionDataPointer,
-            AnimDataPointer = data.RaymanAnimDataPointer,
-            XPosition = (short)(rayPos != null ? (rayPos.XPosition + rayPos.CollisionData.OffsetBX - data.RaymanCollisionData.OffsetBX) : 100),
-            YPosition = (short)(rayPos != null ? (rayPos.YPosition + rayPos.CollisionData.OffsetBY - data.RaymanCollisionData.OffsetBY) : 10),
-            Etat = 0, // It's supposed to be Etat 2, SubEtat 2, but the ray pos state has a better looking speed
-            SubEtat = 19,
-            InitialMapLayer = ObjMapLayer.Front,
-            Unk2 = new byte[17],
-            ObjType = R2_ObjType.TYPE_RAYMAN,
-            DisplayPrio = 7,
-            Bytes_5B = new byte[10],
-            Bytes_65 = new byte[3],
-            Unk5 = new byte[2],
-            CollisionData = data.RaymanCollisionData,
-            AnimSet = data.RaymanAnimSet
-        };
+        public short Rotation { get; set; }
+        public short Short_02 { get; set; }
+        public short Short_04 { get; set; }
+        public short Short_06 { get; set; } // Appears unreferenced
+        public byte RotationCollisionIndex { get; set; }
+        public bool HasRotationCollision { get; set; }
+        public byte Byte_0A { get; set; } // Appears unreferenced
+        public byte RotationMode { get; set; } // 0 = No rotation, 1 = rotation. Checked as a bool, but set to 2 in one place...
 
-        #endregion
-
-        #region Pre-Serialize
-
-        public bool Pre_IsSerializingFromMemory { get; set; }
-
-        #endregion
-
-        #region Obj Data
-
-        public ushort UShort_00 { get; set; }
-        public ushort UShort_02 { get; set; }
-        public ushort UShort_04 { get; set; }
-        public ushort UShort_06 { get; set; }
-        public ushort UShort_08 { get; set; }
-        public ushort UShort_0A { get; set; }
+        public Pointer UserDataPointer { get; set; }
+        public Pointer CharacterPointer { get; set; }
+        public Pointer AnimSetPointer { get; set; }
+        public Pointer HandlersPointer { get; set; }
         
-        // 12 (0xC)
-        
-        public Pointer UserDataPointer { get; set; } // The data struct here depends on the object type and acts as additional parameters. Several of these are edited during runtime. The max size is 44 bytes, which all empty always slot objects use.
-
-        // Leads to 16-byte long structures for collision data
-        public Pointer CollisionDataPointer { get; set; }
-
-        public Pointer AnimDataPointer { get; set; }
-
-        // Always 0 in file - gets set to the object function struct when initialized, based on the type
-        public uint RuntimeHandlersPointer { get; set; }
-        
-        // 28 (0x1C)
-
         public short InitialXPosition { get; set; }
         public short InitialYPosition { get; set; }
-
-        // 32 (0x20)
-
-        public byte InitialEtat { get; set; }
+        public byte InitialMainEtat { get; set; }
         public byte InitialSubEtat { get; set; }
         public byte InitialHitPoints { get; set; }
-
-        // 24 (0x22)
-
         public byte InitialDisplayPrio { get; set; }
-
         public ObjMapLayer InitialMapLayer { get; set; }
+        public byte InitialScale { get; set; }
+        public bool InitialFlipX { get; set; }
+        public byte InitialGendoorExtGroup { get; set; }
 
-        // 26 (0x24)
+        public FixedPointInt32 FixedPointXPosition { get; set; }
+        public FixedPointInt32 FixedPointYPosition { get; set; }
 
-        public byte Byte_25 { get; set; }
-        public PS1_R2Demo_ObjFlags Flags { get; set; }
-        public byte Byte_27 { get; set; }
-        
-        public int Float_XPos { get; set; }
-        public int Float_YPos { get; set; }
+        public int TestBlockIndex { get; set; }
+        public int RaymanDistance { get; set; }
 
-        public byte[] Unk2 { get; set; }
+        public Pointer StatePointer { get; set; }
+        public Pointer AnimationPointer { get; set; }
 
-        // 56 (0x38)
-
-        // Dev pointer in file - gets set to a pointer to the current object state during runtime
-        public uint RuntimeCurrentStatePointer { get; set; }
-
-        // Always 0 in file - gets set to a pointer during runtime
-        public uint RuntimeCurrentAnimationPointer { get; set; }
-
-        // 64 (0x40)
-
-        public ushort Index { get; set; }
-
-        /// <summary>
-        /// The object type
-        /// </summary>
-        public R2_ObjType ObjType { get; set; }
-
-        // 68 (0x44)
+        public short Id { get; set; }
+        public R2_ObjType Type { get; set; }
 
         public short XPosition { get; set; }
         public short YPosition { get; set; }
 
-        // 72 (0x48)
-
         public short ScreenXPosition { get; set; }
         public short ScreenYPosition { get; set; }
 
-        // 76 (0x4C)
+        public short SpeedX { get; set; }
+        public short SpeedY { get; set; }
 
-        public short Float_SpeedX { get; set; }
-        public short Float_SpeedY { get; set; }
-        public short Short_50 { get; set; }
-        public byte Byte_52 { get; set; }
+        public short ActiveTimer { get; set; }
+        public byte Scale { get; set; }
 
-        public byte RuntimeCurrentAnimIndex { get; set; }
+        public byte AnimationIndex { get; set; }
+        public byte AnimationFrame { get; set; }
 
-        // 84 (0x54)
-
-        public byte RuntimeCurrentAnimFrame { get; set; }
-
-        public byte Etat { get; set; }
+        public byte MainEtat { get; set; }
         public byte SubEtat { get; set; }
+        
         public byte HitPoints { get; set; }
-        public byte Byte_58 { get; set; }
-
-        // The layer to appear on (0-7)
+        public byte ActiveFlag { get; set; }
         public byte DisplayPrio { get; set; }
 
-        // 90 (0x5A)
+        public R2_BlockType BlockType { get; set; }
 
-        public R2_BlockType RuntimeCurrentCollisionType { get; set; }
+        public byte Byte_5B { get; set; } // Appears unreferenced
 
-        public byte[] Bytes_5B { get; set; }
-
-        // 100 (0x64)
+        public byte EventIndex { get; set; }
+        public byte[] EventTimers { get; set; } // Unsure about length
 
         public ObjMapLayer MapLayer { get; set; }
+        public byte BlockCheckCounter { get; set; }
+        public byte BlockCheck { get; set; }
 
-        public byte[] Bytes_65 { get; set; }
+        public bool NewState { get; set; }
+        public bool UnknownFlag1 { get; set; }
+        public bool IsAlive { get; set; }
+        public bool IsLinked { get; set; }
+        public bool IsActive { get; set; }
+        public bool UnknownFlag2 { get; set; }
+        public bool HasHandledDeath { get; set; }
+        public bool UnknownFlag3 { get; set; } // Same as UnknownFlag2 from R1
 
-        public PS1_R2Demo_ObjRuntimeFlags1 RuntimeFlags1 { get; set; }
-
-        // 104 (0x68)
-
-        public bool RuntimeFlipX { get; set; }
-        public bool RuntimeUnkFlag { get; set; }
-        public byte ZDCFlags { get; set; }
-
-        // First bit determines if the sprite should be faded
-        public byte RuntimeFlags3 { get; set; }
-
-        public byte[] Unk5 { get; set; }
+        public bool FlipX { get; set; }
+        public bool FollowEnabled { get; set; }
+        public byte GendoorExtGroup { get; set; } // Might have other usages for other types?
+        public bool SemiTransparent { get; set; }
 
         #endregion
 
-        #region Pointer Data
+        #region Parsed from pointers
 
-        public R2_ObjCollision CollisionData { get; set; }
+        public R2_Character Character { get; set; }
         public R2_AnimationSet AnimSet { get; set; }
 
         public byte[] UserDataBuffer { get; set; }
@@ -176,55 +104,75 @@ namespace BinarySerializer.Ray1
 
         #endregion
 
-        #region Public Methods
+        #region Object Creation Methods
 
         /// <summary>
-        /// Handles the data serialization
+        /// Gets a new object instance for Rayman
         /// </summary>
-        /// <param name="s">The serializer object</param>
+        public static R2_ObjData GetRayman(R2_ObjData rayPos, R2_AllfixFooter data) => new R2_ObjData()
+        {
+            // Gets loaded at 0x80178DF0 during runtime
+            UserDataPointer = data.RaymanUserDataPointer,
+            CharacterPointer = data.RaymanCharacterPointer,
+            AnimSetPointer = data.RaymanAnimSetPointer,
+            XPosition = (short)(rayPos != null ? (rayPos.XPosition + rayPos.Character.OffsetBX - data.RaymanCollisionData.OffsetBX) : 100),
+            YPosition = (short)(rayPos != null ? (rayPos.YPosition + rayPos.Character.OffsetBY - data.RaymanCollisionData.OffsetBY) : 10),
+            MainEtat = 0, // It's supposed to be Etat 2, SubEtat 2, but the ray pos state has a better looking speed
+            SubEtat = 19,
+            InitialMapLayer = ObjMapLayer.Front,
+            Type = R2_ObjType.TYPE_RAYMAN,
+            DisplayPrio = 7,
+            EventTimers = new byte[7],
+            Character = data.RaymanCollisionData,
+            AnimSet = data.RaymanAnimSet
+        };
+
+        #endregion
+
+        #region Public Methods
+
         public override void SerializeImpl(SerializerObject s)
         {
-            // Serialize initial unknown values
-            UShort_00 = s.Serialize<ushort>(UShort_00, name: nameof(UShort_00));
-            UShort_02 = s.Serialize<ushort>(UShort_02, name: nameof(UShort_02));
-            UShort_04 = s.Serialize<ushort>(UShort_04, name: nameof(UShort_04));
-            UShort_06 = s.Serialize<ushort>(UShort_06, name: nameof(UShort_06));
-            UShort_08 = s.Serialize<ushort>(UShort_08, name: nameof(UShort_08));
-            UShort_0A = s.Serialize<ushort>(UShort_0A, name: nameof(UShort_0A));
+            Rotation = s.Serialize<short>(Rotation, name: nameof(Rotation));
+            Short_02 = s.Serialize<short>(Short_02, name: nameof(Short_02));
+            Short_04 = s.Serialize<short>(Short_04, name: nameof(Short_04));
+            Short_06 = s.Serialize<short>(Short_06, name: nameof(Short_06));
+            RotationCollisionIndex = s.Serialize<byte>(RotationCollisionIndex, name: nameof(RotationCollisionIndex));
+            HasRotationCollision = s.Serialize<bool>(HasRotationCollision, name: nameof(HasRotationCollision));
+            Byte_0A = s.Serialize<byte>(Byte_0A, name: nameof(Byte_0A));
+            RotationMode = s.Serialize<byte>(RotationMode, name: nameof(RotationMode));
 
-            // Serialize pointers
             UserDataPointer = s.SerializePointer(UserDataPointer, name: nameof(UserDataPointer));
-            CollisionDataPointer = s.SerializePointer(CollisionDataPointer, name: nameof(CollisionDataPointer));
-            AnimDataPointer = s.SerializePointer(AnimDataPointer, name: nameof(AnimDataPointer));
-            RuntimeHandlersPointer = s.Serialize<uint>(RuntimeHandlersPointer, name: nameof(RuntimeHandlersPointer));
+            CharacterPointer = s.SerializePointer(CharacterPointer, name: nameof(CharacterPointer));
+            AnimSetPointer = s.SerializePointer(AnimSetPointer, name: nameof(AnimSetPointer));
+            HandlersPointer = s.SerializePointer(HandlersPointer, name: nameof(HandlersPointer));
 
-            // Serialize positions
             InitialXPosition = s.Serialize<short>(InitialXPosition, name: nameof(InitialXPosition));
             InitialYPosition = s.Serialize<short>(InitialYPosition, name: nameof(InitialYPosition));
-
-            // Serialize state data
-            InitialEtat = s.Serialize<byte>(InitialEtat, name: nameof(InitialEtat));
+            InitialMainEtat = s.Serialize<byte>(InitialMainEtat, name: nameof(InitialMainEtat));
             InitialSubEtat = s.Serialize<byte>(InitialSubEtat, name: nameof(InitialSubEtat));
             InitialHitPoints = s.Serialize<byte>(InitialHitPoints, name: nameof(InitialHitPoints));
             InitialDisplayPrio = s.Serialize<byte>(InitialDisplayPrio, name: nameof(InitialDisplayPrio));
             InitialMapLayer = s.Serialize<ObjMapLayer>(InitialMapLayer, name: nameof(InitialMapLayer));
+            InitialScale = s.Serialize<byte>(InitialScale, name: nameof(InitialScale));
+            s.DoBits<ushort>(b =>
+            {
+                InitialFlipX = b.SerializeBits<bool>(InitialFlipX, 1, name: nameof(InitialFlipX));
+                InitialGendoorExtGroup = b.SerializeBits<byte>(InitialGendoorExtGroup, 6, name: nameof(InitialGendoorExtGroup));
+                b.SerializePadding(1, logIfNotNull: true);
+            });
 
-            Byte_25 = s.Serialize<byte>(Byte_25, name: nameof(Byte_25));
-            Flags = s.Serialize<PS1_R2Demo_ObjFlags>(Flags, name: nameof(Flags));
-            Byte_27 = s.Serialize<byte>(Byte_27, name: nameof(Byte_27));
+            FixedPointXPosition = s.SerializeObject<FixedPointInt32>(FixedPointXPosition, x => x.Pre_PointPosition = 8, name: nameof(FixedPointXPosition));
+            FixedPointYPosition = s.SerializeObject<FixedPointInt32>(FixedPointYPosition, x => x.Pre_PointPosition = 8, name: nameof(FixedPointYPosition));
 
-            Float_XPos = s.Serialize<int>(Float_XPos, name: nameof(Float_XPos));
-            Float_YPos = s.Serialize<int>(Float_YPos, name: nameof(Float_YPos));
+            TestBlockIndex = s.Serialize<int>(TestBlockIndex, name: nameof(TestBlockIndex));
+            RaymanDistance = s.Serialize<int>(RaymanDistance, name: nameof(RaymanDistance));
 
-            Unk2 = s.SerializeArray(Unk2, 8, name: nameof(Unk2)); // Two floats?
+            StatePointer = s.SerializePointer(StatePointer, name: nameof(StatePointer));
+            AnimationPointer = s.SerializePointer(AnimationPointer, name: nameof(AnimationPointer));
 
-            RuntimeCurrentStatePointer = s.Serialize<uint>(RuntimeCurrentStatePointer, name: nameof(RuntimeCurrentStatePointer));
-            RuntimeCurrentAnimationPointer = s.Serialize<uint>(RuntimeCurrentAnimationPointer, name: nameof(RuntimeCurrentAnimationPointer));
-
-            Index = s.Serialize<ushort>(Index, name: nameof(Index));
-
-            // Serialize the type
-            ObjType = s.Serialize<R2_ObjType>(ObjType, name: nameof(ObjType));
+            Id = s.Serialize<short>(Id, name: nameof(Id));
+            Type = s.Serialize<R2_ObjType>(Type, name: nameof(Type));
 
             XPosition = s.Serialize<short>(XPosition, name: nameof(XPosition));
             YPosition = s.Serialize<short>(YPosition, name: nameof(YPosition));
@@ -232,111 +180,97 @@ namespace BinarySerializer.Ray1
             ScreenXPosition = s.Serialize<short>(ScreenXPosition, name: nameof(ScreenXPosition));
             ScreenYPosition = s.Serialize<short>(ScreenYPosition, name: nameof(ScreenYPosition));
 
-            Float_SpeedX = s.Serialize<short>(Float_SpeedX, name: nameof(Float_SpeedX));
-            Float_SpeedY = s.Serialize<short>(Float_SpeedY, name: nameof(Float_SpeedY));
-            Short_50 = s.Serialize<short>(Short_50, name: nameof(Short_50));
+            SpeedX = s.Serialize<short>(SpeedX, name: nameof(SpeedX));
+            SpeedY = s.Serialize<short>(SpeedY, name: nameof(SpeedY));
+            
+            ActiveTimer = s.Serialize<short>(ActiveTimer, name: nameof(ActiveTimer));
+            Scale = s.Serialize<byte>(Scale, name: nameof(Scale));
 
-            Byte_52 = s.Serialize<byte>(Byte_52, name: nameof(Byte_52));
+            AnimationIndex = s.Serialize<byte>(AnimationIndex, name: nameof(AnimationIndex));
+            AnimationFrame = s.Serialize<byte>(AnimationFrame, name: nameof(AnimationFrame));
 
-            RuntimeCurrentAnimIndex = s.Serialize<byte>(RuntimeCurrentAnimIndex, name: nameof(RuntimeCurrentAnimIndex));
-            RuntimeCurrentAnimFrame = s.Serialize<byte>(RuntimeCurrentAnimFrame, name: nameof(RuntimeCurrentAnimFrame));
-
-            Etat = s.Serialize<byte>(Etat, name: nameof(Etat));
+            MainEtat = s.Serialize<byte>(MainEtat, name: nameof(MainEtat));
             SubEtat = s.Serialize<byte>(SubEtat, name: nameof(SubEtat));
+
             HitPoints = s.Serialize<byte>(HitPoints, name: nameof(HitPoints));
-            Byte_58 = s.Serialize<byte>(Byte_58, name: nameof(Byte_58));
-
+            ActiveFlag = s.Serialize<byte>(ActiveFlag, name: nameof(ActiveFlag));
             DisplayPrio = s.Serialize<byte>(DisplayPrio, name: nameof(DisplayPrio));
+            BlockType = s.Serialize<R2_BlockType>(BlockType, name: nameof(BlockType));
 
-            RuntimeCurrentCollisionType = s.Serialize<R2_BlockType>(RuntimeCurrentCollisionType, name: nameof(RuntimeCurrentCollisionType));
+            Byte_5B = s.Serialize<byte>(Byte_5B, name: nameof(Byte_5B));
 
-            Bytes_5B = s.SerializeArray(Bytes_5B, 9, name: nameof(Bytes_5B));
+            EventIndex = s.Serialize<byte>(EventIndex, name: nameof(EventIndex));
+            EventTimers = s.SerializeArray<byte>(EventTimers, 7, name: nameof(EventTimers));
 
             MapLayer = s.Serialize<ObjMapLayer>(MapLayer, name: nameof(MapLayer));
-
-            Bytes_65 = s.SerializeArray(Bytes_65, 2, name: nameof(Bytes_65));
-
-            RuntimeFlags1 = s.Serialize<PS1_R2Demo_ObjRuntimeFlags1>(RuntimeFlags1, name: nameof(RuntimeFlags1));
+            BlockCheckCounter = s.Serialize<byte>(BlockCheckCounter, name: nameof(BlockCheckCounter));
+            BlockCheck = s.Serialize<byte>(BlockCheck, name: nameof(BlockCheck));
 
             s.DoBits<byte>(b =>
             {
-                RuntimeFlipX = b.SerializeBits<bool>(RuntimeFlipX, 1, name: nameof(RuntimeFlipX));
-                RuntimeUnkFlag = b.SerializeBits<bool>(RuntimeUnkFlag, 1, name: nameof(RuntimeUnkFlag));
-                ZDCFlags = b.SerializeBits<byte>(ZDCFlags, 6, name: nameof(ZDCFlags));
+                NewState = b.SerializeBits<bool>(NewState, 1, name: nameof(NewState));
+                UnknownFlag1 = b.SerializeBits<bool>(UnknownFlag1, 1, name: nameof(UnknownFlag1));
+                IsAlive = b.SerializeBits<bool>(IsAlive, 1, name: nameof(IsAlive));
+                IsLinked = b.SerializeBits<bool>(IsLinked, 1, name: nameof(IsLinked));
+                IsActive = b.SerializeBits<bool>(IsActive, 1, name: nameof(IsActive));
+                UnknownFlag2 = b.SerializeBits<bool>(UnknownFlag2, 1, name: nameof(UnknownFlag2));
+                HasHandledDeath = b.SerializeBits<bool>(HasHandledDeath, 1, name: nameof(HasHandledDeath));
+                UnknownFlag3 = b.SerializeBits<bool>(UnknownFlag3, 1, name: nameof(UnknownFlag3));
             });
 
-            RuntimeFlags3 = s.Serialize<byte>(RuntimeFlags3, name: nameof(RuntimeFlags3));
+            s.DoBits<int>(b =>
+            {
+                FlipX = b.SerializeBits<bool>(FlipX, 1, name: nameof(FlipX));
+                FollowEnabled = b.SerializeBits<bool>(FollowEnabled, 1, name: nameof(FollowEnabled));
+                GendoorExtGroup = b.SerializeBits<byte>(GendoorExtGroup, 6, name: nameof(GendoorExtGroup));
+                SemiTransparent = b.SerializeBits<bool>(SemiTransparent, 1, name: nameof(SemiTransparent));
 
-            Unk5 = s.SerializeArray(Unk5, 2, name: nameof(Unk5));
+                // Seems unreferenced, so probably padding
+                b.SerializePadding(23, logIfNotNull: true);
+            });
 
             // Parse data from pointers
 
-            // Serialize collision data
-            if (CollisionDataPointer != null)
-                s.DoAt(CollisionDataPointer, () => CollisionData = s.SerializeObject<R2_ObjCollision>(CollisionData, name: nameof(CollisionData)));
-
-            // Serialize object user data
+            s.DoAt(CharacterPointer, () => Character = s.SerializeObject<R2_Character>(Character, name: nameof(Character)));
+            
             s.DoAt(UserDataPointer, () =>
             {
-                if (ObjType == R2_ObjType.TYPE_GENERATING_DOOR || ObjType == R2_ObjType.TYPE_DESTROYING_DOOR)
-                    UserData_Gendoor = s.SerializeObject<R2_UserData_Gendoor>(UserData_Gendoor, name: nameof(UserData_Gendoor));
-                else if (ObjType == R2_ObjType.TYPE_TRIGGER)
-                    UserData_Trigger = s.SerializeObject<R2_UserData_Trigger>(UserData_Trigger, name: nameof(UserData_Trigger));
-                else
-                    UserDataBuffer = s.SerializeArray<byte>(UserDataBuffer, ObjType.GetUserDataLength(), name: nameof(UserDataBuffer));
+                switch (Type)
+                {
+                    case R2_ObjType.TYPE_GENERATING_DOOR:
+                    case R2_ObjType.TYPE_DESTROYING_DOOR:
+                        UserData_Gendoor = s.SerializeObject<R2_UserData_Gendoor>(UserData_Gendoor, name: nameof(UserData_Gendoor));
+                        break;
+                    
+                    case R2_ObjType.TYPE_TRIGGER:
+                        UserData_Trigger = s.SerializeObject<R2_UserData_Trigger>(UserData_Trigger, name: nameof(UserData_Trigger));
+                        break;
+
+                    // TODO: Parse remaining user data
+                    
+                    default:
+                        UserDataBuffer = s.SerializeArray<byte>(UserDataBuffer, Type.GetUserDataLength(), name: nameof(UserDataBuffer));
+                        break;
+                }
             });
 
-            if (!s.FullSerialize || Pre_IsSerializingFromMemory)
+            if (!s.FullSerialize)
                 return;
 
-            // Serialize the animation group data
-            if (AnimDataPointer != null)
-                s.DoAt(AnimDataPointer, () => AnimSet = s.SerializeObject<R2_AnimationSet>(AnimSet, name: nameof(AnimSet)));
+            s.DoAt(AnimSetPointer, () => AnimSet = s.SerializeObject<R2_AnimationSet>(AnimSet, name: nameof(AnimSet)));
         }
 
         #endregion
 
-        /// <summary>
-        /// Flags for <see cref="R2_ObjData"/>
-        /// </summary>
-        [Flags]
-        public enum PS1_R2Demo_ObjFlags : byte
-        {
-            None = 0,
-            UnkFlag_0 = 1 << 0,
-            UnkFlag_1 = 1 << 1,
-            UnkFlag_2 = 1 << 2,
-            UnkFlag_3 = 1 << 3,
-            UnkFlag_4 = 1 << 4,
-            UnkFlag_5 = 1 << 5,
-            UnkFlag_6 = 1 << 6,
-            FlippedHorizontally = 1 << 7,
-        }
+        #region Data Types
 
         public enum ObjMapLayer : byte
         {
             None = 0,
             Front = 1,
-            Back = 2
+            Back = 2,
         }
 
-        [Flags]
-        public enum PS1_R2Demo_ObjRuntimeFlags1 : byte
-        {
-            None = 0,
-            UnkFlag_0 = 1 << 0,
-            UnkFlag_1 = 1 << 1,
-            UnkFlag_2 = 1 << 2,
-            UnkFlag_3 = 1 << 3,
-
-            /// <summary>
-            /// Indicates if the object should be drawn on screen
-            /// </summary>
-            SwitchedOn = 1 << 4,
-
-            UnkFlag_5 = 1 << 5,
-            UnkFlag_6 = 1 << 6,
-            UnkFlag_7 = 1 << 7,
-        }
+        #endregion
     }
 }

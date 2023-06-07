@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace BinarySerializer.Ray1
 {
@@ -16,7 +17,7 @@ namespace BinarySerializer.Ray1
         public Pointer ZDCArray3Pointer { get; set; } // Indexed using UnkPointer5 values
         public short[] ObjectLinkTable { get; set; }
         public short[] ActivatedObjects { get; set; }
-        public RayDistData[] RayDistData { get; set; }
+        public RotationCollision[] RotationCollision { get; set; }
 
         // Serialized from pointers
         public ZDCData[] ZDC { get; set; }
@@ -39,7 +40,8 @@ namespace BinarySerializer.Ray1
             s.Align(logIfNotNull: true);
             ActivatedObjects = s.SerializeArray<short>(ActivatedObjects, Level.ObjectsCount, name: nameof(ActivatedObjects));
             s.Align(logIfNotNull: true);
-            RayDistData = s.SerializeObjectArray<RayDistData>(RayDistData, 5, name: nameof(RayDistData));
+            int rotCollisionCount = Level.R2_Objects.Where(x => x.HasRotationCollision).Max(x => x.RotationCollisionIndex) + 1;
+            RotationCollision = s.SerializeObjectArray<RotationCollision>(RotationCollision, rotCollisionCount, name: nameof(RotationCollision));
 
             // Serialize data from pointers
             s.DoAt(ZDCDataPointer, () => 

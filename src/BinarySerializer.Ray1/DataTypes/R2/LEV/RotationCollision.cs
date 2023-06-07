@@ -1,8 +1,8 @@
 ﻿namespace BinarySerializer.Ray1
 {
-    public class RayDistData : BinarySerializable
+    public class RotationCollision : BinarySerializable
     {
-        // What is all of this data used for?
+        // Used for collision on rotated object
         public int X1 { get; set; }
         public int Y1 { get; set; }
         public int X2 { get; set; }
