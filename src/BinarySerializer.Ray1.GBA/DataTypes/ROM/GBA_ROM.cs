@@ -196,7 +196,7 @@ namespace BinarySerializer.Ray1.GBA
             // Serialize tables
             s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.TypeZDC), () => TypeZDC = s.SerializeObjectArray<ZDCEntry>(TypeZDC, 262, name: nameof(TypeZDC)));
             s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.ZdcData), () => ZdcData = s.SerializeObjectArray<ZDCData>(ZdcData, 200, name: nameof(ZdcData)));
-            s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.EventFlags), () => EventFlags = s.SerializeArray<ObjTypeFlags>(EventFlags, 262, name: nameof(EventFlags)));
+            s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.EventFlags), () => EventFlags = s.SerializeObjectArray<ObjTypeFlags>(EventFlags, 262, name: nameof(EventFlags)));
 
             WorldVignetteIndicesPointers = s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.WorldVignetteIndices), () => s.SerializePointerArray(WorldVignetteIndicesPointers, 9, name: nameof(WorldVignetteIndicesPointers)));
             WorldVignetteIndices = s.DoAt(WorldVignetteIndicesPointers[(int)settings.World], () => s.SerializeArray<byte>(WorldVignetteIndices, 8, name: nameof(WorldVignetteIndices))); // The max size is 8

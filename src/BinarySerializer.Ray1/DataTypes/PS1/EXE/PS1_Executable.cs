@@ -33,12 +33,7 @@ namespace BinarySerializer.Ray1
                 ZDCData = s.SerializeObjectArray<ZDCData>(ZDCData, 200, name: nameof(ZDCData)));
 
             s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.ObjTypeFlags), () => 
-            {
-                if (settings.EngineVersion == Ray1EngineVersion.Saturn)
-                    ObjTypeFlags = s.SerializeArray<int>(ObjTypeFlags?.Select(x => BitHelpers.ReverseBits((int)x)).ToArray(), 256, name: nameof(ObjTypeFlags)).Select(BitHelpers.ReverseBits).Select(x => (ObjTypeFlags)x).ToArray();
-                else
-                    ObjTypeFlags = s.SerializeArray<ObjTypeFlags>(ObjTypeFlags, 256, name: nameof(ObjTypeFlags));
-            });
+                ObjTypeFlags = s.SerializeObjectArray<ObjTypeFlags>(ObjTypeFlags, 256, name: nameof(ObjTypeFlags)));
 
             s.DoAt(s.GetPreDefinedPointer(PS1_DefinedPointer.WorldInfo), () => 
                 WorldInfo = s.SerializeObjectArray<WorldInfo>(WorldInfo, 24, name: nameof(WorldInfo)));

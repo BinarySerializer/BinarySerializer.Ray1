@@ -165,7 +165,7 @@ namespace BinarySerializer.Ray1.GBA
             // Serialize tables
             s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.TypeZDC), () => TypeZDC = s.SerializeObjectArray<ZDCEntry>(TypeZDC, 262, name: nameof(TypeZDC)));
             s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.ZdcData), () => ZdcData = s.SerializeObjectArray<ZDCData>(ZdcData, 200, name: nameof(ZdcData)));
-            s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.EventFlags), () => EventFlags = s.SerializeArray<ObjTypeFlags>(EventFlags, 262, name: nameof(EventFlags)));
+            s.DoAt(s.GetRequiredPreDefinedPointer(DSi_DefinedPointer.EventFlags), () => EventFlags = s.SerializeObjectArray<ObjTypeFlags>(EventFlags, 262, name: nameof(EventFlags)));
 
             if (settings.World != World.Menu)
             {
