@@ -1,6 +1,6 @@
 ﻿namespace BinarySerializer.Ray1
 {
-    public class PC_VersionFile : BinarySerializable
+    public class VersionScript : BinarySerializable
     {
         public byte VersionsCount { get; set; }
         public byte RuntimeCurrentVersion { get; set; }

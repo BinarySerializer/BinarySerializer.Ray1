@@ -1,5 +1,7 @@
 ﻿namespace BinarySerializer.Ray1
 {
+    // TODO: Remove ObjTypeInfo attribute. The game doesn't handle it like this.
+
     // All names starting with "TYPE_" come from the GBA version. All names starting with "MS_" come from Designer.
     // The rest are manually added.
 

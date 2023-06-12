@@ -169,8 +169,8 @@ namespace BinarySerializer.Ray1
 
         public static ObjData CreateRayman(Context context, ObjData rayPos) =>
             new ObjData().InitRayman(context, rayPos);
-        public static ObjData CreateMapObj(Context context, short x, short y, int index) =>
-            new ObjData().InitMapObj(context, x, y, index);
+        public static ObjData CreateMapObj(Context context, short x, short y, int index, WorldInfo.PelletType type = WorldInfo.PelletType.Normal) =>
+            new ObjData().InitMapObj(context, x, y, index, type);
 
         public ObjData InitRayman(Context context, ObjData rayPos)
         {
@@ -215,7 +215,7 @@ namespace BinarySerializer.Ray1
         }
 
         // Copied from INIT_CHEMIN
-        public ObjData InitMapObj(Context context, short x, short y, int index)
+        public ObjData InitMapObj(Context context, short x, short y, int index, WorldInfo.PelletType type)
         {
             Ray1Settings settings = context.GetRequiredSettings<Ray1Settings>();
 
@@ -237,13 +237,13 @@ namespace BinarySerializer.Ray1
             }
             else if (settings.EngineVersion is Ray1EngineVersion.PC_Edu or Ray1EngineVersion.PS1_Edu)
             {
-                if (index == 0) // Normal
+                if (type == WorldInfo.PelletType.Normal) // Normal
                     SubEtat = 39;
-                else if (index == 2) // End
+                else if (type == WorldInfo.PelletType.Final) // End
                     SubEtat = 55;
-                else if (index == 4) // Demo
+                else if (type == WorldInfo.PelletType.Demo) // Demo
                     SubEtat = 54;
-                else if (index == 3) // Start point
+                else if (type == WorldInfo.PelletType.Start) // Start point
                     SubEtat = 45;
 
                 // ?

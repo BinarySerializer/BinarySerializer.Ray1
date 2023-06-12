@@ -17,37 +17,82 @@
         public byte CollectedCages { get; set; }
         public World World { get; set; }
         public byte Level { get; set; }
-        public uint LevelNameColor { get; set; }
+        public byte WorldNameColor { get; set; }
+        public byte LevelNameColor { get; set; }
         public Pointer LevelNamePointer { get; set; }
 
         // EDU/KIT
-        public uint Unk1 { get; set; }
-        public byte[] Unk2 { get; set; } // Third byte is level icon type
-        public ushort LevelName { get; set; }
-        public string LoadingVig { get; set; }
-        public WorldInfoMapEntry[] MapEntries { get; set; }
+        public bool EDU_Flag_03 { get; set; } // For when level is completed?
+        public bool EDU_Byte_09 { get; set; } // 0-3, used for game progress
+        public sbyte LivesCount { get; set; }
+        public PelletType Type { get; set; }
+        public short WorldName { get; set; }
+        public short LevelName { get; set; }
+        public string LoadingVignette { get; set; }
+        public LevelLinkEntry[][] LevelLinks { get; set; } // Difficulty, level
+        public byte CurrentLinkedLevel { get; set; }
+        public byte?[][] LevelVariants { get; set; } // Each level can have several variants, randomly set when starting a new game
+        public Pointer RunningDemoPointer { get; set; }
+        public uint PCPacked_RunningDemoPointer { get; set; }
+        public Record RunningDemo { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetRequiredSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             if (settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
                 settings.EngineVersion == Ray1EngineVersion.PS1_Edu ||
                 settings.EngineVersion == Ray1EngineVersion.PC_Kit ||
                 settings.EngineVersion == Ray1EngineVersion.PC_Fan)
             {
-                Unk1 = s.Serialize<uint>(Unk1, name: nameof(Unk1));
                 XPosition = s.Serialize<short>(XPosition, name: nameof(XPosition));
                 YPosition = s.Serialize<short>(YPosition, name: nameof(YPosition));
                 UpIndex = s.Serialize<byte>((byte)UpIndex, name: nameof(UpIndex));
                 DownIndex = s.Serialize<byte>((byte)DownIndex, name: nameof(DownIndex));
                 LeftIndex = s.Serialize<byte>((byte)LeftIndex, name: nameof(LeftIndex));
                 RightIndex = s.Serialize<byte>((byte)RightIndex, name: nameof(RightIndex));
-                Unk2 = s.SerializeArray<byte>(Unk2, 8, name: nameof(Unk2));
-                LevelName = s.Serialize<ushort>(LevelName, name: nameof(LevelName));
-                // TODO: Log localized string - store localization in context?
-                LoadingVig = s.SerializeString(LoadingVig, 9, name: nameof(LoadingVig));
-                MapEntries = s.SerializeObjectArray<WorldInfoMapEntry>(MapEntries, 46, name: nameof(MapEntries));
+                
+                s.DoBits<byte>(b =>
+                {
+                    IsUnlocked = b.SerializeBits<bool>(IsUnlocked, 1, name: nameof(IsUnlocked));
+                    HasDrawnPath = b.SerializeBits<bool>(HasDrawnPath, 1, name: nameof(HasDrawnPath));
+                    IsUnlocking = b.SerializeBits<bool>(IsUnlocking, 1, name: nameof(IsUnlocking));
+                    EDU_Flag_03 = b.SerializeBits<bool>(EDU_Flag_03, 1, name: nameof(EDU_Flag_03));
+                    b.SerializePadding(4, logIfNotNull: true);
+                });
+                EDU_Byte_09 = s.Serialize<bool>(EDU_Byte_09, name: nameof(EDU_Byte_09));
+                LivesCount = s.Serialize<sbyte>(LivesCount, name: nameof(LivesCount));
+                Type = s.Serialize<PelletType>(Type, name: nameof(Type));
+                WorldNameColor = s.Serialize<byte>(WorldNameColor, name: nameof(WorldNameColor));
+                LevelNameColor = s.Serialize<byte>(LevelNameColor, name: nameof(LevelNameColor));
+                WorldName = s.Serialize<short>(WorldName, name: nameof(WorldName));
+                LevelName = s.Serialize<short>(LevelName, name: nameof(LevelName));
+                LoadingVignette = s.SerializeString(LoadingVignette, 9, name: nameof(LoadingVignette));
+                World = s.Serialize<World>(World, name: nameof(World));
+
+                LevelLinks = s.InitializeArray(LevelLinks, 5);
+                s.DoArray(LevelLinks, (x, name) => s.SerializeObjectArray<LevelLinkEntry>(x, 6, name: name), name: nameof(LevelLinks));
+
+                CurrentLinkedLevel = s.Serialize<byte>(CurrentLinkedLevel, name: nameof(CurrentLinkedLevel));
+
+                LevelVariants = s.InitializeArray(LevelVariants, 5);
+                s.DoArray(LevelVariants, (x, name) => s.SerializeNullableArray<byte>(x, 6, name: name), name: nameof(LevelVariants));
+
+                if (settings.IsLoadingPackedPCData)
+                {
+                    PCPacked_RunningDemoPointer = s.Serialize<uint>(PCPacked_RunningDemoPointer, name: nameof(PCPacked_RunningDemoPointer));
+
+                    // The actual demo data is stored after the map define when packed
+                }
+                else
+                {
+                    if (settings.EngineVersion == Ray1EngineVersion.PS1_Edu)
+                        s.Align();
+
+                    RunningDemoPointer = s.SerializePointer(RunningDemoPointer, name: nameof(RunningDemoPointer));
+
+                    s.DoAt(RunningDemoPointer, () => RunningDemo = s.SerializeObject<Record>(RunningDemo, name: nameof(RunningDemo)));
+                }
             }
             else if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol6)
             {
@@ -87,9 +132,19 @@
                 CollectedCages = s.Serialize<byte>(CollectedCages, name: nameof(CollectedCages));
                 World = s.Serialize<World>(World, name: nameof(World));
                 Level = s.Serialize<byte>(Level, name: nameof(Level));
-                LevelNameColor = s.Serialize<uint>(LevelNameColor, name: nameof(LevelNameColor));
+                LevelNameColor = s.Serialize<byte>(LevelNameColor, name: nameof(LevelNameColor));
+                s.SerializePadding(3, logIfNotNull: true);
                 LevelNamePointer = s.SerializePointer(LevelNamePointer, allowInvalid: true, name: nameof(LevelNamePointer));
             }
+        }
+
+        public enum PelletType : byte
+        {
+            Normal = 0,
+            Save = 1,
+            Final = 2,
+            Start = 3,
+            Demo = 4,
         }
     }
 }

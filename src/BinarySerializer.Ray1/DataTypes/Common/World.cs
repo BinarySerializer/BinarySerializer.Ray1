@@ -5,6 +5,8 @@
     /// </summary>
     public enum World : byte
     {
+        None = 0,
+
         Jungle = 1,
         Music = 2,
         Mountain = 3,

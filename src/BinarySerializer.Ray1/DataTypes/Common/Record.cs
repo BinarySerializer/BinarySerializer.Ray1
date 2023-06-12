@@ -17,7 +17,7 @@ namespace BinarySerializer.Ray1
         public int R2_InputsBufferLength { get; set; }
 
         public uint PCPacked_InputsPointer { get; set; }
-        public uint InputsBufferLength { get; set; }
+        public int InputsBufferLength { get; set; }
 
         // TODO: Parse and decompress inputs. They're RLE encoded.
         public byte[] InputsBuffer { get; set; }
@@ -47,7 +47,7 @@ namespace BinarySerializer.Ray1
                 World = s.Serialize<byte>(World, name: nameof(World));
                 Level = s.Serialize<byte>(Level, name: nameof(Level));
                 s.SerializePadding(2, logIfNotNull: true);
-                InputsBufferLength = s.Serialize<uint>(InputsBufferLength, name: nameof(InputsBufferLength));
+                InputsBufferLength = s.Serialize<int>(InputsBufferLength, name: nameof(InputsBufferLength));
                 PCPacked_InputsPointer = s.Serialize<uint>(PCPacked_InputsPointer, name: nameof(PCPacked_InputsPointer));
 
                 InputsBuffer = s.SerializeArray<byte>(InputsBuffer, InputsBufferLength, name: nameof(InputsBuffer));

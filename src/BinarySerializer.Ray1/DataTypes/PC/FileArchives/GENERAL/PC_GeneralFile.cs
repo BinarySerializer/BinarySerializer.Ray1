@@ -10,7 +10,7 @@
         public RecordedDemos RecordedDemos { get; set; }
 
         public int CreditsCount { get; set; }
-        public PC_Credit[] Credits { get; set; }
+        public Credit[] Credits { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
         {
@@ -21,7 +21,7 @@
             RecordedDemos = s.SerializeObject<RecordedDemos>(RecordedDemos, name: nameof(RecordedDemos));
 
             CreditsCount = s.Serialize<int>(CreditsCount, name: nameof(CreditsCount));
-            Credits = s.SerializeObjectArray<PC_Credit>(Credits, CreditsCount, name: nameof(Credits));
+            Credits = s.SerializeObjectArray<Credit>(Credits, CreditsCount, name: nameof(Credits));
         }
     }
 }

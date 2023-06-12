@@ -12,15 +12,11 @@
         public uint DESIndex_MapObj { get; set; }
         public uint DESIndex_ClockObj { get; set; }
         public uint DESIndex_DivObj { get; set; }
-        public uint DESIndex_PARCHEM { get; set; } // EDU/Kit only
+        public uint DESIndex_Parchem { get; set; } // EDU/Kit only
 
-        /// <summary>
-        /// Serializes the data
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
-            var settings = s.GetRequiredSettings<Ray1Settings>();
+            Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             // Serialize PC Header
             if (settings.IsVersioned)
@@ -54,7 +50,7 @@
                 settings.EngineVersion == Ray1EngineVersion.PC_Edu ||
                 settings.EngineVersion == Ray1EngineVersion.PS1_Edu || 
                 settings.EngineVersion == Ray1EngineVersion.PC_Fan)
-                DESIndex_PARCHEM = s.Serialize<uint>(DESIndex_PARCHEM, name: nameof(DESIndex_PARCHEM));
+                DESIndex_Parchem = s.Serialize<uint>(DESIndex_Parchem, name: nameof(DESIndex_Parchem));
         }
     }
 }

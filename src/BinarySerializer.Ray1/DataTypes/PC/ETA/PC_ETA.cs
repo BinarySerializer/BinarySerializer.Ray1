@@ -14,11 +14,11 @@
         {
             States = s.SerializeArraySize<ObjState[], byte>(States, name: nameof(States));
 
-            for (int i = 0; i < States.Length; i++)
+            s.DoArray(States, (x, name) =>
             {
-                States[i] = s.SerializeArraySize<ObjState, byte>(States[i], name: $"{nameof(States)}[{i}]");
-                States[i] = s.SerializeObjectArray<ObjState>(States[i], States[i].Length, name: $"{nameof(States)}[{i}]");
-            }
+                x = s.SerializeArraySize<ObjState, byte>(x, name: name);
+                return s.SerializeObjectArray<ObjState>(x, x.Length, name: name);
+            }, name: nameof(States));
         }
     }
 }

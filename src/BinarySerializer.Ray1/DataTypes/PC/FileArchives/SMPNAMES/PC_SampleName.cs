@@ -12,10 +12,6 @@
         /// </summary>
         public ushort RepeatTime { get; set; }
 
-        /// <summary>
-        /// Handles the data serialization
-        /// </summary>
-        /// <param name="s">The serializer object</param>
         public override void SerializeImpl(SerializerObject s)
         {
             SampleName = s.SerializeString(SampleName, 9, name: nameof(SampleName));
