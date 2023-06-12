@@ -60,8 +60,8 @@ namespace BinarySerializer.Ray1.GBA
         /// </summary>
         public string[][] Strings { get; set; }
 
-        public ZDCEntry[] TypeZDC { get; set; }
-        public ZDCData[] ZdcData { get; set; }
+        public ZDCReference[] TypeZDC { get; set; }
+        public ZDCBox[] ZdcData { get; set; }
         public ObjTypeFlags[] EventFlags { get; set; }
 
         public Pointer[] WorldVignetteIndicesPointers { get; set; }
@@ -194,8 +194,8 @@ namespace BinarySerializer.Ray1.GBA
             });
 
             // Serialize tables
-            s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.TypeZDC), () => TypeZDC = s.SerializeObjectArray<ZDCEntry>(TypeZDC, 262, name: nameof(TypeZDC)));
-            s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.ZdcData), () => ZdcData = s.SerializeObjectArray<ZDCData>(ZdcData, 200, name: nameof(ZdcData)));
+            s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.TypeZDC), () => TypeZDC = s.SerializeObjectArray<ZDCReference>(TypeZDC, 262, name: nameof(TypeZDC)));
+            s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.ZdcData), () => ZdcData = s.SerializeObjectArray<ZDCBox>(ZdcData, 200, name: nameof(ZdcData)));
             s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.EventFlags), () => EventFlags = s.SerializeObjectArray<ObjTypeFlags>(EventFlags, 262, name: nameof(EventFlags)));
 
             WorldVignetteIndicesPointers = s.DoAt(s.GetRequiredPreDefinedPointer(GBA_DefinedPointer.WorldVignetteIndices), () => s.SerializePointerArray(WorldVignetteIndicesPointers, 9, name: nameof(WorldVignetteIndicesPointers)));

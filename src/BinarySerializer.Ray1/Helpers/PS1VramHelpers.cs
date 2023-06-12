@@ -1,8 +1,9 @@
 ﻿using BinarySerializer.PS1;
 using System;
 
-namespace BinarySerializer.Ray1
+namespace BinarySerializer.Ray1.PS1
 {
+    // TODO: Rewrite this to match what the game does
     public static class PS1VramHelpers
     {
         public static VRAM PS1_JPDemoVol6_FillVRAM(RGBA5551Color[] pal4, RGBA5551Color[] pal8, RGBA5551Color[] palLettre, byte[] fixGraphics, byte[] wldGraphics, byte[] lvlGraphics)
@@ -35,7 +36,7 @@ namespace BinarySerializer.Ray1
             return vram;
         }
 
-        public static VRAM PS1_FillVRAM(VRAMMode mode, PS1_AllfixPack allFix, PS1_WorldPack world, PS1_BigRayPack bigRay, PS1_LevelPack lev, byte[] font, bool isUSVersion)
+        public static VRAM PS1_FillVRAM(VRAMMode mode, AllfixPack allFix, WorldPack world, BigRayPack bigRay, LevelPack lev, byte[] font, bool isUSVersion)
         {
             // TODO: Support BigRay + font for US version
             // TODO: Fill background palettes
@@ -117,7 +118,7 @@ namespace BinarySerializer.Ray1
             return vram;
         }
 
-        public static VRAM PS1_JP_FillVRAM(VRAMMode mode, PS1_AllfixPack allFix, PS1_WorldPack world, PS1_BigRayPack bigRay, PS1_LevelPack lev, byte[] font, int tileColorsCount)
+        public static VRAM PS1_JP_FillVRAM(VRAMMode mode, AllfixPack allFix, WorldPack world, BigRayPack bigRay, LevelPack lev, byte[] font, int tileColorsCount)
         {
             VRAM vram = new VRAM();
 

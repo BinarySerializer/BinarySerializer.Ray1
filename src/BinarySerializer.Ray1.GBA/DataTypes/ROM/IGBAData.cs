@@ -51,9 +51,9 @@
         string[][] Strings { get; }
 
 
-        ZDCEntry[] TypeZDC { get; } 
+        ZDCReference[] TypeZDC { get; } 
 
-        ZDCData[] ZdcData { get; }
+        ZDCBox[] ZdcData { get; }
 
         ObjTypeFlags[] EventFlags { get; }
 
