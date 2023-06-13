@@ -133,10 +133,8 @@
                 {
                     p.Serialize<byte>(s, "AlphaChecksum");
 
-                    Alpha ??= new byte[480][];
-
-                    for (int i = 0; i < Alpha.Length; i++)
-                        Alpha[i] = s.SerializeArray<byte>(Alpha[i], 256, name: $"{nameof(Alpha)}[{i}]");
+                    Alpha = s.InitializeArray(Alpha, 480);
+                    s.DoArray(Alpha, (x, name) => s.SerializeArray<byte>(x, 256, name: name), name: nameof(Alpha));
                 });
             }
 
