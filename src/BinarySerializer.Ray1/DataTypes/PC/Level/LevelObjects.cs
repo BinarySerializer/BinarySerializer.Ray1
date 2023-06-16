@@ -8,7 +8,7 @@
         /// <summary>
         /// The number of available objects in the map
         /// </summary>
-        public ushort ObjCount { get; set; }
+        public ushort ObjectsCount { get; set; }
 
         /// <summary>
         /// Data table for object linking
@@ -23,7 +23,7 @@
         /// <summary>
         /// The object commands in the map
         /// </summary>
-        public PC_CommandCollection[] ObjCommands { get; set; }
+        public ObjCommandsData[] ObjCommands { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
         {
@@ -32,16 +32,16 @@
 
             s.DoProcessed(hasChecksum ? new Checksum8Processor() : null, p =>
             {
-                p?.Serialize<byte>(s, "ObjBlockChecksum");
+                p?.Serialize<byte>(s, "LevelObjectsChecksum");
 
                 // Set the xor key to use for the obj block
                 bool isEncrypted = settings.EngineVersion is not (Ray1EngineVersion.PC or Ray1EngineVersion.PocketPC);
                 s.DoProcessed(isEncrypted ? new Xor8Processor(0x91) : null, () =>
                 {
-                    ObjCount = s.Serialize<ushort>(ObjCount, name: nameof(ObjCount));
-                    ObjLinkingTable = s.SerializeArray<ushort>(ObjLinkingTable, ObjCount, name: nameof(ObjLinkingTable));
-                    Objects = s.SerializeObjectArray<ObjData>(Objects, ObjCount, name: nameof(Objects));
-                    ObjCommands = s.SerializeObjectArray<PC_CommandCollection>(ObjCommands, ObjCount, name: nameof(ObjCommands));
+                    ObjectsCount = s.Serialize<ushort>(ObjectsCount, name: nameof(ObjectsCount));
+                    ObjLinkingTable = s.SerializeArray<ushort>(ObjLinkingTable, ObjectsCount, name: nameof(ObjLinkingTable));
+                    Objects = s.SerializeObjectArray<ObjData>(Objects, ObjectsCount, name: nameof(Objects));
+                    ObjCommands = s.SerializeObjectArray<ObjCommandsData>(ObjCommands, ObjectsCount, name: nameof(ObjCommands));
                 });
             });
         }

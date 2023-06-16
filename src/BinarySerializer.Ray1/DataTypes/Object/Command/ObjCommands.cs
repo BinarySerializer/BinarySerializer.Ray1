@@ -7,7 +7,7 @@ namespace BinarySerializer.Ray1
     /// <summary>
     /// An object command collection
     /// </summary>
-    public class CommandCollection : BinarySerializable
+    public class ObjCommands : BinarySerializable
     {
         /// <summary>
         /// The commands
@@ -20,11 +20,11 @@ namespace BinarySerializer.Ray1
         /// <param name="bytes">The command bytes</param>
         /// <param name="contextFunc">The func used to create a new context</param>
         /// <returns>The command</returns>
-        public static CommandCollection FromBytes(byte[] bytes, Func<Context> contextFunc)
+        public static ObjCommands FromBytes(byte[] bytes, Func<Context> contextFunc)
         {
             // Make sure there are bytes
             if (!bytes.Any())
-                return new CommandCollection() { Commands = Array.Empty<Command>() };
+                return new ObjCommands() { Commands = Array.Empty<Command>() };
 
             // Create a new context
             using var context = contextFunc();
@@ -41,7 +41,7 @@ namespace BinarySerializer.Ray1
             context.AddFile(file);
 
             // Deserialize the bytes
-            return FileFactory.Read<CommandCollection>(context, key);
+            return FileFactory.Read<ObjCommands>(context, key);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace BinarySerializer.Ray1
             context.AddFile(file);
 
             // Serialize the command
-            FileFactory.Write<CommandCollection>(context, key, this);
+            FileFactory.Write<ObjCommands>(context, key, this);
 
             // Return the bytes
             return memStream.ToArray();

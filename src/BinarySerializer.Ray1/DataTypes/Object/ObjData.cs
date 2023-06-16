@@ -160,7 +160,7 @@ namespace BinarySerializer.Ray1
         public Animation[] Animations { get; set; }
         public byte[] ImageBuffer { get; set; }
         public ETA ETA { get; set; }
-        public CommandCollection Commands { get; set; }
+        public ObjCommands Commands { get; set; }
         public ushort[] LabelOffsets { get; set; }
 
         #endregion
@@ -207,7 +207,7 @@ namespace BinarySerializer.Ray1
 
             CommandContexts = new[] { new CommandContext() };
             BlockTypes = new BlockType[5];
-            Commands = new CommandCollection() { Commands = new Command[0] };
+            Commands = new ObjCommands() { Commands = new Command[0] };
             LabelOffsets = new ushort[0];
             TypeZDC = new ZDCReference();
 
@@ -278,7 +278,7 @@ namespace BinarySerializer.Ray1
 
             CommandContexts = new[] { new CommandContext() };
             BlockTypes = new BlockType[5];
-            Commands = new CommandCollection() { Commands = new Command[0] };
+            Commands = new ObjCommands() { Commands = new Command[0] };
             LabelOffsets = new ushort[0];
             TypeZDC = new ZDCReference();
 
@@ -308,7 +308,7 @@ namespace BinarySerializer.Ray1
 
             // Serialize the commands
             s.DoAt(CommandsPointer, () => 
-                Commands = s.SerializeObject<CommandCollection>(Commands, name: nameof(Commands)));
+                Commands = s.SerializeObject<ObjCommands>(Commands, name: nameof(Commands)));
 
             // Serialize the label offsets
             if (Commands != null && Commands.Commands.Length > 0)

@@ -46,7 +46,7 @@ namespace BinarySerializer.Ray1.PC
 
             LanguageNames = s.SerializeStringArray(LanguageNames, numLangNames, 11, name: nameof(LanguageNames));
 
-            s.Align();
+            s.Align(baseOffset: Offset);
 
             TextDefineCount = s.Serialize<uint>(TextDefineCount, name: nameof(TextDefineCount));
             PCPacked_TextDefinePointer = s.Serialize<uint>(PCPacked_TextDefinePointer, name: nameof(PCPacked_TextDefinePointer));

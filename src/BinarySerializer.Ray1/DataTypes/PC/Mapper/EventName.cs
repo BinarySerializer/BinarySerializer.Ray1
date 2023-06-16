@@ -22,9 +22,9 @@
 
         public override void SerializeImpl(SerializerObject s) 
         {
-            Name = s.SerializeString(Name);
-            DisplayName = s.SerializeString(DisplayName);
-            DisplayDescription = s.SerializeString(DisplayDescription);
+            Name = s.SerializeString(Name, name: nameof(Name));
+            DisplayName = s.SerializeString(DisplayName, name: nameof(DisplayName));
+            DisplayDescription = s.SerializeString(DisplayDescription, name: nameof(DisplayDescription));
         }
     }
 }

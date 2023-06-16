@@ -12,30 +12,20 @@
         /// <summary>
         /// The pointer to the object block. The game uses this to skip the texture block if the game should use the rough textures.
         /// </summary>
-        public Pointer ObjDataBlockPointer { get; set; }
+        public Pointer ObjectsPointer { get; set; }
 
         /// <summary>
         /// The pointer to the texture block. The game uses this to skip the rough the textures if the game should use the normal textures.
         /// </summary>
-        public Pointer TextureBlockPointer { get; set; }
+        public Pointer NormalBlockTexturesPointer { get; set; }
 
         public LevelDefine LevelDefine { get; set; }
         public BackgroundDefine BackgroundDefineNormal { get; set; }
         public BackgroundDefine BackgroundDefineDiff { get; set; }
 
-        /// <summary>
-        /// The map data
-        /// </summary>
-        public LevelMap Map { get; set; }
+        public MapInfo MapInfo { get; set; }
 
-        /// <summary>
-        /// The index of the background image
-        /// </summary>
         public byte FNDIndex { get; set; }
-
-        /// <summary>
-        /// The index of the parallax background image
-        /// </summary>
         public byte ScrollDiffFNDIndex { get; set; }
 
         /// <summary>
@@ -43,15 +33,10 @@
         /// </summary>
         public int ScrollDiffSprites { get; set; }
 
-        /// <summary>
-        /// The rough tile texture data
-        /// </summary>
-        public RoughTileTextureBlock RoughTileTextureData { get; set; }
+        public RoughBlockTextures RoughBlockTextures { get; set; }
+        public byte[] LeftoverRoughBlockTextures { get; set; }
 
-        // Leftover data for the rough textures in versions which don't use it. In RayKit there is still a lot of data there, but it doesn't appear to match with how it's being parsed.
-        public byte[] LeftoverRoughTextureBlock { get; set; }
-
-        public TileTextureBlock TileTextureData { get; set; }
+        public NormalBlockTextures NormalBlockTextures { get; set; }
 
         public LevelObjects ObjData { get; set; }
 
@@ -71,19 +56,15 @@
             if (settings.IsVersioned)
                 GameVersion = s.SerializeObject<GameVersion>(GameVersion, name: nameof(GameVersion));
 
-            var pointersOffset = s.CurrentPointer;
+            Pointer pointersOffset = s.CurrentPointer;
 
             // Serialize the pointers
-            bool allowInvalid = settings.PCVersion == Ray1PCVersion.PocketPC || 
-                                settings.PCVersion == Ray1PCVersion.Android ||
-                                settings.PCVersion == Ray1PCVersion.iOS;
-            ObjDataBlockPointer = s.SerializePointer(ObjDataBlockPointer, allowInvalid: allowInvalid, name: nameof(ObjDataBlockPointer));
-            TextureBlockPointer = s.SerializePointer(TextureBlockPointer, allowInvalid: allowInvalid, name: nameof(TextureBlockPointer));
+            bool allowInvalid = settings.PCVersion is Ray1PCVersion.PocketPC or Ray1PCVersion.Android or Ray1PCVersion.iOS;
+            ObjectsPointer = s.SerializePointer(ObjectsPointer, allowInvalid: allowInvalid, name: nameof(ObjectsPointer));
+            NormalBlockTexturesPointer = s.SerializePointer(NormalBlockTexturesPointer, allowInvalid: allowInvalid, name: nameof(NormalBlockTexturesPointer));
 
             // Serialize the level defines
-            if (settings.EngineVersion == Ray1EngineVersion.PC_Kit || 
-                settings.EngineVersion == Ray1EngineVersion.PC_Edu || 
-                settings.EngineVersion == Ray1EngineVersion.PC_Fan)
+            if (settings.EngineVersion is Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Edu or Ray1EngineVersion.PC_Fan)
             {
                 LevelDefine = s.SerializeObject<LevelDefine>(LevelDefine, name: nameof(LevelDefine));
                 BackgroundDefineNormal = s.SerializeObject<BackgroundDefine>(BackgroundDefineNormal, name: nameof(BackgroundDefineNormal));
@@ -91,33 +72,40 @@
             }
 
             // Serialize the map data
-            Map = s.SerializeObject<LevelMap>(Map, name: nameof(Map));
+            MapInfo = s.SerializeObject<MapInfo>(MapInfo, name: nameof(MapInfo));
 
             // Serialize the background data
-            if (settings.EngineVersion == Ray1EngineVersion.PC || settings.EngineVersion == Ray1EngineVersion.PocketPC)
+            if (settings.EngineVersion is Ray1EngineVersion.PC or Ray1EngineVersion.PocketPC)
             {
                 // Serialize the background data
                 FNDIndex = s.Serialize<byte>(FNDIndex, name: nameof(FNDIndex));
                 ScrollDiffFNDIndex = s.Serialize<byte>(ScrollDiffFNDIndex, name: nameof(ScrollDiffFNDIndex));
-                ScrollDiffSprites = s.Serialize<int>(ScrollDiffSprites, name: nameof(ScrollDiffSprites));
+            }
+            
+            ScrollDiffSprites = s.Serialize<int>(ScrollDiffSprites, name: nameof(ScrollDiffSprites));
+
+            // Serialize the rough block textures
+            if (settings.EngineVersion == Ray1EngineVersion.PocketPC)
+            {
+                // Leftover data. Usually (always?) just the first 12 bytes.
+                long length = NormalBlockTexturesPointer.FileOffset - s.CurrentPointer.FileOffset;
+                LeftoverRoughBlockTextures = s.SerializeArray<byte>(LeftoverRoughBlockTextures, length, name: nameof(LeftoverRoughBlockTextures));
+            }
+            else
+            {
+                RoughBlockTextures = s.SerializeObject<RoughBlockTextures>(RoughBlockTextures, name: nameof(RoughBlockTextures));
             }
 
-            // Serialize the rough tile textures
-            if (settings.EngineVersion == Ray1EngineVersion.PC)
-                RoughTileTextureData = s.SerializeObject<RoughTileTextureBlock>(RoughTileTextureData, name: nameof(RoughTileTextureData));
-            else
-                LeftoverRoughTextureBlock = s.SerializeArray<byte>(LeftoverRoughTextureBlock, TextureBlockPointer.FileOffset - s.CurrentPointer.FileOffset, name: nameof(LeftoverRoughTextureBlock));
-
             // At this point the stream position should match the texture block offset
-            if (s.CurrentPointer != TextureBlockPointer)
-                s.Context.SystemLogger?.LogWarning("Texture block offset is incorrect");
+            if (s.CurrentPointer != NormalBlockTexturesPointer)
+                s.Context.SystemLogger?.LogWarning("Normal block textures offset is incorrect");
 
-            // Serialize the tile textures
-            TileTextureData = s.SerializeObject<TileTextureBlock>(TileTextureData, name: nameof(TileTextureData));
+            // Serialize the normal block textures
+            NormalBlockTextures = s.SerializeObject<NormalBlockTextures>(NormalBlockTextures, name: nameof(NormalBlockTextures));
 
             // At this point the stream position should match the obj block offset (ignore the Pocket PC version here since it uses leftover pointers from PC version)
-            if (settings.EngineVersion != Ray1EngineVersion.PocketPC && s.CurrentPointer != ObjDataBlockPointer)
-                s.Context.SystemLogger?.LogWarning("Object block offset is incorrect");
+            if (settings.EngineVersion != Ray1EngineVersion.PocketPC && s.CurrentPointer != ObjectsPointer)
+                s.Context.SystemLogger?.LogWarning("Object offset is incorrect");
 
             // Serialize the object data
             ObjData = s.SerializeObject<LevelObjects>(ObjData, name: nameof(ObjData));
@@ -141,8 +129,8 @@
             // Correct pointers
             s.DoAt(pointersOffset, () =>
             {
-                s.SerializePointer(ObjData.Offset, allowInvalid: allowInvalid, name: nameof(ObjDataBlockPointer));
-                s.SerializePointer(TileTextureData.Offset, allowInvalid: allowInvalid, name: nameof(TextureBlockPointer));
+                s.SerializePointer(ObjData.Offset, allowInvalid: allowInvalid, name: nameof(ObjectsPointer));
+                s.SerializePointer(NormalBlockTextures.Offset, allowInvalid: allowInvalid, name: nameof(NormalBlockTexturesPointer));
             });
         }
 

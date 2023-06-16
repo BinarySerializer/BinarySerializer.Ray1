@@ -76,7 +76,6 @@ namespace BinarySerializer.Ray1
         /// </summary>
         public bool IsLoadingPackedPCData { get; set; }
 
-        public static int CellSize = 16;
         public static Encoding DefaultEncoding => Encoding.GetEncoding(437);
     }
 }

@@ -33,7 +33,7 @@ namespace BinarySerializer.Ray1.GBA
 
         // Serialized from pointers
         public ObjState[][] ETA { get; set; }
-        public CommandCollection Commands { get; set; }
+        public ObjCommands Commands { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
         {
@@ -158,7 +158,7 @@ namespace BinarySerializer.Ray1.GBA
             }
 
             if (CommandsPointer != null)
-                s.DoAt(CommandsPointer, () => Commands = s.SerializeObject<CommandCollection>(Commands, name: nameof(Commands)));
+                s.DoAt(CommandsPointer, () => Commands = s.SerializeObject<ObjCommands>(Commands, name: nameof(Commands)));
         }
     }
 }

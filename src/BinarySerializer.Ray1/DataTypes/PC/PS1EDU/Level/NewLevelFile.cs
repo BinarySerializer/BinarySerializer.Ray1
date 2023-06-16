@@ -50,7 +50,7 @@ namespace BinarySerializer.Ray1.PC.PS1EDU
 
         public ushort[] ObjectsLinkTable { get; set; }
 
-        public PC_CommandCollection[] ObjCommands { get; set; }
+        public ObjCommandsData[] ObjCommands { get; set; }
 
         // After obj block
         public ushort[] ObjNumCommands { get; set; }
@@ -145,19 +145,18 @@ namespace BinarySerializer.Ray1.PC.PS1EDU
                 }
 
                 // Serialize the commands
-                ObjCommands ??= new PC_CommandCollection[ObjectsCount];
+                ObjCommands ??= new ObjCommandsData[ObjectsCount];
                 
                 for (int i = 0; i < ObjectsCount; i++) {
-                    ObjCommands[i] = new PC_CommandCollection();
+                    ObjCommands[i] = new ObjCommandsData();
                     if (ObjNumCommands[i] != 0) {
                         if (GetPosInObjBlock() % 4 != 0) {
                             int padding = 4 - GetPosInObjBlock() % 4;
                             s.SerializeArray<byte>(Enumerable.Repeat((byte)0xCD, padding).ToArray(), padding, name: "Padding");
                         }
-                        ObjCommands[i].CommandLength = ObjNumCommands[i];
-                        ObjCommands[i].Commands = s.SerializeObject<CommandCollection>(ObjCommands[i].Commands, name: nameof(PC_CommandCollection.Commands));
+                        ObjCommands[i].Commands = s.SerializeObject<ObjCommands>(ObjCommands[i].Commands, name: nameof(ObjCommandsData.Commands));
                     } else {
-                        ObjCommands[i].Commands = new CommandCollection() {
+                        ObjCommands[i].Commands = new ObjCommands() {
                             Commands = new Command[0]
                         };
                     }
@@ -166,8 +165,7 @@ namespace BinarySerializer.Ray1.PC.PS1EDU
                             int padding = 4 - GetPosInObjBlock() % 4;
                             s.SerializeArray<byte>(Enumerable.Repeat((byte)0xCD, padding).ToArray(), padding, name: "Padding");
                         }
-                        ObjCommands[i].LabelOffsetCount = ObjNumLabelOffsets[i];
-                        ObjCommands[i].LabelOffsetTable = s.SerializeArray<ushort>(ObjCommands[i].LabelOffsetTable, ObjCommands[i].LabelOffsetCount, name: nameof(PC_CommandCollection.LabelOffsetTable));
+                        ObjCommands[i].LabelOffsetTable = s.SerializeArray<ushort>(ObjCommands[i].LabelOffsetTable, ObjNumLabelOffsets[i], name: nameof(ObjCommandsData.LabelOffsetTable));
                     } else {
                         ObjCommands[i].LabelOffsetTable = new ushort[0];
                     }

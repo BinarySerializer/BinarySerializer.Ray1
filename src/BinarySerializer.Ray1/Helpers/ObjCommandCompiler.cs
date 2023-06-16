@@ -14,7 +14,7 @@ namespace BinarySerializer.Ray1
         /// </summary>
         /// <param name="commands">The commands</param>
         /// <returns>The compiled the command data</returns>
-        public static CompiledObjCommandData Compile(CommandCollection commands)
+        public static CompiledObjCommandData Compile(ObjCommands commands)
         {
             // Create the lists to compile to
             var compiledCommands = new List<Command>();
@@ -144,7 +144,7 @@ namespace BinarySerializer.Ray1
             }
 
             // Return the compiled commands
-            return new CompiledObjCommandData(new CommandCollection()
+            return new CompiledObjCommandData(new ObjCommands()
             {
                 Commands = compiledCommands.ToArray()
             }, labelOffsets.ToArray());
@@ -156,7 +156,7 @@ namespace BinarySerializer.Ray1
         /// <param name="commands">The commands</param>
         /// <param name="commandBytes">The command bytes</param>
         /// <returns>The decompiled commands</returns>
-        public static CommandCollection Decompile(CompiledObjCommandData commands, byte[] commandBytes)
+        public static ObjCommands Decompile(CompiledObjCommandData commands, byte[] commandBytes)
         {
             throw new NotImplementedException();
         }
@@ -171,7 +171,7 @@ namespace BinarySerializer.Ray1
             /// </summary>
             /// <param name="commands">The object commands</param>
             /// <param name="labelOffsets">The label offsets</param>
-            public CompiledObjCommandData(CommandCollection commands, ushort[] labelOffsets)
+            public CompiledObjCommandData(ObjCommands commands, ushort[] labelOffsets)
             {
                 Commands = commands;
                 LabelOffsets = labelOffsets;
@@ -180,7 +180,7 @@ namespace BinarySerializer.Ray1
             /// <summary>
             /// The object commands
             /// </summary>
-            public CommandCollection Commands { get; }
+            public ObjCommands Commands { get; }
 
             /// <summary>
             /// The label offsets
