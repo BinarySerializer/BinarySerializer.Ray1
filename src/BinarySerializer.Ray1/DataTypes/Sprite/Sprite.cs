@@ -94,7 +94,7 @@ namespace BinarySerializer.Ray1
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
-            if (settings.EngineBranch == Ray1EngineBranch.Jaguar)
+            if (settings.EnginePlatform == Ray1EnginePlatform.Jaguar)
             {
                 // This mostly matches the Jaguar Object struct, but with some added data. I'm unsure
                 // if what's marked as padding is actually padding, but it seems to be unused. The
@@ -137,7 +137,7 @@ namespace BinarySerializer.Ray1
                 SpriteWidth = (byte)Width;
                 SpriteHeight = (byte)Height;
             }
-            else if (settings.EngineBranch is Ray1EngineBranch.PC or Ray1EngineBranch.GBA)
+            else if (settings.EnginePlatform is Ray1EnginePlatform.PC or Ray1EnginePlatform.GBA_DSi)
             {
                 ImageBufferOffset = s.Serialize<int>(ImageBufferOffset, name: nameof(ImageBufferOffset));
                 Id = s.SerializeNullable<byte>((byte?)Id, name: nameof(Id));
@@ -160,7 +160,7 @@ namespace BinarySerializer.Ray1
                 // game doesn't support reflected sprites though, so that doesn't make much sense.
                 Flags = s.Serialize<byte>(Flags, name: nameof(Flags));
             }
-            else if (settings.EngineBranch == Ray1EngineBranch.PS1)
+            else if (settings.EnginePlatform == Ray1EnginePlatform.PS1_Saturn)
             {
                 if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
                 {
@@ -247,7 +247,7 @@ namespace BinarySerializer.Ray1
             }
             else
             {
-                throw new BinarySerializableException(this, $"Unsupported engine branch {settings.EngineBranch}");
+                throw new BinarySerializableException(this, $"Unsupported engine branch {settings.EnginePlatform}");
             }
         }
     }

@@ -64,7 +64,7 @@
             NormalBlockTexturesPointer = s.SerializePointer(NormalBlockTexturesPointer, allowInvalid: allowInvalid, name: nameof(NormalBlockTexturesPointer));
 
             // Serialize the level defines
-            if (settings.EngineVersion is Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Edu or Ray1EngineVersion.PC_Fan)
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.PC_Edu))
             {
                 LevelDefine = s.SerializeObject<LevelDefine>(LevelDefine, name: nameof(LevelDefine));
                 BackgroundDefineNormal = s.SerializeObject<BackgroundDefine>(BackgroundDefineNormal, name: nameof(BackgroundDefineNormal));
@@ -75,7 +75,7 @@
             MapInfo = s.SerializeObject<MapInfo>(MapInfo, name: nameof(MapInfo));
 
             // Serialize the background data
-            if (settings.EngineVersion is Ray1EngineVersion.PC or Ray1EngineVersion.PocketPC)
+            if (!settings.EngineVersionTree.HasParent(Ray1EngineVersion.PC_Edu))
             {
                 // Serialize the background data
                 FNDIndex = s.Serialize<byte>(FNDIndex, name: nameof(FNDIndex));

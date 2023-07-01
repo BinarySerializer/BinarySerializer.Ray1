@@ -14,7 +14,7 @@ internal static class InternalHelpers
         {
             bool is4bit;
 
-            if (settings.EngineBranch == Ray1EngineBranch.PS1)
+            if (settings.EnginePlatform == Ray1EnginePlatform.PS1_Saturn)
             {
                 if (settings.EngineVersion == Ray1EngineVersion.PS1_JP ||
                     settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3 ||

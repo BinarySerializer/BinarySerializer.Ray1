@@ -24,11 +24,8 @@
             s.DoAt(SpritesPointer, () => 
                 Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites)));
 
-            if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
-            {
-                s.DoAt(ImageBufferPointer, () => 
-                    ImageBuffer = s.SerializeArray<byte>(ImageBuffer, InternalHelpers.GetImageBufferLength(Sprites, settings), name: nameof(ImageBuffer)));
-            }
+            s.DoAt(ImageBufferPointer, () =>
+                ImageBuffer = s.SerializeArray<byte>(ImageBuffer, InternalHelpers.GetImageBufferLength(Sprites, settings), name: nameof(ImageBuffer)));
         }
     }
 }

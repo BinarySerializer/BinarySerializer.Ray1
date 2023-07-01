@@ -1,11 +1,11 @@
 ﻿namespace BinarySerializer.Ray1
 {
-    public enum Ray1EngineBranch
+    public enum Ray1EnginePlatform
     {
         SNES,
         Jaguar,
-        PS1,
+        PS1_Saturn,
         PC,
-        GBA,
+        GBA_DSi,
     }
 }

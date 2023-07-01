@@ -27,7 +27,7 @@ namespace BinarySerializer.Ray1
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.R2_PS1))
             {
                 RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
                 InputsPointer = s.SerializePointer(InputsPointer, name: nameof(InputsPointer));

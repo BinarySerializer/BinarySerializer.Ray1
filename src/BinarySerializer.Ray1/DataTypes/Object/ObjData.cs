@@ -338,7 +338,7 @@ namespace BinarySerializer.Ray1
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
-            if (settings.EngineBranch is Ray1EngineBranch.PC or Ray1EngineBranch.GBA)
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.PC))
             {
                 if (settings.IsLoadingPackedPCData)
                 {
@@ -363,7 +363,7 @@ namespace BinarySerializer.Ray1
 
                 CommandContexts = s.SerializeObjectArray<CommandContext>(CommandContexts, 1, name: nameof(CommandContexts));
 
-                if (settings.EngineVersion is Ray1EngineVersion.GBA or Ray1EngineVersion.DSi)
+                if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.GBA))
                 {
                     ActiveFlag = s.Serialize<ObjectActiveFlag>(ActiveFlag, name: nameof(ActiveFlag));
                     GBA_Byte_1D = s.Serialize<byte>(GBA_Byte_1D, name: nameof(GBA_Byte_1D));
@@ -400,11 +400,7 @@ namespace BinarySerializer.Ray1
                 FollowY = s.Serialize<short>(FollowY, name: nameof(FollowY));
                 FollowX = s.Serialize<short>(FollowX, name: nameof(FollowX));
 
-                if (settings.EngineVersion is
-                    Ray1EngineVersion.PC_Kit or
-                    Ray1EngineVersion.PC_Fan or
-                    Ray1EngineVersion.PC_Edu or
-                    Ray1EngineVersion.PS1_Edu)
+                if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.PC_Edu))
                     EDU_ExtHitPoints = s.Serialize<uint>(EDU_ExtHitPoints, name: nameof(EDU_ExtHitPoints));
 
                 Short_50 = s.Serialize<short>(Short_50, name: nameof(Short_50));
@@ -454,7 +450,7 @@ namespace BinarySerializer.Ray1
 
                 AnimationsCount = s.Serialize<byte>(AnimationsCount, name: nameof(AnimationsCount));
 
-                if (settings.EngineVersion is Ray1EngineVersion.GBA or Ray1EngineVersion.DSi)
+                if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.GBA))
                 {
                     s.DoBits<byte>(b =>
                     {
@@ -498,7 +494,7 @@ namespace BinarySerializer.Ray1
                     s.SerializePadding(1, logIfNotNull: true);
                 }
             }
-            else if (settings.EngineBranch == Ray1EngineBranch.PS1)
+            else
             {
                 SpritesPointer = s.SerializePointer(SpritesPointer, name: nameof(SpritesPointer));
                 AnimationsPointer = s.SerializePointer(AnimationsPointer, name: nameof(AnimationsPointer));
@@ -682,10 +678,6 @@ namespace BinarySerializer.Ray1
 
                 if (!settings.IsLoadingPackedPCData && s.FullSerialize)
                     SerialierFromPointers(s);
-            }
-            else
-            {
-                throw new BinarySerializableException(this, $"Unsupported engine branch {settings.EngineBranch}");
             }
         }
 

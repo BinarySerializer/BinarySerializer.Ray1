@@ -63,7 +63,7 @@ namespace BinarySerializer.Ray1
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             // Rayman 2 adds sound events
-            if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.R2_PS1))
             {
                 // Serialize pointers
                 LayersPointer = s.SerializePointer(LayersPointer, name: nameof(LayersPointer));
@@ -96,7 +96,7 @@ namespace BinarySerializer.Ray1
                 s.DoAt(SoundEventsPointer, () =>
                     SoundEventKeyFrames = s.SerializeObjectArray<SoundEventKeyFrame>(SoundEventKeyFrames, SoundEventKeyFramesCount, name: nameof(SoundEventKeyFrames)));
             }
-            else if (settings.EngineBranch is Ray1EngineBranch.SNES or Ray1EngineBranch.Jaguar)
+            else if (settings.EngineVersionTree.HasAnyParent(Ray1EngineVersion.ENGINE_SNES, Ray1EngineVersion.ENGINE_JAGUAR))
             {
                 // TODO: Does the padding here actually contain data?
                 // Serialize data

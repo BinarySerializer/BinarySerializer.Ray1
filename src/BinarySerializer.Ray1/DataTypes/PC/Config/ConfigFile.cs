@@ -24,7 +24,7 @@
         public ushort VolumeSound { get; set; } // Options_jeu_13, set as (127 * value / 20), 0-20
 
         public ushort IsStero { get; set; } // 0 = Mono, 1 = Stereo
-        public ushort EDU_VoiceSound { get; set; }
+        public ushort VoiceSound { get; set; }
         public bool Mode_Pad { get; set; } // Indicates if the controller setup screen has been shown
         public byte Port_Pad { get; set; }
 
@@ -60,7 +60,7 @@
             // Get the settings
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
-            if (settings.EngineVersion is Ray1EngineVersion.PC or Ray1EngineVersion.PocketPC)
+            if (!settings.EngineVersionTree.HasParent(Ray1EngineVersion.PC_Edu))
                 Language = s.Serialize<Language>(Language, name: nameof(Language));
 
             Port = s.Serialize<uint>(Port, name: nameof(Port));
@@ -79,8 +79,8 @@
 
             IsStero = s.Serialize<ushort>(IsStero, name: nameof(IsStero));
 
-            if (settings.EngineVersion is Ray1EngineVersion.PC_Edu or Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Fan)
-                EDU_VoiceSound = s.Serialize<ushort>(EDU_VoiceSound, name: nameof(EDU_VoiceSound));
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.PC_Edu))
+                VoiceSound = s.Serialize<ushort>(VoiceSound, name: nameof(VoiceSound));
 
             Mode_Pad = s.Serialize<bool>(Mode_Pad, name: nameof(Mode_Pad));
             Port_Pad = s.Serialize<byte>(Port_Pad, name: nameof(Port_Pad));

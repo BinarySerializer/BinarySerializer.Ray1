@@ -19,7 +19,7 @@
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.R2_PS1))
             {
                 LivesCount = s.Serialize<short>(LivesCount, name: nameof(LivesCount));
                 LivesDigits = s.SerializeArray<byte>(LivesDigits, 2, name: nameof(LivesDigits));

@@ -35,7 +35,7 @@
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.R2_PS1))
             {
                 s.DoBits<byte>(b =>
                 {
@@ -82,11 +82,7 @@
                     Squished = b.SerializeBits<bool>(Squished, 1, name: nameof(Squished));
                 });
 
-                if (settings.EngineVersion is
-                    Ray1EngineVersion.PC_Edu or
-                    Ray1EngineVersion.PS1_Edu or
-                    Ray1EngineVersion.PC_Kit or
-                    Ray1EngineVersion.PC_Fan)
+                if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.PC_Edu))
                 {
                     s.DoBits<byte>(b =>
                     {

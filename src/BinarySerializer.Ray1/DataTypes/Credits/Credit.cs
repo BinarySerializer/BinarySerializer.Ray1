@@ -27,11 +27,7 @@
             XPos = s.Serialize<short>(XPos, name: nameof(XPos));
             YPos = s.Serialize<short>(YPos, name: nameof(YPos));
 
-            if (settings.EngineVersion is 
-                Ray1EngineVersion.PC_Edu or 
-                Ray1EngineVersion.PS1_Edu or 
-                Ray1EngineVersion.PC_Kit or 
-                Ray1EngineVersion.PC_Fan)
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.PC_Edu))
                 LocTextId = s.Serialize<ushort>(LocTextId, name: nameof(LocTextId));
             
             Font = s.Serialize<byte>(Font, name: nameof(Font));

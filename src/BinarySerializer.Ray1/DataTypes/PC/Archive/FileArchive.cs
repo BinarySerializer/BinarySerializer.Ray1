@@ -61,8 +61,7 @@ namespace BinarySerializer.Ray1.PC
         {
             var settings = context.GetRequiredSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.PC || 
-                settings.EngineVersion == Ray1EngineVersion.PocketPC)
+            if (settings.EngineVersion is Ray1EngineVersion.PC or Ray1EngineVersion.PocketPC)
                 throw new NotImplementedException("Repacking is not supported for Rayman 1"); // The header is in the exe
 
             // Get every file before we start writing
@@ -138,9 +137,16 @@ namespace BinarySerializer.Ray1.PC
             if (settings.IsVersioned)
                 GameVersion = s.SerializeObject<GameVersion>(GameVersion, name: nameof(GameVersion));
 
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.PC_Edu))
+            {
+                Entries = s.SerializeObjectArrayUntil(
+                    obj: Entries,
+                    conditionCheckFunc: x => x.FileName == "ENDFILE",
+                    getLastObjFunc: () => new FileArchiveEntry() { FileName = "ENDFILE" },
+                    name: nameof(Entries));
+            }
             // For Rayman 1 the header is hard-coded in the game executable
-            if (settings.EngineVersion == Ray1EngineVersion.PC || 
-                settings.EngineVersion == Ray1EngineVersion.PocketPC)
+            else
             {
                 if (s is BinarySerializer)
                     throw new Exception("Can't serialize Rayman 1 archive headers");
@@ -156,16 +162,8 @@ namespace BinarySerializer.Ray1.PC
 
                 s.Context.AddFile(file);
 
-                s.DoAt(s.Context.GetRequiredFile(key).StartPointer, () => 
+                s.DoAt(s.Context.GetRequiredFile(key).StartPointer, () =>
                     Entries = s.SerializeObjectArray<FileArchiveEntry>(Entries, headerLength, name: nameof(Entries)));
-            }
-            else
-            {
-                Entries = s.SerializeObjectArrayUntil(
-                    obj: Entries,
-                    conditionCheckFunc: x => x.FileName == "ENDFILE",
-                    getLastObjFunc: () => new FileArchiveEntry() { FileName = "ENDFILE" },
-                    name: nameof(Entries));
             }
         }
     }

@@ -20,7 +20,7 @@
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.R2_PS1))
             {
                 s.DoBits<ushort>(b =>
                 {
@@ -33,7 +33,7 @@
                 XPosition = s.Serialize<byte>(XPosition, name: nameof(XPosition));
                 YPosition = s.Serialize<byte>(YPosition, name: nameof(YPosition));
             }
-            else if (settings.EngineBranch == Ray1EngineBranch.SNES)
+            else if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.ENGINE_SNES))
             {
                 s.DoBits<byte>(b =>
                 {
@@ -47,7 +47,7 @@
                 });
                 SpriteIndex = s.Serialize<byte>((byte)SpriteIndex, name: nameof(SpriteIndex));
             }
-            else if (settings.EngineBranch == Ray1EngineBranch.Jaguar)
+            else if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.ENGINE_JAGUAR))
             {
                 XPosition = s.Serialize<byte>(XPosition, name: nameof(XPosition));
                 YPosition = s.Serialize<byte>(YPosition, name: nameof(YPosition));

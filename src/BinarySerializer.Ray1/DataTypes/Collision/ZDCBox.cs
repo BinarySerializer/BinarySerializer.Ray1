@@ -22,7 +22,7 @@
             Width = s.Serialize<byte>(Width, name: nameof(Width));
             Height = s.Serialize<byte>(Height, name: nameof(Height));
 
-            if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.R2_PS1))
             {
                 s.DoBits<ushort>(b =>
                 {

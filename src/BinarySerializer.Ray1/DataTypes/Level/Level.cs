@@ -31,7 +31,7 @@
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
-            if (settings.EngineVersion == Ray1EngineVersion.R2_PS1)
+            if (settings.EngineVersionTree.HasParent(Ray1EngineVersion.R2_PS1))
             {
                 ObjectsPointer = s.SerializePointer(ObjectsPointer, name: nameof(ObjectsPointer));
                 AlwaysObjectsPointer = s.SerializePointer(AlwaysObjectsPointer, name: nameof(AlwaysObjectsPointer));
