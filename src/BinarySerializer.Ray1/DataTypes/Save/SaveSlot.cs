@@ -51,64 +51,77 @@
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
-            // The game sets these to random values, but we can set it to constant values (0x20 and 0x40) for simplicity
-            byte gbaRandomValue1 = (byte)(GBA_IsValid ? 0x20 : 0xFF);
-            byte gbaRandomValue2 = (byte)(GBA_IsValid ? 0x40 : 0xFF);
-
             if (settings.EngineVersion == Ray1EngineVersion.GBA)
             {
+                // The game sets these to random values, but we can set it to constant values (0x20 and 0x40) for simplicity
+                byte gbaRandomValue1 = (byte)(GBA_IsValid ? 0x20 : 0xFF);
+                byte gbaRandomValue2 = (byte)(GBA_IsValid ? 0x40 : 0xFF);
+
                 gbaRandomValue1 = s.Serialize<byte>(gbaRandomValue1, name: nameof(gbaRandomValue1));
                 gbaRandomValue2 = s.Serialize<byte>(gbaRandomValue2, name: nameof(gbaRandomValue2));
+
+                // Serialize verification values after save now in order to determine if the save data is valid
+                s.DoAt(s.CurrentPointer + 0x90 - 2, () =>
+                {
+                    byte gbaRandomValueVerify1 = (byte)(GBA_IsValid ? 0xA5 - gbaRandomValue1 : 0xFF);
+                    byte gbaRandomValueVerify2 = (byte)(GBA_IsValid ? 0x5A - gbaRandomValue2 : 0xFF);
+
+                    gbaRandomValueVerify1 = s.Serialize<byte>(gbaRandomValueVerify1, name: nameof(gbaRandomValueVerify1));
+                    gbaRandomValueVerify2 = s.Serialize<byte>(gbaRandomValueVerify2, name: nameof(gbaRandomValueVerify2));
+
+                    GBA_IsValid = (byte)(gbaRandomValue1 + gbaRandomValueVerify1) == 0xA5 &&
+                                  (byte)(gbaRandomValue2 + gbaRandomValueVerify2) == 0x5A;
+
+                    s.Log("{0}: {1}", nameof(GBA_IsValid), GBA_IsValid);
+                });
             }
 
-            SaveName = s.SerializeString(SaveName, 4, name: nameof(SaveName));
-            ContinuesCount = s.Serialize<byte>(ContinuesCount, name: nameof(ContinuesCount));
-            WorldInfoSaveZone = s.SerializeObjectArray<WorldInfoSave>(WorldInfoSaveZone, 24, name: nameof(WorldInfoSaveZone));
-            RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
-            Poing = s.SerializeObject<Poing>(Poing, name: nameof(Poing));
-            StatusBar = s.SerializeObject<StatusBar>(StatusBar, name: nameof(StatusBar));
-
-            if (settings.EngineVersion == Ray1EngineVersion.GBA)
-                s.SerializePadding(2, logIfNotNull: true);
-
-            RayHitPoints = s.Serialize<byte>(RayHitPoints, name: nameof(RayHitPoints));
-
-            if (settings.EngineVersion == Ray1EngineVersion.GBA)
+            s.DoWithDefaults(new SerializerDefaults()
             {
-                GBA_SaveZone = s.SerializeArray<ushort>(GBA_SaveZone, 24, name: nameof(GBA_SaveZone));
-            }
-            else
+                // If an invalid GBA save we disable formatting warnings since the data will most likely all be 0xFF
+                DisableFormattingWarnings = settings.EngineVersion == Ray1EngineVersion.GBA && !GBA_IsValid
+            }, () =>
             {
-                SaveZone ??= new byte[81][];
+                SaveName = s.SerializeString(SaveName, 4, name: nameof(SaveName));
+                ContinuesCount = s.Serialize<byte>(ContinuesCount, name: nameof(ContinuesCount));
+                WorldInfoSaveZone = s.SerializeObjectArray<WorldInfoSave>(WorldInfoSaveZone, 24, name: nameof(WorldInfoSaveZone));
+                RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
+                Poing = s.SerializeObject<Poing>(Poing, name: nameof(Poing));
+                StatusBar = s.SerializeObject<StatusBar>(StatusBar, name: nameof(StatusBar));
 
-                for (int i = 0; i < SaveZone.Length; i++)
-                    SaveZone[i] = s.SerializeArray<byte>(SaveZone[i], 32, name: $"{nameof(SaveZone)}[{i}]");
-            }
+                if (settings.EngineVersion == Ray1EngineVersion.GBA)
+                    s.SerializePadding(2, logIfNotNull: true);
 
-            BonusPerfect = s.SerializeArray<byte>(BonusPerfect, 24, name: nameof(BonusPerfect));
-            WorldIndex = s.Serialize<ushort>(WorldIndex, name: nameof(WorldIndex));
-            FinBossLevel = s.Serialize<FinBossLevel>(FinBossLevel, name: nameof(FinBossLevel));
+                RayHitPoints = s.Serialize<byte>(RayHitPoints, name: nameof(RayHitPoints));
 
-            if (settings.EngineVersion == Ray1EngineVersion.GBA)
-                s.SerializePadding(2, logIfNotNull: true);
+                if (settings.EngineVersion == Ray1EngineVersion.GBA)
+                {
+                    GBA_SaveZone = s.SerializeArray<ushort>(GBA_SaveZone, 24, name: nameof(GBA_SaveZone));
+                }
+                else
+                {
+                    SaveZone ??= new byte[81][];
 
-            if (settings.EngineVersion == Ray1EngineVersion.GBA)
-            {
-                byte gbaRandomValueVerify1 = (byte)(GBA_IsValid ? 0xA5 - gbaRandomValue1 : 0xFF);
-                byte gbaRandomValueVerify2 = (byte)(GBA_IsValid ? 0x5A - gbaRandomValue2 : 0xFF);
+                    for (int i = 0; i < SaveZone.Length; i++)
+                        SaveZone[i] = s.SerializeArray<byte>(SaveZone[i], 32, name: $"{nameof(SaveZone)}[{i}]");
+                }
 
-                gbaRandomValueVerify1 = s.Serialize<byte>(gbaRandomValueVerify1, name: nameof(gbaRandomValueVerify1));
-                gbaRandomValueVerify2 = s.Serialize<byte>(gbaRandomValueVerify2, name: nameof(gbaRandomValueVerify2));
+                BonusPerfect = s.SerializeArray<byte>(BonusPerfect, 24, name: nameof(BonusPerfect));
+                WorldIndex = s.Serialize<ushort>(WorldIndex, name: nameof(WorldIndex));
+                FinBossLevel = s.Serialize<FinBossLevel>(FinBossLevel, name: nameof(FinBossLevel));
 
-                GBA_IsValid = (byte)(gbaRandomValue1 + gbaRandomValueVerify1) == 0xA5 && 
-                              (byte)(gbaRandomValue2 + gbaRandomValueVerify2) == 0x5A;
+                if (settings.EngineVersion == Ray1EngineVersion.GBA)
+                {
+                    s.SerializePadding(2, logIfNotNull: true);
 
-                s.Log("{0}: {1}", nameof(GBA_IsValid), GBA_IsValid);
+                    // Skip the 2 verification bytes since we read those first
+                    s.Goto(s.CurrentPointer + 2);
 
-                // Padding (0xFF). Each slot is 170 bytes. The slots in total then use
-                // 170 * 3 = 510 bytes out of 512 available bytes for the EEPROM save.
-                s.SerializePadding(24);
-            }
+                    // Padding (0xFF). Each slot is 170 bytes. The slots in total then use
+                    // 170 * 3 = 510 bytes out of 512 available bytes for the EEPROM save.
+                    s.SerializePadding(24);
+                }
+            });
         }
     }
 }
