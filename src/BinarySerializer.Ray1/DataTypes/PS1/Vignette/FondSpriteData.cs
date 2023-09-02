@@ -5,13 +5,13 @@ namespace BinarySerializer.Ray1.PS1
     public class FondSpriteData : BinarySerializable
     {
         public byte SpritesCount { get; set; }
-        public byte UnkCount1 { get; set; }
-        public byte UnkCount2 { get; set; }
+        public byte BackBandsCount { get; set; }
+        public byte FrontBandsCount { get; set; }
         public byte PalettesCount { get; set; }
         public byte[] Bytes_05 { get; set; } // Seems to be unused by the game. Padding? Has data though.
         
-        public UnknownData[] UnkData1 { get; set; }
-        public UnknownData[] UnkData2 { get; set; }
+        public BackgroundBandDefine[] BackBands { get; set; }
+        public BackgroundBandDefine[] FrontBands { get; set; }
 
         public Clut[] Palettes { get; set; }
 
@@ -21,8 +21,8 @@ namespace BinarySerializer.Ray1.PS1
 
             SpritesCount = s.Serialize<byte>(SpritesCount, name: nameof(SpritesCount));
             s.SerializePadding(1, logIfNotNull: true);
-            UnkCount1 = s.Serialize<byte>(UnkCount1, name: nameof(UnkCount1));
-            UnkCount2 = s.Serialize<byte>(UnkCount2, name: nameof(UnkCount2));
+            BackBandsCount = s.Serialize<byte>(BackBandsCount, name: nameof(BackBandsCount));
+            FrontBandsCount = s.Serialize<byte>(FrontBandsCount, name: nameof(FrontBandsCount));
 
             if (settings.EngineVersion == Ray1EngineVersion.PS1_JP)
             {
@@ -34,34 +34,12 @@ namespace BinarySerializer.Ray1.PS1
                 Bytes_05 = s.SerializeArray<byte>(Bytes_05, 3, name: nameof(Bytes_05));
             }
 
-            UnkData1 = s.SerializeObjectArray<UnknownData>(UnkData1, UnkCount1, name: nameof(UnkData1));
-            UnkData2 = s.SerializeObjectArray<UnknownData>(UnkData2, UnkCount2, name: nameof(UnkData2));
+            BackBands = s.SerializeObjectArray<BackgroundBandDefine>(BackBands, BackBandsCount, name: nameof(BackBands));
+            FrontBands = s.SerializeObjectArray<BackgroundBandDefine>(FrontBands, FrontBandsCount, name: nameof(FrontBands));
 
             s.Align();
 
             Palettes = s.SerializeObjectArray<Clut>(Palettes, PalettesCount, name: nameof(Palettes));
-        }
-
-        public class UnknownData : BinarySerializable
-        {
-            public short Short_00 { get; set; }
-            public byte Byte_02 { get; set; }
-            public byte Byte_04 { get; set; }
-            public byte Byte_06 { get; set; }
-            public byte Byte_08 { get; set; }
-
-            public override void SerializeImpl(SerializerObject s)
-            {
-                Short_00 = s.Serialize<short>(Short_00, name: nameof(Short_00));
-                Byte_02 = s.Serialize<byte>(Byte_02, name: nameof(Byte_02));
-                s.SerializePadding(1, logIfNotNull: true);
-                Byte_04 = s.Serialize<byte>(Byte_04, name: nameof(Byte_04));
-                s.SerializePadding(1, logIfNotNull: true);
-                Byte_06 = s.Serialize<byte>(Byte_06, name: nameof(Byte_06));
-                s.SerializePadding(1, logIfNotNull: true);
-                Byte_08 = s.Serialize<byte>(Byte_08, name: nameof(Byte_08));
-                s.SerializePadding(1, logIfNotNull: true);
-            }
         }
     }
 }
