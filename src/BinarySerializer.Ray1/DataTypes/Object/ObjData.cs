@@ -289,7 +289,7 @@ namespace BinarySerializer.Ray1
 
         #region Serialization Methods
 
-        private void SerialierFromPointers(SerializerObject s)
+        private void SerializeFromPointers(SerializerObject s)
         {
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
@@ -681,7 +681,7 @@ namespace BinarySerializer.Ray1
                 }
 
                 if (!settings.IsLoadingPackedPCData && s.FullSerialize)
-                    SerialierFromPointers(s);
+                    SerializeFromPointers(s);
             }
             else
             {
