@@ -23,8 +23,8 @@
 
             int levelTracksCount = 21;
 
-            // The PS1 version hard-codes a different length for this version
-            if (settings.EngineVersion == Ray1EngineVersion.PS1_Edu && settings.Volume.StartsWith("CS"))
+            // The Spanish versions hard-code a different length
+            if (settings.Volume.StartsWith("CS") || settings.Volume.StartsWith("CT"))
                 levelTracksCount = 23;
 
             LevelTracks = s.SerializeNullableArray<byte>(LevelTracks, levelTracksCount, name: nameof(LevelTracks));
