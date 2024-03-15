@@ -1,4 +1,5 @@
-﻿using BinarySerializer.Ray1.PS1;
+﻿using System;
+using BinarySerializer.Ray1.PS1;
 
 namespace BinarySerializer.Ray1
 {
@@ -7,6 +8,15 @@ namespace BinarySerializer.Ray1
     /// </summary>
     public class R2_ObjData : BinarySerializable 
     {
+        #region Options
+
+        // Sometimes we don't want to serialize all referenced data, so this can be used to
+        // specify which data we want. Ideally this should be replaced with a more common
+        // system in BinarySerializer for determining which data to serialize.
+        public RefDataFlags Pre_SerializeRefDataFlags { get; set; } = RefDataFlags.All;
+
+        #endregion
+
         #region Object data
 
         public short Rotation { get; set; }
@@ -232,39 +242,51 @@ namespace BinarySerializer.Ray1
             });
 
             // Parse data from pointers
-
-            s.DoAt(CharacterPointer, () => Character = s.SerializeObject<Character>(Character, name: nameof(Character)));
+            if ((Pre_SerializeRefDataFlags & RefDataFlags.Character) != 0)
+                s.DoAt(CharacterPointer, () => Character = s.SerializeObject<Character>(Character, name: nameof(Character)));
             
-            s.DoAt(UserDataPointer, () =>
-            {
-                switch (Type)
+            if ((Pre_SerializeRefDataFlags & RefDataFlags.UserData) != 0)
+                s.DoAt(UserDataPointer, () =>
                 {
-                    case R2_ObjType.TYPE_GENERATING_DOOR:
-                    case R2_ObjType.TYPE_DESTROYING_DOOR:
-                        UserData_Gendoor = s.SerializeObject<GendoorUserData>(UserData_Gendoor, name: nameof(UserData_Gendoor));
-                        break;
-                    
-                    case R2_ObjType.TYPE_TRIGGER:
-                        UserData_Trigger = s.SerializeObject<TriggerUserData>(UserData_Trigger, name: nameof(UserData_Trigger));
-                        break;
+                    switch (Type)
+                    {
+                        case R2_ObjType.TYPE_GENERATING_DOOR:
+                        case R2_ObjType.TYPE_DESTROYING_DOOR:
+                            UserData_Gendoor = s.SerializeObject<GendoorUserData>(UserData_Gendoor, name: nameof(UserData_Gendoor));
+                            break;
+                        
+                        case R2_ObjType.TYPE_TRIGGER:
+                            UserData_Trigger = s.SerializeObject<TriggerUserData>(UserData_Trigger, name: nameof(UserData_Trigger));
+                            break;
 
-                    // TODO: Parse remaining user data
-                    
-                    default:
-                        UserDataBuffer = s.SerializeArray<byte>(UserDataBuffer, Type.GetUserDataLength(), name: nameof(UserDataBuffer));
-                        break;
-                }
-            });
+                        // TODO: Parse remaining user data
+                        
+                        default:
+                            UserDataBuffer = s.SerializeArray<byte>(UserDataBuffer, Type.GetUserDataLength(), name: nameof(UserDataBuffer));
+                            break;
+                    }
+                });
 
             if (!s.FullSerialize)
                 return;
 
-            s.DoAt(AnimSetPointer, () => AnimSet = s.SerializeObject<AnimationSet>(AnimSet, name: nameof(AnimSet)));
+            if ((Pre_SerializeRefDataFlags & RefDataFlags.AnimSet) != 0)
+                s.DoAt(AnimSetPointer, () => AnimSet = s.SerializeObject<AnimationSet>(AnimSet, name: nameof(AnimSet)));
         }
 
         #endregion
 
         #region Data Types
+
+        [Flags]
+        public enum RefDataFlags
+        {
+            None = 0,
+            UserData = 1 << 0,
+            Character = 1 << 1,
+            AnimSet = 1 << 2,
+            All = UserData | Character | AnimSet,
+        }
 
         public enum ObjMapLayer : byte
         {
