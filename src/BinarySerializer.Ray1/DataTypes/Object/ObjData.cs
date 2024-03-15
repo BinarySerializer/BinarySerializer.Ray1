@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace BinarySerializer.Ray1
 {
@@ -7,6 +8,15 @@ namespace BinarySerializer.Ray1
     /// </summary>
     public class ObjData : BinarySerializable
     {
+        #region Options
+
+        // Sometimes we don't want to serialize all referenced data, so this can be used to
+        // specify which data we want. Ideally this should be replaced with a more common
+        // system in BinarySerializer for determining which data to serialize.
+        public RefDataFlags Pre_SerializeRefDataFlags { get; set; } = RefDataFlags.All;
+
+        #endregion
+
         #region Object data
 
         // These are indexes in the files and get replaced with pointers during runtime
@@ -294,44 +304,53 @@ namespace BinarySerializer.Ray1
             Ray1Settings settings = s.GetRequiredSettings<Ray1Settings>();
 
             // Serialize the sprites
-            s.DoAt(SpritesPointer, () => 
-                Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites)));
+            if ((Pre_SerializeRefDataFlags & RefDataFlags.Sprites) != 0)
+                s.DoAt(SpritesPointer, () => 
+                    Sprites = s.SerializeObjectArray<Sprite>(Sprites, SpritesCount, name: nameof(Sprites)));
 
             // Serialize the animations
-            s.DoAt(AnimationsPointer, () =>
-                Animations = s.SerializeObjectArray<Animation>(Animations, AnimationsCount, name: nameof(Animations)));
+            if ((Pre_SerializeRefDataFlags & RefDataFlags.Animations) != 0)
+                s.DoAt(AnimationsPointer, () =>
+                    Animations = s.SerializeObjectArray<Animation>(Animations, AnimationsCount, name: nameof(Animations)));
 
             // Serialize image buffer
-            if (settings.EngineVersion == Ray1EngineVersion.PS1_JPDemoVol3)
+            if ((Pre_SerializeRefDataFlags & RefDataFlags.ImageBuffer) != 0)
                 s.DoAt(ImageBufferPointer, () => 
                     ImageBuffer = s.SerializeArray<byte>(ImageBuffer, InternalHelpers.GetImageBufferLength(Sprites, settings), name: nameof(ImageBuffer)));
 
             // Serialize the commands
-            s.DoAt(CommandsPointer, () => 
-                Commands = s.SerializeObject<ObjCommands>(Commands, name: nameof(Commands)));
-
-            // Serialize the label offsets
-            if (Commands != null && Commands.Commands.Length > 0)
+            if ((Pre_SerializeRefDataFlags & RefDataFlags.Commands) != 0)
             {
-                s.DoAt(LabelOffsetsPointer, () =>
-                {
-                    if (LabelOffsets == null)
-                    {
-                        int length = Commands.Commands.Max(c => c.UsesLabelOffsets ? (int)c.Arguments[0] : -1) + 1;
-                        LabelOffsets = new ushort[length];
-                    }
+                // Serialize the commands
+                s.DoAt(CommandsPointer, () =>
+                    Commands = s.SerializeObject<ObjCommands>(Commands, name: nameof(Commands)));
 
-                    // Serialize the label offsets
-                    LabelOffsets = s.SerializeArray(LabelOffsets, LabelOffsets.Length, name: nameof(LabelOffsets));
-                });
+                // Serialize the label offsets
+                if (Commands != null && Commands.Commands.Length > 0)
+                {
+                    s.DoAt(LabelOffsetsPointer, () =>
+                    {
+                        if (LabelOffsets == null)
+                        {
+                            int length = Commands.Commands.Max(c => c.UsesLabelOffsets ? (int)c.Arguments[0] : -1) + 1;
+                            LabelOffsets = new ushort[length];
+                        }
+
+                        // Serialize the label offsets
+                        LabelOffsets = s.SerializeArray(LabelOffsets, LabelOffsets.Length, name: nameof(LabelOffsets));
+                    });
+                }
             }
 
             // Serialize ETA
-            if (ETAPointer != null)
-                s.DoAt(ETAPointer, () => ETA = s.SerializeObject<ETA>(ETA, name: nameof(ETA)));
+            if ((Pre_SerializeRefDataFlags & RefDataFlags.States) != 0)
+            {
+                if (ETAPointer != null)
+                    s.DoAt(ETAPointer, () => ETA = s.SerializeObject<ETA>(ETA, name: nameof(ETA)));
 
-            if (ETA?.States?.ElementAtOrDefault(MainEtat)?.ElementAtOrDefault(SubEtat) == null)
-                s.Context.SystemLogger?.LogWarning($"Matching obj state not found for obj {Type} at {XPosition}x{YPosition} with E{MainEtat},SE{SubEtat} for {settings.EngineVersion} in {settings.World}{settings.Level}");
+                if (ETA?.States?.ElementAtOrDefault(MainEtat)?.ElementAtOrDefault(SubEtat) == null)
+                    s.Context.SystemLogger?.LogWarning($"Matching obj state not found for obj {Type} at {XPosition}x{YPosition} with E{MainEtat},SE{SubEtat} for {settings.EngineVersion} in {settings.World}{settings.Level}");
+            }
         }
 
         public override void SerializeImpl(SerializerObject s)
@@ -352,13 +371,13 @@ namespace BinarySerializer.Ray1
                 }
                 else
                 {
-                    SpritesPointer = s.SerializePointer(SpritesPointer, name: nameof(SpritesPointer));
-                    AnimationsPointer = s.SerializePointer(AnimationsPointer, name: nameof(AnimationsPointer));
-                    ImageBufferPointer = s.SerializePointer(ImageBufferPointer, name: nameof(ImageBufferPointer));
-                    ETAPointer = s.SerializePointer(ETAPointer, name: nameof(ETAPointer));
+                    SpritesPointer = s.SerializePointer(SpritesPointer, nullValue: 0, name: nameof(SpritesPointer));
+                    AnimationsPointer = s.SerializePointer(AnimationsPointer, nullValue: 0, name: nameof(AnimationsPointer));
+                    ImageBufferPointer = s.SerializePointer(ImageBufferPointer, nullValue: 0, name: nameof(ImageBufferPointer));
+                    ETAPointer = s.SerializePointer(ETAPointer, nullValue: 0, name: nameof(ETAPointer));
 
-                    CommandsPointer = s.SerializePointer(CommandsPointer, name: nameof(CommandsPointer));
-                    LabelOffsetsPointer = s.SerializePointer(LabelOffsetsPointer, name: nameof(LabelOffsetsPointer));
+                    CommandsPointer = s.SerializePointer(CommandsPointer, nullValue: 0, name: nameof(CommandsPointer));
+                    LabelOffsetsPointer = s.SerializePointer(LabelOffsetsPointer, nullValue: 0, name: nameof(LabelOffsetsPointer));
                 }
 
                 CommandContexts = s.SerializeObjectArray<CommandContext>(CommandContexts, 1, name: nameof(CommandContexts));
@@ -679,14 +698,30 @@ namespace BinarySerializer.Ray1
                     // Probably padding
                     UnknownBytes = s.SerializeArray<byte>(UnknownBytes, 1, name: nameof(UnknownBytes));
                 }
-
-                if (!settings.IsLoadingPackedPCData && s.FullSerialize)
-                    SerializeFromPointers(s);
             }
             else
             {
                 throw new BinarySerializableException(this, $"Unsupported engine branch {settings.EngineBranch}");
             }
+
+            if (!settings.IsLoadingPackedPCData && s.FullSerialize)
+                SerializeFromPointers(s);
+        }
+
+        #endregion
+
+        #region Data Types
+
+        [Flags]
+        public enum RefDataFlags
+        {
+            None = 0,
+            Sprites = 1 << 0,
+            Animations = 1 << 1,
+            ImageBuffer = 1 << 2,
+            States = 1 << 3,
+            Commands = 1 << 4,
+            All = Sprites | Animations | ImageBuffer | States | Commands,
         }
 
         #endregion
