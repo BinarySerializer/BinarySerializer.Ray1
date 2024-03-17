@@ -371,13 +371,13 @@ namespace BinarySerializer.Ray1
                 }
                 else
                 {
-                    SpritesPointer = s.SerializePointer(SpritesPointer, nullValue: 0, name: nameof(SpritesPointer));
-                    AnimationsPointer = s.SerializePointer(AnimationsPointer, nullValue: 0, name: nameof(AnimationsPointer));
-                    ImageBufferPointer = s.SerializePointer(ImageBufferPointer, nullValue: 0, name: nameof(ImageBufferPointer));
-                    ETAPointer = s.SerializePointer(ETAPointer, nullValue: 0, name: nameof(ETAPointer));
+                    SpritesPointer = s.SerializePointer(SpritesPointer, name: nameof(SpritesPointer));
+                    AnimationsPointer = s.SerializePointer(AnimationsPointer, name: nameof(AnimationsPointer));
+                    ImageBufferPointer = s.SerializePointer(ImageBufferPointer, name: nameof(ImageBufferPointer));
+                    ETAPointer = s.SerializePointer(ETAPointer, name: nameof(ETAPointer));
 
-                    CommandsPointer = s.SerializePointer(CommandsPointer, nullValue: 0, name: nameof(CommandsPointer));
-                    LabelOffsetsPointer = s.SerializePointer(LabelOffsetsPointer, nullValue: 0, name: nameof(LabelOffsetsPointer));
+                    CommandsPointer = s.SerializePointer(CommandsPointer, name: nameof(CommandsPointer));
+                    LabelOffsetsPointer = s.SerializePointer(LabelOffsetsPointer, name: nameof(LabelOffsetsPointer));
                 }
 
                 CommandContexts = s.SerializeObjectArray<CommandContext>(CommandContexts, 1, name: nameof(CommandContexts));
