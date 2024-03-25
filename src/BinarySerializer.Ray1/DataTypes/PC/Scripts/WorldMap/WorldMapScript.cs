@@ -13,7 +13,7 @@
             if (settings.EngineVersion is Ray1EngineVersion.PC_Edu or Ray1EngineVersion.PS1_Edu)
             {
                 Alpha = s.InitializeArray(Alpha, 160);
-                s.DoArray(Alpha, (x, name) => s.SerializeArray<byte>(x, 256, name: name), name: nameof(Alpha));
+                s.DoArray(Alpha, (x, _, name) => s.SerializeArray<byte>(x, 256, name: name), name: nameof(Alpha));
             }
 
             WorldMap = s.SerializeObject<WorldMap>(WorldMap, name: nameof(WorldMap));

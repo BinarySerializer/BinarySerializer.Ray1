@@ -14,7 +14,7 @@
         {
             ObjectStates = s.SerializeArraySize<ObjState[], byte>(ObjectStates, name: nameof(ObjectStates));
 
-            s.DoArray(ObjectStates, (x, name) =>
+            s.DoArray(ObjectStates, (x, _, name) =>
             {
                 x = s.SerializeArraySize<ObjState, byte>(x, name: name);
                 return s.SerializeObjectArray<ObjState>(x, x.Length, name: name);

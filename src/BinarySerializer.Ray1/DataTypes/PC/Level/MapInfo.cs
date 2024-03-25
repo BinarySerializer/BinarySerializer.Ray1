@@ -29,7 +29,7 @@
                 // Serialize palettes
                 int palettesCount = settings.EngineVersion is Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Fan ? 1 : 3;
                 Palettes = s.InitializeArray(Palettes, palettesCount);
-                s.DoArray(Palettes, (x, name) => s.SerializeObjectArray<RGB666Color>(x, 256, name: name), name: nameof(Palettes));
+                s.DoArray(Palettes, (x, _, name) => s.SerializeObjectArray<RGB666Color>(x, 256, name: name), name: nameof(Palettes));
 
                 // Serialize last palette
                 LastPlan1Palette = s.Serialize<byte>(LastPlan1Palette, name: nameof(LastPlan1Palette));

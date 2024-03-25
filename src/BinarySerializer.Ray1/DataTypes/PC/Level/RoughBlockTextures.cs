@@ -32,7 +32,7 @@ namespace BinarySerializer.Ray1.PC
 
                         Pointer roughTexturesAnchor = s.CurrentPointer;
 
-                        s.DoArray(RoughBlockTexturesData, (x, name) => s.SerializeArray<byte>(x, 256, name: name),
+                        s.DoArray(RoughBlockTexturesData, (x, _, name) => s.SerializeArray<byte>(x, 256, name: name),
                             name: nameof(RoughBlockTexturesData));
 
                         RoughBlockTexturesOffsetTable = s.SerializePointerArray(RoughBlockTexturesOffsetTable, 1200,
@@ -69,7 +69,7 @@ namespace BinarySerializer.Ray1.PC
                     s.DoProcessed(new Xor8Processor(0x7D),
                         () =>
                         {
-                            s.DoArray(RoughBlockTexturesData, (x, name) => s.SerializeArray<byte>(x, 256, name: name),
+                            s.DoArray(RoughBlockTexturesData, (x, _, name) => s.SerializeArray<byte>(x, 256, name: name),
                                 name: nameof(RoughBlockTexturesData));
                         });
 

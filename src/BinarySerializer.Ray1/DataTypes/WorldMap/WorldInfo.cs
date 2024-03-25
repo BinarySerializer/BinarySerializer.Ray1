@@ -71,12 +71,12 @@
                 World = s.Serialize<World>(World, name: nameof(World));
 
                 LevelLinks = s.InitializeArray(LevelLinks, 5);
-                s.DoArray(LevelLinks, (x, name) => s.SerializeObjectArray<LevelLinkEntry>(x, 6, name: name), name: nameof(LevelLinks));
+                s.DoArray(LevelLinks, (x, _, name) => s.SerializeObjectArray<LevelLinkEntry>(x, 6, name: name), name: nameof(LevelLinks));
 
                 CurrentLinkedLevel = s.Serialize<byte>(CurrentLinkedLevel, name: nameof(CurrentLinkedLevel));
 
                 LevelVariants = s.InitializeArray(LevelVariants, 5);
-                s.DoArray(LevelVariants, (x, name) => s.SerializeNullableArray<byte>(x, 6, name: name), name: nameof(LevelVariants));
+                s.DoArray(LevelVariants, (x, _, name) => s.SerializeNullableArray<byte>(x, 6, name: name), name: nameof(LevelVariants));
 
                 if (settings.IsLoadingPackedPCData)
                 {
