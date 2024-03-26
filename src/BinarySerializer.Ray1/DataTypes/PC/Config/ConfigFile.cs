@@ -15,16 +15,16 @@
         public byte NumCard { get; set; }
 
         // Keys are indexed as 0-3
-        public ushort KeyJump { get; set; }
-        public ushort KeyWeapon { get; set; }
-        public ushort Options_jeu_10 { get; set; }
-        public ushort KeyAction { get; set; }
+        public ushort JumpKey { get; set; }
+        public ushort FistKey { get; set; }
+        public ushort UnusedKey { get; set; }
+        public ushort ActionKey { get; set; }
 
-        public ushort MusicCdActive { get; set; } // Options_jeu_12
-        public ushort VolumeSound { get; set; } // Options_jeu_13, set as (127 * value / 20), 0-20
-
-        public ushort IsStero { get; set; } // 0 = Mono, 1 = Stereo
-        public ushort EDU_VoiceSound { get; set; }
+        public ushort MusicVolume { get; set; }
+        public ushort SoundVolume { get; set; } // Set as (127 * value / 20), 0-20
+        public ushort SteroEnabled { get; set; } // 0 = Mono, 1 = Stereo
+        public ushort VoicesVolume { get; set; }
+        
         public bool Mode_Pad { get; set; } // Indicates if the controller setup screen has been shown
         public byte Port_Pad { get; set; }
 
@@ -69,18 +69,16 @@
             Param = s.Serialize<uint>(Param, name: nameof(Param));
             DeviceID = s.Serialize<uint>(DeviceID, name: nameof(DeviceID));
             NumCard = s.Serialize<byte>(NumCard, name: nameof(NumCard));
-            KeyJump = s.Serialize<ushort>(KeyJump, name: nameof(KeyJump));
-            KeyWeapon = s.Serialize<ushort>(KeyWeapon, name: nameof(KeyWeapon));
-            Options_jeu_10 = s.Serialize<ushort>(Options_jeu_10, name: nameof(Options_jeu_10));
-            KeyAction = s.Serialize<ushort>(KeyAction, name: nameof(KeyAction));
+            JumpKey = s.Serialize<ushort>(JumpKey, name: nameof(JumpKey));
+            FistKey = s.Serialize<ushort>(FistKey, name: nameof(FistKey));
+            UnusedKey = s.Serialize<ushort>(UnusedKey, name: nameof(UnusedKey));
+            ActionKey = s.Serialize<ushort>(ActionKey, name: nameof(ActionKey));
 
-            MusicCdActive = s.Serialize<ushort>(MusicCdActive, name: nameof(MusicCdActive));
-            VolumeSound = s.Serialize<ushort>(VolumeSound, name: nameof(VolumeSound));
-
-            IsStero = s.Serialize<ushort>(IsStero, name: nameof(IsStero));
-
+            MusicVolume = s.Serialize<ushort>(MusicVolume, name: nameof(MusicVolume));
+            SoundVolume = s.Serialize<ushort>(SoundVolume, name: nameof(SoundVolume));
+            SteroEnabled = s.Serialize<ushort>(SteroEnabled, name: nameof(SteroEnabled));
             if (settings.EngineVersion is Ray1EngineVersion.PC_Edu or Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Fan)
-                EDU_VoiceSound = s.Serialize<ushort>(EDU_VoiceSound, name: nameof(EDU_VoiceSound));
+                VoicesVolume = s.Serialize<ushort>(VoicesVolume, name: nameof(VoicesVolume));
 
             Mode_Pad = s.Serialize<bool>(Mode_Pad, name: nameof(Mode_Pad));
             Port_Pad = s.Serialize<byte>(Port_Pad, name: nameof(Port_Pad));

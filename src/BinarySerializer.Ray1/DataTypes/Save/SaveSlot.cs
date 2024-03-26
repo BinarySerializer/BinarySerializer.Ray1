@@ -1,4 +1,6 @@
-﻿namespace BinarySerializer.Ray1
+﻿using BinarySerializer.PS1.MemoryCard;
+
+namespace BinarySerializer.Ray1
 {
     /// <summary>
     /// The data for a save slot
@@ -40,10 +42,16 @@
         // 32 bits for each world, where each bit indicates if the bonus has been completed for that map
         public byte[] BonusPerfect { get; set; }
 
+        public GameOptions GameOptions { get; set; }
+
         /// <summary>
         /// The placement on the world map to start
         /// </summary>
         public ushort WorldIndex { get; set; }
+
+        public short XMap { get; set; }
+        public short YMap { get; set; }
+        public byte RayDirection { get; set; }
 
         public FinBossLevel FinBossLevel { get; set; }
 
@@ -82,17 +90,42 @@
                 DisableFormattingWarnings = settings.EngineVersion == Ray1EngineVersion.GBA && !GBA_IsValid
             }, () =>
             {
-                SaveName = s.SerializeString(SaveName, 4, name: nameof(SaveName));
+                bool isPS1 = settings.EngineVersion is Ray1EngineVersion.PS1 or Ray1EngineVersion.PS1_JP;
+
+                if (settings.EngineBranch is Ray1EngineBranch.PC or Ray1EngineBranch.GBA)
+                    SaveName = s.SerializeString(SaveName, 4, name: nameof(SaveName));
+                
                 ContinuesCount = s.Serialize<byte>(ContinuesCount, name: nameof(ContinuesCount));
+                
+                if (isPS1)
+                    s.Align(MemoryCard.FrameSize);
+                
                 WorldInfoSaveZone = s.SerializeObjectArray<WorldInfoSave>(WorldInfoSaveZone, 24, name: nameof(WorldInfoSaveZone));
+                
+                if (isPS1)
+                    s.Align(MemoryCard.FrameSize);
+                
                 RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
+                
+                if (isPS1)
+                    s.Align(MemoryCard.FrameSize);
+                
                 Poing = s.SerializeObject<Poing>(Poing, name: nameof(Poing));
+                
+                if (isPS1)
+                    s.Align(MemoryCard.FrameSize);
+                
                 StatusBar = s.SerializeObject<StatusBar>(StatusBar, name: nameof(StatusBar));
 
-                if (settings.EngineVersion == Ray1EngineVersion.GBA)
+                if (isPS1)
+                    s.Align(MemoryCard.FrameSize);
+                else if (settings.EngineVersion == Ray1EngineVersion.GBA)
                     s.SerializePadding(2, logIfNotNull: true);
 
                 RayHitPoints = s.Serialize<byte>(RayHitPoints, name: nameof(RayHitPoints));
+
+                if (isPS1)
+                    s.Align(MemoryCard.FrameSize);
 
                 if (settings.EngineVersion == Ray1EngineVersion.GBA)
                 {
@@ -100,15 +133,51 @@
                 }
                 else
                 {
-                    SaveZone ??= new byte[81][];
+                    int count = settings.EngineBranch == Ray1EngineBranch.PS1 ? 84 : 81;
+                    SaveZone ??= new byte[count][];
 
                     for (int i = 0; i < SaveZone.Length; i++)
                         SaveZone[i] = s.SerializeArray<byte>(SaveZone[i], 32, name: $"{nameof(SaveZone)}[{i}]");
                 }
 
                 BonusPerfect = s.SerializeArray<byte>(BonusPerfect, 24, name: nameof(BonusPerfect));
+
+                if (isPS1)
+                    s.Align(MemoryCard.FrameSize);
+
+                if (settings.EngineBranch == Ray1EngineBranch.PS1)
+                    GameOptions = s.SerializeObject<GameOptions>(GameOptions, name: nameof(GameOptions));
+
+                if (isPS1)
+                    s.Align(MemoryCard.FrameSize);
+
                 WorldIndex = s.Serialize<ushort>(WorldIndex, name: nameof(WorldIndex));
+
+                if (isPS1)
+                    s.Align(MemoryCard.FrameSize);
+
+                if (settings.EngineBranch == Ray1EngineBranch.PS1)
+                {
+                    XMap = s.Serialize<short>(XMap, name: nameof(XMap));
+
+                    if (isPS1)
+                        s.Align(MemoryCard.FrameSize);
+
+                    YMap = s.Serialize<short>(YMap, name: nameof(YMap));
+
+                    if (isPS1)
+                        s.Align(MemoryCard.FrameSize);
+
+                    RayDirection = s.Serialize<byte>(RayDirection, name: nameof(RayDirection));
+
+                    if (isPS1)
+                        s.Align(MemoryCard.FrameSize);
+                }
+
                 FinBossLevel = s.Serialize<FinBossLevel>(FinBossLevel, name: nameof(FinBossLevel));
+
+                if (isPS1)
+                    s.Align(MemoryCard.FrameSize);
 
                 if (settings.EngineVersion == Ray1EngineVersion.GBA)
                 {
