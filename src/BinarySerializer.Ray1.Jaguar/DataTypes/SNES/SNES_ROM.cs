@@ -4,8 +4,8 @@ namespace BinarySerializer.Ray1.Jaguar
 {
     public class SNES_ROM : BinarySerializable
     {
-        public RGBA5551Color[] TilePalette { get; set; }
-        public RGBA5551Color[] SpritePalette { get; set; }
+        public SerializableColor[] TilePalette { get; set; }
+        public SerializableColor[] SpritePalette { get; set; }
 
         public byte[] TileSet_0000 { get; set; } // 4bpp for normal and foreground map
         public byte[] TileSet_8000 { get; set; } // 2bpp, for background map
@@ -32,8 +32,8 @@ namespace BinarySerializer.Ray1.Jaguar
             // Serialize palettes
             s.DoAt(s.CurrentPointer + 0x2ADC4, () =>
             {
-                TilePalette = s.SerializeObjectArray<RGBA5551Color>(TilePalette, 8 * 16, name: nameof(TilePalette));
-                SpritePalette = s.SerializeObjectArray<RGBA5551Color>(SpritePalette, 8 * 16, name: nameof(SpritePalette));
+                TilePalette = s.SerializeIntoArray<SerializableColor>(TilePalette, 8 * 16, BitwiseColor.RGBA5551, name: nameof(TilePalette));
+                SpritePalette = s.SerializeIntoArray<SerializableColor>(SpritePalette, 8 * 16, BitwiseColor.RGBA5551, name: nameof(SpritePalette));
             });
 
             // Serialize tile sets

@@ -26,7 +26,7 @@ namespace BinarySerializer.Ray1.PC.PS1EDU
         /// <summary>
         /// The color palettes
         /// </summary>
-        public RGB666Color[][] ColorPalettes { get; set; }
+        public SerializableColor[][] ColorPalettes { get; set; }
 
         /// <summary>
         /// Last Plan 1 Palette, always set to 2
@@ -76,18 +76,18 @@ namespace BinarySerializer.Ray1.PC.PS1EDU
 
             // Create the palettes if necessary
             if (ColorPalettes == null) {
-                ColorPalettes = new RGB666Color[][]
+                ColorPalettes = new SerializableColor[][]
                 {
-                    new RGB666Color[256],
-                    new RGB666Color[256],
-                    new RGB666Color[256],
+                    new SerializableColor[256],
+                    new SerializableColor[256],
+                    new SerializableColor[256],
                 };
             }
 
             // Serialize each palette
             for (var paletteIndex = 0; paletteIndex < ColorPalettes.Length; paletteIndex++) {
                 var palette = ColorPalettes[paletteIndex];
-                ColorPalettes[paletteIndex] = s.SerializeObjectArray<RGB666Color>(palette, palette.Length, name: nameof(ColorPalettes) + "[" + paletteIndex + "]");
+                ColorPalettes[paletteIndex] = s.SerializeIntoArray<SerializableColor>(palette, palette.Length, SerializableColor.RGB666, name: nameof(ColorPalettes) + "[" + paletteIndex + "]");
             }
 
             // Serialize unknown byte
