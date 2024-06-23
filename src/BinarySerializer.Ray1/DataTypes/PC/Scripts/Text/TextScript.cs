@@ -40,7 +40,8 @@ namespace BinarySerializer.Ray1.PC
             if (settings.EngineVersion == Ray1EngineVersion.PC_Edu && (settings.Volume.StartsWith("HN") || 
                                                                        settings.Volume.StartsWith("IS") || 
                                                                        settings.Volume.StartsWith("NL") ||
-                                                                       settings.Volume.StartsWith("PO")||
+                                                                       settings.Volume.StartsWith("PO") ||
+                                                                       settings.Volume.StartsWith("KO") ||
                                                                        settings.Volume.StartsWith("CH")))
                 numLangNames = 5;
 
