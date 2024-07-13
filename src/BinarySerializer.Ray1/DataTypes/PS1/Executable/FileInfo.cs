@@ -1,4 +1,4 @@
-﻿using BinarySerializer.PS1.Psyq;
+﻿using BinarySerializer.PlayStation.PS1.Psyq;
 
 namespace BinarySerializer.Ray1.PS1
 {

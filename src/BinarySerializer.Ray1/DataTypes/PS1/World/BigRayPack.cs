@@ -1,4 +1,4 @@
-﻿using BinarySerializer.PS1;
+﻿using BinarySerializer.PlayStation.PS1;
 
 namespace BinarySerializer.Ray1.PS1
 {
