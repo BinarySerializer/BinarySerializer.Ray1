@@ -1,4 +1,6 @@
-﻿namespace BinarySerializer.Ray1
+﻿using BinarySerializer.PlayStation.PS1;
+
+namespace BinarySerializer.Ray1
 {
     public class BackgroundBandDefine : BinarySerializable
     {
@@ -10,8 +12,8 @@
 
         // These values are a bit different between PC and PS1
         public byte SpeedX { get; set; }
-        public byte Byte_04 { get; set; }
-        public byte Byte_06 { get; set; }
+        public bool IsSemiTransparent { get; set; }
+        public SemiTransparencyRate ABR { get; set; }
         public byte Byte_08 { get; set; }
 
         public override void SerializeImpl(SerializerObject s)
@@ -22,9 +24,9 @@
 
             SpeedX = s.Serialize<byte>(SpeedX, name: nameof(SpeedX));
             s.SerializePadding(1, logIfNotNull: true);
-            Byte_04 = s.Serialize<byte>(Byte_04, name: nameof(Byte_04));
+            IsSemiTransparent = s.Serialize<bool>(IsSemiTransparent, name: nameof(IsSemiTransparent));
             s.SerializePadding(1, logIfNotNull: true);
-            Byte_06 = s.Serialize<byte>(Byte_06, name: nameof(Byte_06));
+            ABR = s.Serialize<SemiTransparencyRate>(ABR, name: nameof(ABR));
             s.SerializePadding(1, logIfNotNull: true);
 
             if (settings.EngineBranch == Ray1EngineBranch.PS1)
