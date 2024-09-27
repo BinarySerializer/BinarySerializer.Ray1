@@ -17,10 +17,8 @@
         public bool Run { get; set; }
         public bool SmallRayman { get; set; }
         public bool Firefly { get; set; }
-        public bool ToggleForceRun { get; set; }
-        public bool ForceRun { get; set; }
-        public bool ReverseControls { get; set; }
-        public bool ReverseControls2 { get; set; } // Gets checked, but never set
+        public ToggledRayEvt ForceRun { get; set; }
+        public ToggledRayEvt ReverseControls { get; set; }
         public bool Squished { get; set; } // On PS1 this is an unused death. On PC and later it's the mallet squish.
 
         public bool SuperSeed { get; set; }
@@ -75,10 +73,8 @@
                     Run = b.SerializeBits<bool>(Run, 1, name: nameof(Run));
                     SmallRayman = b.SerializeBits<bool>(SmallRayman, 1, name: nameof(SmallRayman));
                     Firefly = b.SerializeBits<bool>(Firefly, 1, name: nameof(Firefly));
-                    ToggleForceRun = b.SerializeBits<bool>(ToggleForceRun, 1, name: nameof(ToggleForceRun));
-                    ForceRun = b.SerializeBits<bool>(ForceRun, 1, name: nameof(ForceRun));
-                    ReverseControls = b.SerializeBits<bool>(ReverseControls, 1, name: nameof(ReverseControls));
-                    ReverseControls2 = b.SerializeBits<bool>(ReverseControls2, 1, name: nameof(ReverseControls2));
+                    ForceRun = b.SerializeBits<ToggledRayEvt>(ForceRun, 2, name: nameof(ForceRun));
+                    ReverseControls = b.SerializeBits<ToggledRayEvt>(ReverseControls, 2, name: nameof(ReverseControls));
                     Squished = b.SerializeBits<bool>(Squished, 1, name: nameof(Squished));
                 });
 
