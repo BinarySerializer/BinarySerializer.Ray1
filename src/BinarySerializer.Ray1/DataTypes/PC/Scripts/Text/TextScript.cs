@@ -42,7 +42,10 @@ namespace BinarySerializer.Ray1.PC
                                                                        settings.Volume.StartsWith("NL") ||
                                                                        settings.Volume.StartsWith("PO") ||
                                                                        settings.Volume.StartsWith("KO") ||
-                                                                       settings.Volume.StartsWith("CH")))
+                                                                       settings.Volume.StartsWith("CH") ||
+                                                                       settings.Volume.StartsWith("CS") ||
+                                                                       settings.Volume.StartsWith("CT") ||
+                                                                       settings.Volume.StartsWith("IT")))
                 numLangNames = 5;
 
             LanguageNames = s.SerializeStringArray(LanguageNames, numLangNames, 11, name: nameof(LanguageNames));
