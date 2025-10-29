@@ -31,9 +31,6 @@ namespace BinarySerializer.Ray1
         /// <param name="mode">The password mode</param>
         public PS1Password(byte[] encryptedPassword, PasswordMode mode)
         {
-            if (mode == PasswordMode.PAL)
-                throw new NotImplementedException();
-
             Password = encryptedPassword;
             Mode = mode;
         }
@@ -45,10 +42,7 @@ namespace BinarySerializer.Ray1
         /// <param name="mode">The password mode</param>
         public PS1Password(string password, PasswordMode mode)
         {
-            if (mode == PasswordMode.PAL)
-                throw new NotImplementedException();
-
-            Password = password.ToLower().Select(b => (byte)Array.FindIndex(PasswordDisplayTable[mode], x => (char)x == b)).ToArray();
+            Password = password.ToLower().Select(b => (byte)Array.FindIndex(PasswordDisplayTable, x => (char)x == b)).ToArray();
             Mode = mode;
         }
 
@@ -59,9 +53,6 @@ namespace BinarySerializer.Ray1
         /// <param name="mode">The password mode</param>
         public PS1Password(SaveData save, PasswordMode mode)
         {
-            if (mode == PasswordMode.PAL)
-                throw new NotImplementedException();
-
             // Set the mode
             Mode = mode;
 
@@ -114,7 +105,7 @@ namespace BinarySerializer.Ray1
                     value = password[i];
 
                 // Calculate the hash
-                hash += (value >> 1) * PasswordHashTable[Mode][i];
+                hash += (value >> 1) * PasswordHashTable[i];
             }
 
             return hash;
@@ -133,16 +124,36 @@ namespace BinarySerializer.Ray1
             var encodedHash = 0;
 
             // Get the encoded hash
-            encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[0], 1, 0), 1, 5);
-            encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[1], 1, 0), 1, 6);
-            encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[2], 1, 0), 1, 8);
-            encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[3], 1, 0), 1, 7);
-            encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[4], 1, 0), 1, 9);
-            encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[5], 1, 0), 1, 4);
-            encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[6], 1, 0), 1, 2);
-            encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[7], 1, 0), 1, 1);
-            encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[8], 1, 0), 1, 3);
-            encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[9], 1, 0), 1, 0);
+            if (Mode == PasswordMode.NTSC)
+            {
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[0], 1, 0), 1, 5);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[1], 1, 0), 1, 6);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[2], 1, 0), 1, 8);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[3], 1, 0), 1, 7);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[4], 1, 0), 1, 9);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[5], 1, 0), 1, 4);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[6], 1, 0), 1, 2);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[7], 1, 0), 1, 1);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[8], 1, 0), 1, 3);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[9], 1, 0), 1, 0);
+            }
+            else if (Mode == PasswordMode.PAL)
+            {
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[4], 1, 0), 1, 5);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[3], 1, 0), 1, 6);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[1], 1, 0), 1, 8);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[2], 1, 0), 1, 7);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[0], 1, 0), 1, 9);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[5], 1, 0), 1, 4);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[7], 1, 0), 1, 2);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[8], 1, 0), 1, 1);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[6], 1, 0), 1, 3);
+                encodedHash = BitHelpers.SetBits(encodedHash, BitHelpers.ExtractBits(password[9], 1, 0), 1, 0);
+            }
+            else
+            {
+                throw new Exception("Invalid mode");
+            }
 
             // Compare the hashes
             return hash == encodedHash;
@@ -157,6 +168,7 @@ namespace BinarySerializer.Ray1
             // Encrypt the password and get the hash
             int hash = XORAndCalculateHash(password, false);
 
+            // TODO: Update for PAL
             // Encode the hash
             password[0] = (byte)BitHelpers.SetBits(password[0], BitHelpers.ExtractBits(hash, 1, 5), 1, 0);
             password[1] = (byte)BitHelpers.SetBits(password[1], BitHelpers.ExtractBits(hash, 1, 6), 1, 0);
@@ -206,46 +218,32 @@ namespace BinarySerializer.Ray1
             return save;
         }
 
-        public override string ToString() => Password.Aggregate(String.Empty, (current, p) => current + (char)PasswordDisplayTable[Mode][p]);
+        public override string ToString() => Password.Aggregate(String.Empty, (current, p) => current + (char)PasswordDisplayTable[p]);
 
         #endregion
 
         #region Tables
 
-        protected Dictionary<PasswordMode, byte[]> PasswordIndexTranslateTable { get; } = new Dictionary<PasswordMode, byte[]>()
+        protected byte[] PasswordIndexTranslateTable { get; } = 
         {
-            [PasswordMode.NTSC] = new byte[]
-            {
-                0x19, 0x02, 0x1B, 0x04, 0x1D, 0x06, 0x1F, 0x10,
-                0x09, 0x12, 0x0B, 0x14, 0x0D, 0x16, 0x0F, 0x18,
-                0x11, 0x0A, 0x13, 0x15, 0x0E, 0x17, 0x08, 0x01,
-                0x1A, 0x03, 0x0C, 0x05, 0x1E, 0x07, 0x00, 0x1C
-            },
+            0x19, 0x02, 0x1B, 0x04, 0x1D, 0x06, 0x1F, 0x10,
+            0x09, 0x12, 0x0B, 0x14, 0x0D, 0x16, 0x0F, 0x18,
+            0x11, 0x0A, 0x13, 0x15, 0x0E, 0x17, 0x08, 0x01,
+            0x1A, 0x03, 0x0C, 0x05, 0x1E, 0x07, 0x00, 0x1C
         };
-        protected Dictionary<PasswordMode, byte[]> PasswordDisplayTable { get; } = new Dictionary<PasswordMode, byte[]>()
+        protected byte[] PasswordDisplayTable { get; } = 
         {
-            [PasswordMode.NTSC] = new byte[]
-            {
-                0x21, 0x33, 0x63, 0x35, 0x66, 0x37, 0x68, 0x39,
-                0x32, 0x6C, 0x77, 0x6E, 0x36, 0x71, 0x30, 0x73,
-                0x6B, 0x76, 0x6D, 0x78, 0x70, 0x7A, 0x72, 0x31,
-                0x74, 0x62, 0x34, 0x64, 0x3F, 0x67, 0x38, 0x6A
-            },
+            0x21, 0x33, 0x63, 0x35, 0x66, 0x37, 0x68, 0x39,
+            0x32, 0x6C, 0x77, 0x6E, 0x36, 0x71, 0x30, 0x73,
+            0x6B, 0x76, 0x6D, 0x78, 0x70, 0x7A, 0x72, 0x31,
+            0x74, 0x62, 0x34, 0x64, 0x3F, 0x67, 0x38, 0x6A
         };
         protected Dictionary<PasswordMode, byte[]> PasswordXORTable { get; } = new Dictionary<PasswordMode, byte[]>()
         {
-            [PasswordMode.NTSC] = new byte[]
-            {
-                0x18, 0x08, 0x12, 0x0A, 0x06, 0x16, 0x04, 0x1C, 0x0C, 0x14
-            },
+            [PasswordMode.NTSC] = new byte[] { 0x18, 0x08, 0x12, 0x0A, 0x06, 0x16, 0x04, 0x1C, 0x0C, 0x14 },
+            [PasswordMode.PAL] = new byte[] { 0x04, 0x1C, 0x0A, 0x16, 0x14, 0x08, 0x0C, 0x18, 0x06, 0x12 },
         };
-        protected Dictionary<PasswordMode, byte[]> PasswordHashTable { get; } = new Dictionary<PasswordMode, byte[]>()
-        {
-            [PasswordMode.NTSC] = new byte[]
-            {
-                0x02, 0x03, 0x05, 0x07, 0x11, 0x02, 0x03, 0x05, 0x07, 0x11
-            },
-        };
+        protected byte[] PasswordHashTable { get; } = { 0x02, 0x03, 0x05, 0x07, 0x11, 0x02, 0x03, 0x05, 0x07, 0x11 };
 
         #endregion
 
@@ -303,6 +301,7 @@ namespace BinarySerializer.Ray1
                 }
             }
 
+            // TODO: This is different for PAL
             public void Process(byte[] password, bool isDecoding)
             {
                 // Get data from save
