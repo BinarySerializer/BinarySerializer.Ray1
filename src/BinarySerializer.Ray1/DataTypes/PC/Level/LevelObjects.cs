@@ -13,7 +13,7 @@
         /// <summary>
         /// Data table for object linking
         /// </summary>
-        public ushort[] ObjLinkingTable { get; set; }
+        public ushort[] ObjectLinkingTable { get; set; }
 
         /// <summary>
         /// The objects in the map
@@ -39,7 +39,7 @@
                 s.DoProcessed(isEncrypted ? new Xor8Processor(0x91) : null, () =>
                 {
                     ObjectsCount = s.Serialize<ushort>(ObjectsCount, name: nameof(ObjectsCount));
-                    ObjLinkingTable = s.SerializeArray<ushort>(ObjLinkingTable, ObjectsCount, name: nameof(ObjLinkingTable));
+                    ObjectLinkingTable = s.SerializeArray<ushort>(ObjectLinkingTable, ObjectsCount, name: nameof(ObjectLinkingTable));
                     Objects = s.SerializeObjectArray<ObjData>(Objects, ObjectsCount, name: nameof(Objects));
                     ObjCommands = s.SerializeObjectArray<ObjCommandsData>(ObjCommands, ObjectsCount, name: nameof(ObjCommands));
                 });

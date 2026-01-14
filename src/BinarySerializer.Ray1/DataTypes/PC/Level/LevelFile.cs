@@ -5,8 +5,6 @@
     /// </summary>
     public class LevelFile : BinarySerializable
     {
-        #region Public Properties
-
         public GameVersion GameVersion { get; set; }
 
         /// <summary>
@@ -17,7 +15,7 @@
         /// <summary>
         /// The pointer to the texture block. The game uses this to skip the rough the textures if the game should use the normal textures.
         /// </summary>
-        public Pointer NormalBlockTexturesPointer { get; set; }
+        public Pointer TileSetNormalPointer { get; set; }
 
         public LevelDefine LevelDefine { get; set; }
         public BackgroundDefine BackgroundDefineNormal { get; set; }
@@ -25,28 +23,19 @@
 
         public MapInfo MapInfo { get; set; }
 
-        public byte FNDIndex { get; set; }
-        public byte ScrollDiffFNDIndex { get; set; }
+        public byte FondIndex { get; set; }
+        public byte ScrollDiffFondIndex { get; set; }
+        public int ScrollDiffSprites { get; set; } // DES index
 
-        /// <summary>
-        /// The DES for the background sprites when parallax scrolling is enabled
-        /// </summary>
-        public int ScrollDiffSprites { get; set; }
-
-        public RoughBlockTextures RoughBlockTextures { get; set; }
-        public byte[] LeftoverRoughBlockTextures { get; set; }
-
-        public NormalBlockTextures NormalBlockTextures { get; set; }
+        public TileSetModeX TileSetModeX { get; set; }
+        public byte[] TileSetModeXLeftoverData { get; set; }
+        public TileSetNormal TileSetNormal { get; set; }
 
         public LevelObjects ObjData { get; set; }
 
         public ProfileDefine ProfileDefine { get; set; }
 
         public byte[][] Alpha { get; set; }
-
-        #endregion
-
-        #region Public Methods
 
         public override void SerializeImpl(SerializerObject s) 
         {
@@ -61,7 +50,7 @@
             // Serialize the pointers
             bool allowInvalid = settings.PCVersion is Ray1PCVersion.PocketPC or Ray1PCVersion.Android or Ray1PCVersion.iOS;
             ObjectsPointer = s.SerializePointer(ObjectsPointer, allowInvalid: allowInvalid, name: nameof(ObjectsPointer));
-            NormalBlockTexturesPointer = s.SerializePointer(NormalBlockTexturesPointer, allowInvalid: allowInvalid, name: nameof(NormalBlockTexturesPointer));
+            TileSetNormalPointer = s.SerializePointer(TileSetNormalPointer, allowInvalid: allowInvalid, name: nameof(TileSetNormalPointer));
 
             // Serialize the level defines
             if (settings.EngineVersion is Ray1EngineVersion.PC_Kit or Ray1EngineVersion.PC_Edu or Ray1EngineVersion.PC_Fan)
@@ -77,9 +66,8 @@
             // Serialize the background data
             if (settings.EngineVersion is Ray1EngineVersion.PC or Ray1EngineVersion.PocketPC)
             {
-                // Serialize the background data
-                FNDIndex = s.Serialize<byte>(FNDIndex, name: nameof(FNDIndex));
-                ScrollDiffFNDIndex = s.Serialize<byte>(ScrollDiffFNDIndex, name: nameof(ScrollDiffFNDIndex));
+                FondIndex = s.Serialize<byte>(FondIndex, name: nameof(FondIndex));
+                ScrollDiffFondIndex = s.Serialize<byte>(ScrollDiffFondIndex, name: nameof(ScrollDiffFondIndex));
             }
             
             ScrollDiffSprites = s.Serialize<int>(ScrollDiffSprites, name: nameof(ScrollDiffSprites));
@@ -88,20 +76,20 @@
             if (settings.EngineVersion == Ray1EngineVersion.PocketPC)
             {
                 // Leftover data. Usually (always?) just the first 12 bytes.
-                long length = NormalBlockTexturesPointer.FileOffset - s.CurrentPointer.FileOffset;
-                LeftoverRoughBlockTextures = s.SerializeArray<byte>(LeftoverRoughBlockTextures, length, name: nameof(LeftoverRoughBlockTextures));
+                long length = TileSetNormalPointer.FileOffset - s.CurrentPointer.FileOffset;
+                TileSetModeXLeftoverData = s.SerializeArray<byte>(TileSetModeXLeftoverData, length, name: nameof(TileSetModeXLeftoverData));
             }
             else
             {
-                RoughBlockTextures = s.SerializeObject<RoughBlockTextures>(RoughBlockTextures, name: nameof(RoughBlockTextures));
+                TileSetModeX = s.SerializeObject<TileSetModeX>(TileSetModeX, name: nameof(TileSetModeX));
             }
 
             // At this point the stream position should match the texture block offset
-            if (s.CurrentPointer != NormalBlockTexturesPointer)
+            if (s.CurrentPointer != TileSetNormalPointer)
                 s.Context.SystemLogger?.LogWarning("Normal block textures offset is incorrect");
 
             // Serialize the normal block textures
-            NormalBlockTextures = s.SerializeObject<NormalBlockTextures>(NormalBlockTextures, name: nameof(NormalBlockTextures));
+            TileSetNormal = s.SerializeObject<TileSetNormal>(TileSetNormal, name: nameof(TileSetNormal));
 
             // At this point the stream position should match the obj block offset (ignore the Pocket PC version here since it uses leftover pointers from PC version)
             if (settings.EngineVersion != Ray1EngineVersion.PocketPC && s.CurrentPointer != ObjectsPointer)
@@ -130,10 +118,8 @@
             s.DoAt(pointersOffset, () =>
             {
                 s.SerializePointer(ObjData.Offset, allowInvalid: allowInvalid, name: nameof(ObjectsPointer));
-                s.SerializePointer(NormalBlockTextures.Offset, allowInvalid: allowInvalid, name: nameof(NormalBlockTexturesPointer));
+                s.SerializePointer(TileSetNormal.Offset, allowInvalid: allowInvalid, name: nameof(TileSetNormalPointer));
             });
         }
-
-        #endregion
     }
 }

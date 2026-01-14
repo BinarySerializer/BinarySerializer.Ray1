@@ -3,9 +3,9 @@
 namespace BinarySerializer.Ray1.PC
 {
     /// <summary>
-    /// Rough block texture data for PC
+    /// Tile-set data in ModeX for PC
     /// </summary>
-    public class RoughBlockTextures : BinarySerializable
+    public class TileSetModeX : BinarySerializable
     {
         public byte[][] RoughBlockTexturesData { get; set; } // GrosPatai - appears to be 4 8x8 tiles?
         public Pointer[] RoughBlockTexturesOffsetTable { get; set; }
