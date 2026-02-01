@@ -1,30 +1,18 @@
 ﻿namespace BinarySerializer.Ray1.PC
 {
-    /// <summary>
-    /// Sound file entry data
-    /// </summary>
     public class SoundFileEntry : BinarySerializable
     {
-        /// <summary>
-        /// The sound file offset
-        /// </summary>
         public uint FileOffset { get; set; }
-
-        /// <summary>
-        /// The sound file size
-        /// </summary>
         public uint FileSize { get; set; }
-
-        public uint Uint_08 { get; set; }
-
-        public uint Uint_0C { get; set; }
+        public uint LoopStart { get; set; }
+        public uint LoopLength { get; set; } // 0 if the sound doesn't loop (unit is in samples)
 
         public override void SerializeImpl(SerializerObject s)
         {
             FileOffset = s.Serialize<uint>(FileOffset, name: nameof(FileOffset));
             FileSize = s.Serialize<uint>(FileSize, name: nameof(FileSize));
-            Uint_08 = s.Serialize<uint>(Uint_08, name: nameof(Uint_08));
-            Uint_0C = s.Serialize<uint>(Uint_0C, name: nameof(Uint_0C));
+            LoopStart = s.Serialize<uint>(LoopStart, name: nameof(LoopStart));
+            LoopLength = s.Serialize<uint>(LoopLength, name: nameof(LoopLength));
         }
     }
 }
