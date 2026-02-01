@@ -6,9 +6,10 @@
         public short Level { get; set; } // Negative for save points
         public short XPosition { get; set; }
         public short YPosition { get; set; }
-        public int Int_08 { get; set; }
+        public int SaveValuePointer { get; set; } // Pointer to save byte in memory
         public ushort WorldIndex { get; set; } // The index of the entry in this world
-        public byte[] Bytes_0E { get; set; }
+        public short IconXPosition { get; set; }
+        public short IconYPosition { get; set; }
         public Pointer<Jag_ColoredString> WorldNamePointer { get; set; }
         public Pointer<Jag_ColoredString> LevelNamePointer { get; set; }
         public Pointer UnusedPointer { get; set; } // Always null
@@ -22,12 +23,13 @@
             Level = s.Serialize<short>(Level, name: nameof(Level));
             XPosition = s.Serialize<short>(XPosition, name: nameof(XPosition));
             YPosition = s.Serialize<short>(YPosition, name: nameof(YPosition));
-            Int_08 = s.Serialize<int>(Int_08, name: nameof(Int_08));
+            SaveValuePointer = s.Serialize<int>(SaveValuePointer, name: nameof(SaveValuePointer));
             WorldIndex = s.Serialize<ushort>(WorldIndex, name: nameof(WorldIndex));
 
             if (settings.EngineVersion == Ray1EngineVersion.Jaguar)
             {
-                Bytes_0E = s.SerializeArray<byte>(Bytes_0E, 4, name: nameof(Bytes_0E));
+                IconXPosition = s.Serialize<short>(IconXPosition, name: nameof(IconXPosition));
+                IconYPosition = s.Serialize<short>(IconYPosition, name: nameof(IconYPosition));
                 WorldNamePointer = s.SerializePointer<Jag_ColoredString>(WorldNamePointer, name: nameof(WorldNamePointer))?.ResolveObject(s);
                 LevelNamePointer = s.SerializePointer<Jag_ColoredString>(LevelNamePointer, name: nameof(LevelNamePointer))?.ResolveObject(s);
                 UnusedPointer = s.SerializePointer(UnusedPointer, name: nameof(UnusedPointer));
