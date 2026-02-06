@@ -5,7 +5,7 @@
         public string SaveName { get; set; } // 0x00006c96
         
         public byte ContinuesCount { get; set; } // 0x00006c84
-        public byte LivesCount { get; set; } // 0x00006c60
+        public byte LivesCount { get; set; } // 0x00006c60 NOTE: This is in BCD
 
         public JAG_SaveLevel PinkPlantWoods { get; set; } // 00006c2c
         public JAG_SaveLevel AnguishLagoon { get; set; } // 00006c2d
