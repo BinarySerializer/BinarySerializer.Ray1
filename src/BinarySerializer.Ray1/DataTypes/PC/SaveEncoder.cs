@@ -8,11 +8,18 @@ namespace BinarySerializer.Ray1.PC
     /// </summary>
     public class SaveEncoder : IStreamEncoder
     {
+        public SaveEncoder(long? size = null)
+        {
+            Size = size;
+        }
+
+        public long? Size { get; }
+
         public string Name => "SaveEncoding";
 
         public void DecodeStream(Stream input, Stream output) 
         {
-            using Stream unxor = XORStream(input);
+            using Stream unxor = XORStream(input, Size);
             using Reader reader = new Reader(unxor, isLittleEndian: true);
 
             var initialOutputPos = output.Position;
@@ -228,8 +235,10 @@ namespace BinarySerializer.Ray1.PC
             xor.CopyTo(output);
         }
 
-        private static Stream XORStream(Stream s) 
+        private static Stream XORStream(Stream s, long? size = null) 
         {
+            long endPos = size != null ? s.Position + size.Value : s.Length;
+
             byte compr_incremental_xor = 0x57;
 
             var decompressedStream = new MemoryStream();
@@ -242,7 +251,7 @@ namespace BinarySerializer.Ray1.PC
             uint decompressedSize = reader.ReadUInt32();
             decompressedSize ^= 0x54555657;
             decompressedStream.Write(BitConverter.GetBytes(decompressedSize), 0, 4);
-            while (s.Position < s.Length) 
+            while (s.Position < endPos) 
             {
                 byte b = reader.ReadByte();
                 byte xor = 0;

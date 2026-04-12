@@ -98,34 +98,34 @@ namespace BinarySerializer.Ray1
                 ContinuesCount = s.Serialize<byte>(ContinuesCount, name: nameof(ContinuesCount));
                 
                 if (isPS1)
-                    s.Align(MemoryCard.FrameSize);
+                    s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
                 
                 WorldInfoSaveZone = s.SerializeObjectArray<WorldInfoSave>(WorldInfoSaveZone, 24, name: nameof(WorldInfoSaveZone));
                 
                 if (isPS1)
-                    s.Align(MemoryCard.FrameSize);
+                    s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
                 
                 RayEvts = s.SerializeObject<RayEvts>(RayEvts, name: nameof(RayEvts));
                 
                 if (isPS1)
-                    s.Align(MemoryCard.FrameSize);
+                    s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
                 
                 Poing = s.SerializeObject<Poing>(Poing, name: nameof(Poing));
                 
                 if (isPS1)
-                    s.Align(MemoryCard.FrameSize);
+                    s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
                 
                 StatusBar = s.SerializeObject<StatusBar>(StatusBar, name: nameof(StatusBar));
 
                 if (isPS1)
-                    s.Align(MemoryCard.FrameSize);
+                    s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
                 else if (settings.EngineVersion == Ray1EngineVersion.GBA)
                     s.SerializePadding(2, logIfNotNull: true);
 
                 RayHitPoints = s.Serialize<byte>(RayHitPoints, name: nameof(RayHitPoints));
 
                 if (isPS1)
-                    s.Align(MemoryCard.FrameSize);
+                    s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
 
                 if (settings.EngineVersion == Ray1EngineVersion.GBA)
                 {
@@ -143,41 +143,41 @@ namespace BinarySerializer.Ray1
                 BonusPerfect = s.SerializeArray<byte>(BonusPerfect, 24, name: nameof(BonusPerfect));
 
                 if (isPS1)
-                    s.Align(MemoryCard.FrameSize);
+                    s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
 
                 if (settings.EngineBranch == Ray1EngineBranch.PS1)
                     GameOptions = s.SerializeObject<GameOptions>(GameOptions, name: nameof(GameOptions));
 
                 if (isPS1)
-                    s.Align(MemoryCard.FrameSize);
+                    s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
 
                 WorldIndex = s.Serialize<ushort>(WorldIndex, name: nameof(WorldIndex));
 
                 if (isPS1)
-                    s.Align(MemoryCard.FrameSize);
+                    s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
 
                 if (settings.EngineBranch == Ray1EngineBranch.PS1)
                 {
                     XMap = s.Serialize<short>(XMap, name: nameof(XMap));
 
                     if (isPS1)
-                        s.Align(MemoryCard.FrameSize);
+                        s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
 
                     YMap = s.Serialize<short>(YMap, name: nameof(YMap));
 
                     if (isPS1)
-                        s.Align(MemoryCard.FrameSize);
+                        s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
 
                     RayDirection = s.Serialize<byte>(RayDirection, name: nameof(RayDirection));
 
                     if (isPS1)
-                        s.Align(MemoryCard.FrameSize);
+                        s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
                 }
 
                 FinBossLevel = s.Serialize<FinBossLevel>(FinBossLevel, name: nameof(FinBossLevel));
 
                 if (isPS1)
-                    s.Align(MemoryCard.FrameSize);
+                    s.SerializeAlignmentPadding(MemoryCard.FrameSize, Offset);
 
                 if (settings.EngineVersion == Ray1EngineVersion.GBA)
                 {
