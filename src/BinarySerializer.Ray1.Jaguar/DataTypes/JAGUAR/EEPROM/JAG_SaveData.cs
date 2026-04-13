@@ -15,7 +15,7 @@
                     s.SerializePadding(16, logIfNotNull: true);
                     p.Serialize<ushort>(s, "Checksum");
                 });
-            });
+            }, endianness: Endian.Big);
         }
     }
 }
